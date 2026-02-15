@@ -394,13 +394,19 @@ body.dark-mode .eco-xp-text {
     }
 
     .eco-hud {
-        padding: 5px 10px;
-        margin-left: 5px;
-        border-radius: 15px;
-        background: rgba(0, 0, 0, 0.05);
+        padding: 5px 12px;
+        margin-left: 0;
+        gap: 8px;
+        background: rgba(49, 100, 45, 0.1);
+        border: 1px solid rgba(49, 100, 45, 0.2);
     }
 
-    .eco-bar-container,
+    .eco-bar-container {
+        display: block !important;
+        width: 40px;
+        height: 4px;
+    }
+
     .eco-xp-text {
         display: none !important;
     }
@@ -1206,16 +1212,57 @@ body.dark-mode .option-btn.wrong {
     gap: 10px;
 }
 
-@media (max-width: 900px) {
+@media (max-width: 768px) {
     .gaia-card {
         flex-direction: column;
-        text-align: center;
         padding: 40px 20px;
-        gap: 30px;
+        text-align: center;
+        gap: 20px;
     }
 
-    .gaia-icon {
-        font-size: 6rem;
+    .gaia-header-side {
+        margin-bottom: 10px;
+    }
+
+    .gaia-icon-side img {
+        width: 100px;
+        transform: rotate(-5deg);
+    }
+
+    .gaia-text h2 {
+        font-size: 1.8rem;
+    }
+
+    .gaia-text p {
+        font-size: 1rem;
+    }
+
+    /* Tags da GAIA no Mobile */
+    .gaia-features {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+        margin-top: 15px;
+    }
+
+    .feature-tag {
+        padding: 6px 12px;
+        font-size: 0.8rem;
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 50px;
+    }
+
+    .gaia-cta {
+        flex-direction: column;
+        width: 100%;
+        gap: 10px;
+    }
+
+    .btn-gaia {
+        width: 100%;
+        justify-content: center;
     }
 }
 
