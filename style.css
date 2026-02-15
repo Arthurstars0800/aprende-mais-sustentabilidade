@@ -2193,7 +2193,8 @@ body.dark-mode .eco-profile-summary {
     width: 100%;
     height: 100%;
     pointer-events: none;
-    z-index: 9998;
+    z-index: 100;
+    /* Baixado de 9998 para ficar atrás da navbar (1000) */
     overflow: hidden;
     /* Usamos translate3d para forçar aceleração de hardware sem o custo de transição + rAF */
     transform: translate3d(0, var(--eco-scroll-shift-y, 0px), 0);
@@ -2210,7 +2211,7 @@ body.dark-mode .eco-profile-summary {
     background-position: center;
     /* Inércia inerente à queda */
     animation: charismatic-fall 12s cubic-bezier(0.45, 0.05, 0.55, 0.95) forwards;
-    z-index: 9998;
+    z-index: 100;
 }
 
 /* Padrão 1: Folha Arredondada Clássica */
@@ -2459,8 +2460,9 @@ body.dark-mode .eco-profile-summary {
     background: white;
     opacity: 0;
     pointer-events: none;
-    z-index: 11000;
-    /* Sobre tudo, incluindo modais */
+    z-index: 500;
+    /* Flash agora fica atrás da UI também */
+    /* Sobre o conteúdo, mas sob a navbar */
     transition: opacity 0.1s ease-out;
 }
 
