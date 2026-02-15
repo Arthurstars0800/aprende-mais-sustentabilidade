@@ -3457,3 +3457,34 @@ body.dark-mode .cta-icon {
     }
 }
 
+
+/* --- Mobile Navbar Visibility Fix --- */
+@media (max-width: 900px) {
+    .navbar {
+        display: flex !important;
+        position: fixed !important;
+        top: 0;
+        left: 0;
+        width: 100%;
+        z-index: 900; /* Abaixo de modais, acima de conteúdo */
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        padding: 10px 0;
+        height: auto;
+        min-height: 60px;
+    }
+    
+    body.dark-mode .navbar {
+        background: rgba(26, 26, 26, 0.95);
+    }
+
+    .bottom-nav {
+        display: flex !important;
+        position: fixed !important;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        z-index: 900;
+    }
+}
+
