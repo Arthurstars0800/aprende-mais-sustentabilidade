@@ -413,69 +413,76 @@ body.dark-mode .eco-xp-text {
         height: 40px;
     }
 
-    /* O Menu Mobile agora dentro da Navbar */
-    .nav-links {
-        display: flex !important;
-        position: fixed;
-        top: 0;
-        right: -100%;
-        /* Começa escondido */
-        width: 80%;
-        max-width: 320px;
-        height: 100vh;
-        background: #ffffff;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        padding: 40px;
-        gap: 20px;
-        box-shadow: -15px 0 50px rgba(0, 0, 0, 0.3);
-        transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        z-index: 2147483647 !important;
-        /* MÁXIMO ABSOLUTO */
-    }
-
-    body.dark-mode .nav-links {
-        background: #121212;
-    }
-
-    /* Força menu ativo */
-    .nav-links.active {
-        display: flex !important;
-        right: 0 !important;
-        visibility: visible !important;
-        opacity: 1 !important;
-    }
-
-    .nav-links li {
-        width: 100% !important;
-        /* No mobile ocupa tudo */
-    }
-
-    .nav-links a {
-        font-size: 1.4rem !important;
-        padding: 15px !important;
-        background: none !important;
-        color: var(--text-dark) !important;
-        pointer-events: auto !important;
-        /* Força recepção de cliques */
-    }
-
-    .nav-links a.active {
-        color: var(--primary) !important;
-        background: rgba(49, 100, 45, 0.1) !important;
-    }
-
+    /* --- BOTTOM NAVIGATION (Mobile Only) --- */
     .mobile-menu-toggle {
-        display: block !important;
-        font-size: 2.2rem;
-        padding: 10px;
-        cursor: pointer;
-        z-index: 2147483647 !important;
-        /* MÁXIMO ABSOLUTO */
+        display: none !important;
+        /* Exterminado */
+    }
+
+    .nav-links {
+        display: none !important;
+        /* Menu lateral desativado no mobile */
+    }
+
+    .bottom-nav {
+        display: flex;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        background: var(--white);
+        box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.1);
+        padding: 10px 0;
+        /* Ajuste para iPhone */
+        padding-bottom: max(10px, env(safe-area-inset-bottom));
+        justify-content: space-around;
+        align-items: center;
+        z-index: 10000;
+        border-top: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    body.dark-mode .bottom-nav {
+        background: #1a1a1a;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .bottom-nav-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-decoration: none;
+        color: var(--text-muted);
+        font-size: 0.75rem;
+        gap: 5px;
+        flex: 1;
+        transition: all 0.2s;
         background: none;
         border: none;
-        color: var(--text-dark);
+        padding: 5px;
+    }
+
+    .bottom-nav-item i {
+        font-size: 1.4rem;
+        margin-bottom: 2px;
+        transition: transform 0.2s;
+    }
+
+    .bottom-nav-item.active {
+        color: var(--primary);
+        font-weight: 700;
+    }
+
+    .bottom-nav-item.active i {
+        transform: translateY(-2px);
+    }
+
+    body.dark-mode .bottom-nav-item.active {
+        color: var(--primary-light);
+    }
+
+    /* Espaço extra no fim da página para não cortar conteúdo */
+    body {
+        padding-bottom: 80px;
     }
 
     .menu-overlay {
