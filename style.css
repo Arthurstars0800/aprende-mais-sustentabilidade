@@ -346,7 +346,8 @@ body.dark-mode .eco-xp-text {
         gap: 20px;
         box-shadow: -10px 0 30px rgba(0, 0, 0, 0.2);
         transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        z-index: 10000 !important;
+        z-index: 99999 !important;
+        /* Camada altíssima */
     }
 
     body.dark-mode .nav-links {
@@ -354,17 +355,21 @@ body.dark-mode .eco-xp-text {
     }
 
     .nav-links.active {
-        right: 0;
+        right: 0 !important;
     }
 
     .mobile-menu-toggle {
         display: block !important;
-        font-size: 1.8rem;
-        padding: 10px;
-        margin-left: 10px;
+        font-size: 2rem;
+        padding: 15px;
+        /* Área de toque maior */
+        margin-left: 5px;
         cursor: pointer;
-        z-index: 10001 !important;
-        background: none;
+        z-index: 100000 !important;
+        /* O mais alto de todos */
+        background: rgba(49, 100, 45, 0.1);
+        /* Fundo sutil para ver o botão */
+        border-radius: 10px;
         border: none;
         color: var(--text-dark);
     }
@@ -379,13 +384,15 @@ body.dark-mode .eco-xp-text {
         left: 0;
         width: 100%;
         height: 100%;
-        background: rgba(0, 0, 0, 0.5);
+        background: rgba(0, 0, 0, 0.6);
+        backdrop-filter: blur(4px);
         display: none;
-        z-index: 9999;
+        z-index: 99998;
+        /* Logo abaixo do menu */
     }
 
     .menu-overlay.active {
-        display: block;
+        display: block !important;
     }
 }
 
