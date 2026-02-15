@@ -132,32 +132,35 @@ function playForestAmbience() {
     // Bird chirps - random sine tone bursts
     window._ambienceTimers = [];
     function scheduleBird() {
-        if (userProfile.audioMuted || currentAmbienceType !== 'forest') return;
-        const osc = ctx.createOscillator();
-        const birdGain = ctx.createGain();
-        const freq = 1800 + Math.random() * 2500;
-        osc.type = 'sine';
-        osc.frequency.value = freq;
+        if (currentAmbienceType !== 'forest') return; // Stop if theme changed
 
-        // Quick chirp pattern
-        const now = ctx.currentTime;
-        const chirpDur = 0.05 + Math.random() * 0.08;
-        const numChirps = 2 + Math.floor(Math.random() * 4);
+        if (!userProfile.audioMuted) {
+            const osc = ctx.createOscillator();
+            const birdGain = ctx.createGain();
+            const freq = 1800 + Math.random() * 2500;
+            osc.type = 'sine';
+            osc.frequency.value = freq;
 
-        birdGain.gain.value = 0;
-        for (let i = 0; i < numChirps; i++) {
-            const t = now + i * (chirpDur + 0.03);
-            birdGain.gain.setValueAtTime(0, t);
-            birdGain.gain.linearRampToValueAtTime(0.08 + Math.random() * 0.06, t + chirpDur * 0.3);
-            osc.frequency.setValueAtTime(freq + Math.random() * 400, t);
-            osc.frequency.linearRampToValueAtTime(freq - 200 + Math.random() * 600, t + chirpDur);
-            birdGain.gain.linearRampToValueAtTime(0, t + chirpDur);
+            // Quick chirp pattern
+            const now = ctx.currentTime;
+            const chirpDur = 0.05 + Math.random() * 0.08;
+            const numChirps = 2 + Math.floor(Math.random() * 4);
+
+            birdGain.gain.value = 0;
+            for (let i = 0; i < numChirps; i++) {
+                const t = now + i * (chirpDur + 0.03);
+                birdGain.gain.setValueAtTime(0, t);
+                birdGain.gain.linearRampToValueAtTime(0.08 + Math.random() * 0.06, t + chirpDur * 0.3);
+                osc.frequency.setValueAtTime(freq + Math.random() * 400, t);
+                osc.frequency.linearRampToValueAtTime(freq - 200 + Math.random() * 600, t + chirpDur);
+                birdGain.gain.linearRampToValueAtTime(0, t + chirpDur);
+            }
+
+            osc.connect(birdGain);
+            birdGain.connect(masterGain);
+            osc.start(now);
+            osc.stop(now + numChirps * (chirpDur + 0.03) + 0.1);
         }
-
-        osc.connect(birdGain);
-        birdGain.connect(masterGain);
-        osc.start(now);
-        osc.stop(now + numChirps * (chirpDur + 0.03) + 0.1);
 
         const tid = setTimeout(scheduleBird, 2000 + Math.random() * 5000);
         window._ambienceTimers.push(tid);
@@ -241,21 +244,25 @@ function playRainAmbience(isStorm = false) {
     if (isStorm) {
         window._ambienceTimers = window._ambienceTimers || [];
         function thunder() {
-            if (userProfile.audioMuted || currentAmbienceType !== 'storm') return;
-            const thunderOsc = createNoise(ctx, 'brown');
-            const tFilter = ctx.createBiquadFilter();
-            tFilter.type = 'lowpass';
-            tFilter.frequency.value = 100;
-            const tGain = ctx.createGain();
-            const now = ctx.currentTime;
-            tGain.gain.setValueAtTime(0, now);
-            tGain.gain.linearRampToValueAtTime(0.6 + Math.random() * 0.3, now + 0.1);
-            tGain.gain.exponentialRampToValueAtTime(0.01, now + 1.5 + Math.random());
-            thunderOsc.connect(tFilter);
-            tFilter.connect(tGain);
-            tGain.connect(masterGain);
-            thunderOsc.start(now);
-            thunderOsc.stop(now + 2.5);
+            if (currentAmbienceType !== 'storm') return; // Stop recursion if theme changed
+
+            if (!userProfile.audioMuted) {
+                const thunderOsc = createNoise(ctx, 'brown');
+                const tFilter = ctx.createBiquadFilter();
+                tFilter.type = 'lowpass';
+                tFilter.frequency.value = 100;
+                const tGain = ctx.createGain();
+                const now = ctx.currentTime;
+                tGain.gain.setValueAtTime(0, now);
+                tGain.gain.linearRampToValueAtTime(0.6 + Math.random() * 0.3, now + 0.1);
+                tGain.gain.exponentialRampToValueAtTime(0.01, now + 1.5 + Math.random());
+                thunderOsc.connect(tFilter);
+                tFilter.connect(tGain);
+                tGain.connect(masterGain);
+                thunderOsc.start(now);
+                thunderOsc.stop(now + 2.5);
+            }
+
             const tid = setTimeout(thunder, 6000 + Math.random() * 12000);
             window._ambienceTimers.push(tid);
         }
@@ -735,26 +742,29 @@ function playSciFiAmbience() {
 
     // Random crackle/pops (like old vinyl or radio interference)
     function crackle() {
-        if (userProfile.audioMuted || currentAmbienceType !== 'scifi') return;
-        const numPops = 1 + Math.floor(Math.random() * 4);
-        const now = ctx.currentTime;
+        if (currentAmbienceType !== 'scifi') return; // Stop if theme changed
 
-        for (let i = 0; i < numPops; i++) {
-            const popNoise = createNoise(ctx, 'white');
-            const popFilter = ctx.createBiquadFilter();
-            popFilter.type = 'highpass';
-            popFilter.frequency.value = 1000 + Math.random() * 3000;
-            const popGain = ctx.createGain();
-            const t = now + i * (0.02 + Math.random() * 0.05);
-            const popVol = 0.05 + Math.random() * 0.08;
-            popGain.gain.setValueAtTime(0, t);
-            popGain.gain.linearRampToValueAtTime(popVol, t + 0.003);
-            popGain.gain.exponentialRampToValueAtTime(0.001, t + 0.02 + Math.random() * 0.03);
-            popNoise.connect(popFilter);
-            popFilter.connect(popGain);
-            popGain.connect(masterGain);
-            popNoise.start(t);
-            popNoise.stop(t + 0.08);
+        if (!userProfile.audioMuted) {
+            const numPops = 1 + Math.floor(Math.random() * 4);
+            const now = ctx.currentTime;
+
+            for (let i = 0; i < numPops; i++) {
+                const popNoise = createNoise(ctx, 'white');
+                const popFilter = ctx.createBiquadFilter();
+                popFilter.type = 'highpass';
+                popFilter.frequency.value = 1000 + Math.random() * 3000;
+                const popGain = ctx.createGain();
+                const t = now + i * (0.02 + Math.random() * 0.05);
+                const popVol = 0.05 + Math.random() * 0.08;
+                popGain.gain.setValueAtTime(0, t);
+                popGain.gain.linearRampToValueAtTime(popVol, t + 0.003);
+                popGain.gain.exponentialRampToValueAtTime(0.001, t + 0.02 + Math.random() * 0.03);
+                popNoise.connect(popFilter);
+                popFilter.connect(popGain);
+                popGain.connect(masterGain);
+                popNoise.start(t);
+                popNoise.stop(t + 0.08);
+            }
         }
 
         const tid = setTimeout(crackle, 500 + Math.random() * 2500);
@@ -763,17 +773,22 @@ function playSciFiAmbience() {
 
     // 8-bit chiptune melody through the radio filter (Mario on vintage radio!)
     function radioMelody() {
-        if (userProfile.audioMuted || currentAmbienceType !== 'scifi') return;
+        if (currentAmbienceType !== 'scifi') return; // Stop if theme changed
 
-        const melody = CHIPTUNE_MELODIES[Math.floor(Math.random() * CHIPTUNE_MELODIES.length)];
-        const bass = CHIPTUNE_BASS[Math.floor(Math.random() * CHIPTUNE_BASS.length)];
+        let nextTime = 2000; // Default gap if muted
 
-        // Lead melody goes through the radio bus for that Alastor crunch
-        const melodyDur = playChiptuneMelody(ctx, radioLowCut, melody, 0.06, 'square');
-        playChiptuneMelody(ctx, radioLowCut, bass, 0.04, 'triangle');
+        if (!userProfile.audioMuted) {
+            const melody = CHIPTUNE_MELODIES[Math.floor(Math.random() * CHIPTUNE_MELODIES.length)];
+            const bass = CHIPTUNE_BASS[Math.floor(Math.random() * CHIPTUNE_BASS.length)];
 
-        const gap = 1.5 + Math.random() * 3.0;
-        const tid = setTimeout(radioMelody, (melodyDur + gap) * 1000);
+            // Lead melody goes through the radio bus for that Alastor crunch
+            const melodyDur = playChiptuneMelody(ctx, radioLowCut, melody, 0.06, 'square');
+            playChiptuneMelody(ctx, radioLowCut, bass, 0.04, 'triangle');
+
+            nextTime = (melodyDur + 1.5 + Math.random() * 3.0) * 1000;
+        }
+
+        const tid = setTimeout(radioMelody, nextTime);
         window._ambienceTimers.push(tid);
     }
 
