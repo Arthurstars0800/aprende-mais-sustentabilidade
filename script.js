@@ -225,33 +225,46 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // --- MOBILE MENU ---
-    var btn = document.getElementById('mobileMenuToggle');
-    var menu = document.getElementById('navLinks');
-    var over = document.querySelector('.menu-overlay');
+    // --- Mobile Menu Logic (Robust) ---
+    const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+    const navLinks = document.getElementById('navLinks');
+    const menuOverlay = document.querySelector('.menu-overlay');
 
-    if (btn) {
-        btn.onclick = function () {
-            menu.classList.toggle('active');
-            over.classList.toggle('active');
-        };
+    function toggleMenu() {
+        const isActive = navLinks.classList.contains('active');
+
+        if (isActive) {
+            navLinks.classList.remove('active');
+            menuOverlay.classList.remove('active');
+            mobileMenuToggle.innerHTML = '<i class="fas fa-bars"></i>';
+            document.body.style.overflow = ''; // Libera scroll
+        } else {
+            navLinks.classList.add('active');
+            menuOverlay.classList.add('active');
+            mobileMenuToggle.innerHTML = '<i class="fas fa-times"></i>';
+            document.body.style.overflow = 'hidden'; // Trava scroll
+        }
     }
 
-    if (over) {
-        over.onclick = function () {
-            menu.classList.remove('active');
-            over.classList.remove('active');
-        };
+    if (mobileMenuToggle) {
+        mobileMenuToggle.addEventListener('click', (e) => {
+            e.stopPropagation();
+            toggleMenu();
+        });
     }
 
-    // Fecha ao clicar em links
-    var lnks = menu ? menu.getElementsByTagName('a') : [];
-    for (var i = 0; i < lnks.length; i++) {
-        lnks[i].onclick = function () {
-            menu.classList.remove('active');
-            over.classList.remove('active');
-        };
+    // Fechar ao clicar no overlay
+    if (menuOverlay) {
+        menuOverlay.addEventListener('click', toggleMenu);
     }
+
+    // Fechar ao clicar em qualquer link
+    const links = document.querySelectorAll('.nav-links a');
+    links.forEach(link => {
+        link.addEventListener('click', () => {
+            if (navLinks.classList.contains('active')) toggleMenu();
+        });
+    });
 
     // --- Filtros da Oficina de Artesanato ---
     const filterButtons = document.querySelectorAll('.filter-btn');

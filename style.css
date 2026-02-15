@@ -439,9 +439,12 @@ body.dark-mode .eco-xp-text {
         background: #121212;
     }
 
+    /* Força menu ativo */
     .nav-links.active {
+        display: flex !important;
         right: 0 !important;
-        /* Abre o menu */
+        visibility: visible !important;
+        opacity: 1 !important;
     }
 
     .nav-links li {
