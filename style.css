@@ -407,42 +407,19 @@ body.dark-mode .eco-xp-text {
 
     .logo span {
         display: none !important;
-        /* Esconde o texto no celular para sobrar espaço */
     }
 
     .nav-logo {
         height: 40px;
     }
 
-    .eco-hud {
-        padding: 5px 12px;
-        margin-left: 0;
-        gap: 8px;
-        background: rgba(49, 100, 45, 0.1);
-        border: 1px solid rgba(49, 100, 45, 0.2);
-    }
-
-    .eco-bar-container {
-        display: block !important;
-        width: 40px;
-        height: 4px;
-    }
-
-    .eco-xp-text {
-        display: none !important;
-    }
-
+    /* O Menu Mobile agora dentro da Navbar */
     .nav-links {
-        display: none;
-        /* Esconde o menu padrão no mobile */
-    }
-
-    /* O menu mobile (solto no body) */
-    body>.nav-links {
         display: flex !important;
         position: fixed;
         top: 0;
         right: -100%;
+        /* Começa escondido */
         width: 80%;
         max-width: 320px;
         height: 100vh;
@@ -451,36 +428,36 @@ body.dark-mode .eco-xp-text {
         justify-content: center;
         align-items: center;
         padding: 40px;
-        gap: 25px;
+        gap: 20px;
         box-shadow: -15px 0 50px rgba(0, 0, 0, 0.3);
         transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         z-index: 1000000 !important;
-        /* Absolutamente no topo */
     }
 
-    body.dark-mode>.nav-links {
+    body.dark-mode .nav-links {
         background: #121212;
-        box-shadow: -15px 0 50px rgba(0, 0, 0, 0.8);
     }
 
-    body>.nav-links.active {
+    .nav-links.active {
         right: 0 !important;
+        /* Abre o menu */
     }
 
-    body>.nav-links a {
-        font-size: 1.5rem !important;
-        text-align: center;
-        width: 100%;
-        padding: 15px;
-        color: var(--text-dark);
-        text-decoration: none;
-        font-weight: 800;
-        border-radius: 12px;
+    .nav-links li {
+        width: 100% !important;
+        /* No mobile ocupa tudo */
     }
 
-    body>.nav-links a:hover {
-        background: rgba(49, 100, 45, 0.1);
-        color: var(--primary);
+    .nav-links a {
+        font-size: 1.4rem !important;
+        padding: 15px !important;
+        background: none !important;
+        color: var(--text-dark) !important;
+    }
+
+    .nav-links a.active {
+        color: var(--primary) !important;
+        background: rgba(49, 100, 45, 0.1) !important;
     }
 
     .mobile-menu-toggle {
@@ -488,30 +465,25 @@ body.dark-mode .eco-xp-text {
         font-size: 2.2rem;
         padding: 10px;
         cursor: pointer;
-        z-index: 10001 !important;
+        z-index: 1000001 !important;
+        /* Acima do menu */
         background: none;
         border: none;
         color: var(--text-dark);
-        margin-left: 10px;
-    }
-
-    .dark-mode-toggle {
-        margin-left: auto;
     }
 
     .menu-overlay {
         position: fixed;
         top: 0;
         left: 0;
-        width: 100%;
-        height: 100%;
+        width: 100vw;
+        height: 100vh;
         background: rgba(0, 0, 0, 0.7);
         backdrop-filter: blur(8px);
         opacity: 0;
         visibility: hidden;
         transition: 0.3s ease;
         z-index: 999999;
-        /* Logo abaixo do menu lateral */
     }
 
     .menu-overlay.active {
