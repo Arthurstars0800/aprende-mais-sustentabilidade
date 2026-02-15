@@ -3302,3 +3302,105 @@ body.dark-mode .about-card p {
 body.dark-mode .about-card img {
     border-color: #333;
 }
+/* --- CTA Reciclagem Styles (Adicionado para corrigir Botão Cortado) --- */
+.cta-reciclagem {
+    padding: 80px 0;
+}
+
+.cta-card {
+    background: linear-gradient(135deg, #f0fdf4, #e6fffa);
+    border-radius: 40px;
+    padding: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 50px;
+    box-shadow: 0 20px 50px rgba(49, 100, 45, 0.15);
+    overflow: hidden;
+    position: relative;
+    border: 2px solid #dcfce7;
+}
+
+.cta-content {
+    flex: 1;
+    z-index: 2;
+}
+
+.cta-content h2 {
+    font-size: 2.5rem;
+    color: var(--primary);
+    margin-bottom: 20px;
+}
+
+.cta-content p {
+    font-size: 1.2rem;
+    color: var(--text-muted);
+    margin-bottom: 35px;
+    max-width: 600px;
+}
+
+.cta-icon {
+    font-size: 10rem;
+    color: rgba(49, 100, 45, 0.1);
+    transform: rotate(15deg);
+    transition: var(--transition);
+}
+
+.cta-card:hover .cta-icon {
+    transform: rotate(0deg) scale(1.1);
+    color: rgba(49, 100, 45, 0.2);
+}
+
+/* Dark Mode CTA */
+body.dark-mode .cta-card {
+    background: linear-gradient(135deg, #064e3b, #065f46);
+    border-color: #059669;
+}
+
+body.dark-mode .cta-content h2 {
+    color: #34d399;
+}
+
+body.dark-mode .cta-content p {
+    color: #e5e5e5;
+}
+
+body.dark-mode .cta-icon {
+    color: rgba(255, 255, 255, 0.05);
+}
+
+/* Responsive Mobile Styles */
+@media (max-width: 900px) {
+    .cta-card {
+        flex-direction: column;
+        padding: 40px 30px;
+        text-align: center;
+        gap: 30px;
+    }
+
+    .cta-content h2 {
+        font-size: 2rem;
+    }
+
+    .cta-content p {
+        font-size: 1rem;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    
+    .cta-card .btn {
+        width: 100%; /* Botão full width no mobile */
+        display: block; /* Garante bloco */
+        text-align: center;
+        padding: 15px 10px;
+        white-space: normal; /* Permite quebra de linha se texto for longo */
+        height: auto; 
+    }
+
+    .cta-icon {
+        font-size: 6rem;
+        order: -1; /* Ícone sobe para o topo */
+        margin-bottom: 10px;
+    }
+}
+
