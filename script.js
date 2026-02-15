@@ -217,9 +217,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Mobile Menu Toggle logic with Overlay
+    // --- Lógica do Menu Mobile Robustecida ---
     const mobileMenuToggle = document.getElementById('mobileMenuToggle');
-    const navLinks = document.getElementById('navLinks'); // Única declaração permitida
+    const navLinks = document.getElementById('navLinks');
     const menuIcon = mobileMenuToggle?.querySelector('i');
 
     // Injeta overlay se não existir
@@ -230,38 +230,45 @@ document.addEventListener('DOMContentLoaded', () => {
         document.body.appendChild(menuOverlay);
     }
 
-    const toggleMenu = (forceClose = false) => {
-        const shouldOpen = forceClose ? false : !navLinks?.classList.contains('active');
+    function toggleMenu(forceClose = false) {
+        if (!navLinks || !menuOverlay) return;
 
-        if (shouldOpen) {
-            navLinks?.classList.add('active');
+        const isOpening = forceClose ? false : !navLinks.classList.contains('active');
+
+        if (isOpening) {
+            navLinks.classList.add('active');
             menuOverlay.classList.add('active');
-            menuIcon?.classList.remove('fa-bars');
-            menuIcon?.classList.add('fa-times');
+            if (menuIcon) {
+                menuIcon.classList.remove('fa-bars');
+                menuIcon.classList.add('fa-times');
+            }
             document.body.style.overflow = 'hidden';
         } else {
-            navLinks?.classList.remove('active');
+            navLinks.classList.remove('active');
             menuOverlay.classList.remove('active');
-            menuIcon?.classList.remove('fa-times');
-            menuIcon?.classList.add('fa-bars');
+            if (menuIcon) {
+                menuIcon.classList.remove('fa-times');
+                menuIcon.classList.add('fa-bars');
+            }
             document.body.style.overflow = '';
         }
-    };
+    }
 
     if (mobileMenuToggle) {
-        mobileMenuToggle.addEventListener('click', (e) => {
+        mobileMenuToggle.onclick = (e) => {
+            e.preventDefault();
             e.stopPropagation();
             toggleMenu();
-        });
+        };
     }
 
     if (menuOverlay) {
-        menuOverlay.addEventListener('click', () => toggleMenu(true));
+        menuOverlay.onclick = () => toggleMenu(true);
     }
 
-    // Fechar menu ao clicar em um link
+    // Fecha ao clicar nos links
     navLinks?.querySelectorAll('a').forEach(link => {
-        link.addEventListener('click', () => toggleMenu(true));
+        link.onclick = () => toggleMenu(true);
     });
 
     // --- Filtros da Oficina de Artesanato ---
