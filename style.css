@@ -173,22 +173,21 @@ body.dark-mode .navbar {
     width: auto;
 }
 
-/* --- Desktop Nav Links (Original Clean Style) --- */
+/* --- Desktop Nav Links (Clean & Professional) --- */
 .nav-links {
     display: flex;
     list-style: none;
     gap: 30px;
-    /* Espaçamento original generoso */
     align-items: center;
-    background: none;
-    /* Remove fundo cinza */
+    margin: 0;
     padding: 0;
+    background: transparent !important;
+    /* Garante que não pareça um bloco */
 }
 
 .nav-links li {
-    width: auto;
-    /* Remove largura fixa de abas */
-    text-align: left;
+    width: auto !important;
+    /* Largura natural do texto */
 }
 
 .nav-links a {
@@ -196,38 +195,62 @@ body.dark-mode .navbar {
     color: var(--text-dark);
     font-weight: 500;
     font-size: 1rem;
-    padding: 5px 0;
+    padding: 10px 0;
+    /* Espaço vertical para clique */
     border-radius: 0;
-    transition: color 0.3s ease;
-    background: none !important;
-    /* Garante que não tenha fundo */
-    box-shadow: none !important;
-}
-
-.nav-links a:hover {
-    color: var(--primary);
-    transform: none;
-    background: none;
-}
-
-.nav-links a.active {
-    color: var(--primary) !important;
-    font-weight: 700;
-    background: none !important;
+    background: transparent !important;
     box-shadow: none !important;
     position: relative;
+    transition: color 0.3s ease;
 }
 
+/* Hover simples: apenas muda a cor */
+.nav-links a:hover {
+    color: var(--primary);
+    background: transparent !important;
+    transform: none !important;
+}
+
+/* Estado Ativo: Texto Colorido + Linha Inferior */
+.nav-links a.active {
+    font-weight: 700;
+    background: transparent !important;
+    box-shadow: none !important;
+    /* Cor padrão (verde) */
+    color: var(--primary) !important;
+}
+
+/* Linha inferior colorida */
 .nav-links a.active::after {
     content: '';
-    display: block;
+    position: absolute;
+    bottom: 0;
+    left: 0;
     width: 100%;
     height: 3px;
-    background: var(--primary);
-    position: absolute;
-    bottom: -5px;
-    left: 0;
-    border-radius: 2px;
+    background: currentColor;
+    /* Usa a cor do texto */
+    border-radius: 2px 2px 0 0;
+}
+
+/* Cores Individuais dos Links (Global) */
+
+/* Reciclagem (Azul) */
+.nav-links li:nth-child(2) a:hover,
+.nav-links li:nth-child(2) a.active {
+    color: #2563eb !important;
+}
+
+/* Oficina (Laranja) */
+.nav-links li:nth-child(3) a:hover,
+.nav-links li:nth-child(3) a.active {
+    color: #ea580c !important;
+}
+
+/* Quizes (Roxo) */
+.nav-links li:nth-child(4) a:hover,
+.nav-links li:nth-child(4) a.active {
+    color: #9333ea !important;
 }
 
 /* Dark Mode Toggle */
