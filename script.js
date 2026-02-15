@@ -217,59 +217,48 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // --- Lógica do Menu Mobile Robustecida ---
-    const mobileMenuToggle = document.getElementById('mobileMenuToggle');
-    const navLinks = document.getElementById('navLinks');
-    const menuIcon = mobileMenuToggle?.querySelector('i');
+    // --- Lógica do Menu Mobile (Ultra compatível) ---
+    var mobileBtn = document.getElementById('mobileMenuToggle');
+    var nav = document.getElementById('navLinks');
 
-    // Injeta overlay se não existir
-    let menuOverlay = document.querySelector('.menu-overlay');
-    if (!menuOverlay) {
-        menuOverlay = document.createElement('div');
-        menuOverlay.className = 'menu-overlay';
-        document.body.appendChild(menuOverlay);
+    var overlay = document.querySelector('.menu-overlay');
+    if (!overlay) {
+        overlay = document.createElement('div');
+        overlay.className = 'menu-overlay';
+        document.body.appendChild(overlay);
     }
 
-    function toggleMenu(forceClose = false) {
-        if (!navLinks || !menuOverlay) return;
+    function toggleNav(closeOnly) {
+        if (!nav || !overlay) return;
+        var isOpen = nav.classList.contains('active');
 
-        const isOpening = forceClose ? false : !navLinks.classList.contains('active');
-
-        if (isOpening) {
-            navLinks.classList.add('active');
-            menuOverlay.classList.add('active');
-            if (menuIcon) {
-                menuIcon.classList.remove('fa-bars');
-                menuIcon.classList.add('fa-times');
-            }
-            document.body.style.overflow = 'hidden';
-        } else {
-            navLinks.classList.remove('active');
-            menuOverlay.classList.remove('active');
-            if (menuIcon) {
-                menuIcon.classList.remove('fa-times');
-                menuIcon.classList.add('fa-bars');
-            }
+        if (closeOnly || isOpen) {
+            nav.classList.remove('active');
+            overlay.classList.remove('active');
             document.body.style.overflow = '';
+        } else {
+            nav.classList.add('active');
+            overlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
         }
     }
 
-    if (mobileMenuToggle) {
-        mobileMenuToggle.onclick = (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            toggleMenu();
+    if (mobileBtn) {
+        mobileBtn.onclick = function (e) {
+            if (e) e.stopPropagation();
+            toggleNav();
         };
     }
 
-    if (menuOverlay) {
-        menuOverlay.onclick = () => toggleMenu(true);
+    if (overlay) {
+        overlay.onclick = function () { toggleNav(true); };
     }
 
     // Fecha ao clicar nos links
-    navLinks?.querySelectorAll('a').forEach(link => {
-        link.onclick = () => toggleMenu(true);
-    });
+    var links = nav ? nav.querySelectorAll('a') : [];
+    for (var i = 0; i < links.length; i++) {
+        links[i].onclick = function () { toggleNav(true); };
+    }
 
     // --- Filtros da Oficina de Artesanato ---
     const filterButtons = document.querySelectorAll('.filter-btn');
