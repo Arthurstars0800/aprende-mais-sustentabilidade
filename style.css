@@ -1213,28 +1213,38 @@ body.dark-mode .option-btn.wrong {
 }
 
 @media (max-width: 768px) {
+    .gaia-promo.container {
+        padding: 0 !important;
+        /* Remove o recuo lateral do container */
+        max-width: 100% !important;
+    }
+
     .gaia-card {
         flex-direction: column;
-        padding: 40px 20px;
+        padding: 50px 25px;
         text-align: center;
-        gap: 20px;
+        gap: 30px;
+        border-radius: 0;
+        /* Faz a barra preencher toda a tela lateralmente */
+        width: 100%;
     }
 
     .gaia-header-side {
-        margin-bottom: 10px;
+        margin-bottom: 5px;
     }
 
     .gaia-icon-side img {
-        width: 100px;
-        transform: rotate(-5deg);
+        width: 110px;
+        transform: rotate(-3deg);
     }
 
     .gaia-text h2 {
-        font-size: 1.8rem;
+        font-size: 2rem;
     }
 
     .gaia-text p {
-        font-size: 1rem;
+        font-size: 1.1rem;
+        margin-bottom: 25px;
     }
 
     /* Tags da GAIA no Mobile */
@@ -1242,27 +1252,33 @@ body.dark-mode .option-btn.wrong {
         display: flex;
         flex-wrap: wrap;
         justify-content: center;
-        gap: 10px;
+        gap: 12px;
         margin-top: 15px;
     }
 
     .feature-tag {
-        padding: 6px 12px;
-        font-size: 0.8rem;
+        padding: 8px 16px;
+        font-size: 0.85rem;
         background: rgba(255, 255, 255, 0.1);
         border: 1px solid rgba(255, 255, 255, 0.2);
         border-radius: 50px;
     }
 
     .gaia-cta {
+        display: flex;
         flex-direction: column;
         width: 100%;
-        gap: 10px;
+        gap: 20px;
+        /* Mais espaço entre os botões (estavam grudados) */
+        margin-top: 35px;
     }
 
     .btn-gaia {
         width: 100%;
         justify-content: center;
+        padding: 18px;
+        /* Botões maiores para mobile */
+        font-size: 1.1rem;
     }
 }
 
