@@ -431,7 +431,8 @@ body.dark-mode .eco-xp-text {
         gap: 20px;
         box-shadow: -15px 0 50px rgba(0, 0, 0, 0.3);
         transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        z-index: 1000000 !important;
+        z-index: 2147483647 !important;
+        /* MÁXIMO ABSOLUTO */
     }
 
     body.dark-mode .nav-links {
@@ -453,6 +454,8 @@ body.dark-mode .eco-xp-text {
         padding: 15px !important;
         background: none !important;
         color: var(--text-dark) !important;
+        pointer-events: auto !important;
+        /* Força recepção de cliques */
     }
 
     .nav-links a.active {
@@ -465,8 +468,8 @@ body.dark-mode .eco-xp-text {
         font-size: 2.2rem;
         padding: 10px;
         cursor: pointer;
-        z-index: 1000001 !important;
-        /* Acima do menu */
+        z-index: 2147483647 !important;
+        /* MÁXIMO ABSOLUTO */
         background: none;
         border: none;
         color: var(--text-dark);
@@ -483,7 +486,8 @@ body.dark-mode .eco-xp-text {
         opacity: 0;
         visibility: hidden;
         transition: 0.3s ease;
-        z-index: 999999;
+        z-index: 999990 !important;
+        /* Alto, mas MENOR que o menu */
     }
 
     .menu-overlay.active {
@@ -1255,6 +1259,22 @@ body.dark-mode .option-btn.wrong {
         background: rgba(255, 255, 255, 0.1);
         border: 1px solid rgba(255, 255, 255, 0.2);
         border-radius: 50px;
+    }
+
+    .eco-hud {
+        display: flex !important;
+        /* Mostra o ícone */
+        padding: 8px;
+        margin-left: 0;
+        background: rgba(49, 100, 45, 0.1);
+        border: 1px solid rgba(49, 100, 45, 0.2);
+        border-radius: 12px;
+    }
+
+    .eco-bar-container,
+    .eco-xp-text {
+        display: none !important;
+        /* Esconde barra e texto */
     }
 
     .gaia-cta {

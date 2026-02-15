@@ -133,7 +133,15 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         filtered.forEach(item => {
-            const card = document.createElement('div');
+            // Open Profile Modal (Desktop & Mobile)
+            const ecoHud = document.getElementById('ecoHud');
+            if (ecoHud) {
+                ecoHud.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation(); // Garante que o clique seja capturado apenas aqui
+                    openProfile();
+                });
+            } const card = document.createElement('div');
             card.className = 'result-card-big';
             card.innerHTML = `
                 <div class="result-visual-side">
