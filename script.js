@@ -217,47 +217,37 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // --- Lógica do Menu Mobile (Ultra compatível) ---
+    // --- Lógica do Menu Mobile (Simplificada) ---
     var mobileBtn = document.getElementById('mobileMenuToggle');
-    var nav = document.getElementById('navLinks');
-
+    var navLinks = document.getElementById('navLinks');
     var overlay = document.querySelector('.menu-overlay');
-    if (!overlay) {
-        overlay = document.createElement('div');
-        overlay.className = 'menu-overlay';
-        document.body.appendChild(overlay);
-    }
-
-    function toggleNav(closeOnly) {
-        if (!nav || !overlay) return;
-        var isOpen = nav.classList.contains('active');
-
-        if (closeOnly || isOpen) {
-            nav.classList.remove('active');
-            overlay.classList.remove('active');
-            document.body.style.overflow = '';
-        } else {
-            nav.classList.add('active');
-            overlay.classList.add('active');
-            document.body.style.overflow = 'hidden';
-        }
-    }
 
     if (mobileBtn) {
-        mobileBtn.onclick = function (e) {
-            if (e) e.stopPropagation();
-            toggleNav();
+        mobileBtn.onclick = function () {
+            console.log("Botão de menu clicado!");
+            if (navLinks && overlay) {
+                navLinks.classList.toggle('active');
+                overlay.classList.toggle('active');
+            }
         };
     }
 
     if (overlay) {
-        overlay.onclick = function () { toggleNav(true); };
+        overlay.onclick = function () {
+            if (navLinks) navLinks.classList.remove('active');
+            overlay.classList.remove('active');
+        };
     }
 
-    // Fecha ao clicar nos links
-    var links = nav ? nav.querySelectorAll('a') : [];
-    for (var i = 0; i < links.length; i++) {
-        links[i].onclick = function () { toggleNav(true); };
+    // Fecha ao clicar em links
+    if (navLinks) {
+        var links = navLinks.getElementsByTagName('a');
+        for (var i = 0; i < links.length; i++) {
+            links[i].onclick = function () {
+                navLinks.classList.remove('active');
+                if (overlay) overlay.classList.remove('active');
+            };
+        }
     }
 
     // --- Filtros da Oficina de Artesanato ---
