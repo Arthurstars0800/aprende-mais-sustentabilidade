@@ -182,12 +182,10 @@ body.dark-mode .navbar {
     margin: 0;
     padding: 0;
     background: transparent !important;
-    /* Garante que não pareça um bloco */
 }
 
 .nav-links li {
     width: auto !important;
-    /* Largura natural do texto */
 }
 
 .nav-links a {
@@ -196,7 +194,6 @@ body.dark-mode .navbar {
     font-weight: 500;
     font-size: 1rem;
     padding: 10px 0;
-    /* Espaço vertical para clique */
     border-radius: 0;
     background: transparent !important;
     box-shadow: none !important;
@@ -204,7 +201,7 @@ body.dark-mode .navbar {
     transition: color 0.3s ease;
 }
 
-/* Hover simples: apenas muda a cor */
+/* Hover simples */
 .nav-links a:hover {
     color: var(--primary);
     background: transparent !important;
@@ -216,7 +213,6 @@ body.dark-mode .navbar {
     font-weight: 700;
     background: transparent !important;
     box-shadow: none !important;
-    /* Cor padrão (verde) */
     color: var(--primary) !important;
 }
 
@@ -228,29 +224,8 @@ body.dark-mode .navbar {
     left: 0;
     width: 100%;
     height: 3px;
-    background: currentColor;
-    /* Usa a cor do texto */
+    background: var(--primary);
     border-radius: 2px 2px 0 0;
-}
-
-/* Cores Individuais dos Links (Global) */
-
-/* Reciclagem (Azul) */
-.nav-links li:nth-child(2) a:hover,
-.nav-links li:nth-child(2) a.active {
-    color: #2563eb !important;
-}
-
-/* Oficina (Laranja) */
-.nav-links li:nth-child(3) a:hover,
-.nav-links li:nth-child(3) a.active {
-    color: #ea580c !important;
-}
-
-/* Quizes (Roxo) */
-.nav-links li:nth-child(4) a:hover,
-.nav-links li:nth-child(4) a.active {
-    color: #9333ea !important;
 }
 
 /* Dark Mode Toggle */
