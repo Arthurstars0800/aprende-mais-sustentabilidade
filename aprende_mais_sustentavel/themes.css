@@ -1,0 +1,430 @@
+/* --- EXPERIMENTO DE TEMAS VISUAIS --- */
+
+/* Tema: Oficina (Artesanato) - Quente, criativo, papel/craft */
+body.theme-craft {
+    --primary: #d97706;
+    /* Ambar/Laranja */
+    --primary-light: #f59e0b;
+    --bg-light: #fffbeb;
+    /* Removido background-image ruidoso */
+    background-color: var(--bg-light);
+}
+
+body.theme-craft .page-header {
+    background: linear-gradient(135deg, #d97706, #b45309);
+    color: white;
+    /* Garante constraste */
+}
+
+body.theme-craft .navbar {
+    border-bottom: 3px solid #d97706;
+    /* Detalhe extra */
+}
+
+/* Ajuste de cor do logo para Laranja */
+body.theme-craft .nav-logo {
+    filter: hue-rotate(-75deg) saturate(1.5) brightness(1.1);
+}
+
+/* Dark Mode - Artesanato Background */
+body.dark-mode.theme-craft {
+    background-color: #1c1917;
+    /* Warm dark background */
+    background-image: radial-gradient(rgba(217, 119, 6, 0.2) 1px, transparent 1px), radial-gradient(rgba(217, 119, 6, 0.2) 1px, #1c1917 1px);
+}
+
+/* Tema: Guia (Reciclagem) - Técnico, limpo, água/ar */
+body.theme-guide {
+    --primary: #0284c7;
+    /* Azul Céu */
+    --primary-light: #38bdf8;
+    --bg-light: #f0f9ff;
+    /* Padrão milimetrado sutil */
+    /* Removido padrão milimetrado sutil para maior clareza */
+    background-color: var(--bg-light);
+}
+
+body.theme-guide .page-header {
+    background: linear-gradient(135deg, #0284c7, #0369a1);
+}
+
+/* Ajuste de cor do logo para Azul */
+body.theme-guide .nav-logo {
+    filter: hue-rotate(85deg) brightness(1.2);
+}
+
+/* Tema: Games (Quizes) - Energético, divertido, roxo/neon */
+body.theme-game {
+    --primary: #7c3aed;
+    /* Violeta Vibrante */
+    --primary-light: #a78bfa;
+    --bg-light: #f5f3ff;
+    /* Padrão geométrico */
+    /* Removido padrão geométrico */
+    background-color: var(--bg-light);
+}
+
+body.theme-game .page-header,
+body.theme-game .hero-mini {
+    background: linear-gradient(135deg, #7c3aed, #4c1d95);
+}
+
+/* Ajuste de cor do logo para Roxo */
+body.theme-game .nav-logo {
+    filter: hue-rotate(160deg) brightness(1.1);
+}
+
+/* Tema: Natureza (Sobre) - Calmo, orgânico, verde esmeralda */
+body.theme-nature {
+    --primary: #059669;
+    /* Verde Esmeralda */
+    --primary-light: #34d399;
+    --bg-light: #ecfdf5;
+    /* Removido padrão de pontos */
+    background-color: var(--bg-light);
+}
+
+body.theme-nature .page-header {
+    background: linear-gradient(135deg, #059669, #064e3b);
+}
+
+/* Ajuste de cor do logo para Verde Esmeralda (sutil) */
+body.theme-nature .nav-logo {
+    filter: hue-rotate(20deg) brightness(1.1);
+}
+
+/* --- CORREÇÕES GERAIS DE CONTRASTE NOS TEMAS --- */
+/* Garante que o badge dentro de headers coloridos fique visível */
+body[class*="theme-"] .page-header .badge,
+body[class*="theme-"] .hero-mini .badge {
+    background: rgba(255, 255, 255, 0.2);
+    /* Fundo branco translúcido */
+    color: white;
+    /* Texto branco */
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    backdrop-filter: blur(5px);
+}
+
+/* --- TEMA SECRETO: FUTURISTA (Cyberpunk / G.A.I.A. Core) --- */
+body.theme-future {
+    --primary: #00f3ff;
+    /* Ciano Neon Padrão */
+    --primary-light: #70ffff;
+    --bg-light: #05010a;
+    --text-dark: #e0e0fb;
+    --white: #100520;
+    --neon-shadow: rgba(0, 243, 255, 0.3);
+
+    background-color: #05010a;
+    /* Grid de fundo muito sutil para não poluir */
+    background-image:
+        linear-gradient(rgba(0, 243, 255, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 243, 255, 0.05) 1px, transparent 1px);
+    background-size: 80px 80px;
+}
+
+/* Overrides de Cores por Aba no Tema Futurista */
+body.theme-future.theme-craft {
+    --primary: #ff9d00;
+    /* Laranja Neon */
+    --primary-light: #ffce00;
+    --neon-shadow: rgba(255, 157, 0, 0.2);
+}
+
+body.theme-future.theme-game {
+    --primary: #bf00ff;
+    /* Purple Neon */
+    --primary-light: #df80ff;
+    --neon-shadow: rgba(191, 0, 255, 0.2);
+}
+
+body.theme-future.theme-guide {
+    --primary: #39ff14;
+    /* Verde Neon */
+    --primary-light: #bfff00;
+    --neon-shadow: rgba(57, 255, 20, 0.2);
+}
+
+body.theme-future.theme-nature {
+    --primary: #00ff88;
+    /* Verde Esmeralda Neon */
+    --primary-light: #aaffdd;
+    --neon-shadow: rgba(0, 255, 136, 0.2);
+}
+
+body.theme-future .page-header,
+body.theme-future .hero-mini,
+body.theme-future .navbar {
+    background: linear-gradient(135deg, #100520, #05010a) !important;
+    border-bottom: 2px solid var(--primary) !important;
+    box-shadow: 0 5px 25px var(--neon-shadow) !important;
+}
+
+body.theme-future .card,
+body.theme-future .waste-card,
+body.theme-future .info-card,
+body.theme-future .craft-card,
+body.theme-future .quiz-card,
+body.theme-future .cta-card,
+body.theme-future .intro-card,
+body.theme-future .gaia-card {
+    background: rgba(16, 5, 32, 0.8) !important;
+    border: 1px solid var(--primary) !important;
+    border-color: rgba(var(--primary-rgb, 0, 243, 255), 0.3) !important;
+    /* Nota: como não definimos RGB individualmente, vamos usar opacidade sutil no CSS fixo ou var */
+    border: 1px solid var(--primary) !important;
+    box-shadow: 0 0 20px var(--neon-shadow) !important;
+    backdrop-filter: blur(12px);
+    color: #e0e0fb !important;
+}
+
+/* Forçar cores de destaque no tema futuro */
+body.theme-future .cta-card h2,
+body.theme-future .gaia-card h2,
+body.theme-future .intro-card p,
+body.theme-future .info-card h3,
+body.theme-future .hero-content h1 span,
+body.theme-future .card-visual h2 {
+    color: var(--primary) !important;
+    text-shadow: 0 0 10px var(--neon-shadow);
+}
+
+/* Ajustar botões */
+body.theme-future .btn-primary,
+body.theme-future .gaia-cta .btn-primary,
+body.theme-future .quiz-btn {
+    background: rgba(16, 5, 32, 0.5) !important;
+    color: var(--primary) !important;
+    border: 2px solid var(--primary) !important;
+    box-shadow: 0 0 10px var(--neon-shadow) !important;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+body.theme-future .btn-primary:hover,
+body.theme-future .gaia-cta .btn-primary:hover,
+body.theme-future .quiz-btn:hover {
+    background: var(--primary) !important;
+    color: #100520 !important;
+    box-shadow: 0 0 25px var(--primary) !important;
+}
+
+body.theme-future .nav-logo {
+    filter: drop-shadow(0 0 8px var(--primary)) brightness(1.2);
+}
+
+/* Corrigir ícones e tags */
+body.theme-future .cta-icon,
+body.theme-future .main-icon,
+body.theme-future .card-visual i {
+    color: var(--primary) !important;
+    opacity: 0.8 !important;
+    text-shadow: 0 0 15px var(--primary);
+}
+
+/* --- Gamificação Futurista Suave (Menos Brilho) --- */
+body.theme-future .eco-modal {
+    background: #0a0515 !important;
+    border: 1px solid var(--primary);
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.8);
+}
+
+body.theme-future .eco-modal-header {
+    background: linear-gradient(90deg, #100520, #0a0515) !important;
+    border-bottom: 2px solid var(--primary);
+}
+
+body.theme-future .eco-profile-summary {
+    border-bottom-color: rgba(255, 255, 255, 0.1);
+}
+
+body.theme-future .eco-profile-avatar-big {
+    background: rgba(16, 5, 32, 0.8);
+    border: 1px solid var(--neon-shadow);
+}
+
+body.theme-future .eco-profile-info p {
+    color: #a0a0c0;
+}
+
+body.theme-future .eco-tab-btn {
+    background: #1a1a2e;
+    color: #8080a0;
+}
+
+body.theme-future .eco-tab-btn.active {
+    background: var(--primary);
+    color: #05010a;
+    box-shadow: 0 0 15px var(--neon-shadow);
+}
+
+body.theme-future .eco-shop-item {
+    background: #110a1f !important;
+    border-color: rgba(255, 255, 255, 0.05) !important;
+}
+
+body.theme-future .eco-shop-item:hover {
+    border-color: var(--primary) !important;
+    background: rgba(var(--primary-rgb, 0, 243, 255), 0.05) !important;
+}
+
+body.theme-future .eco-shop-item.equipped {
+    background: rgba(var(--primary-rgb, 0, 243, 255), 0.1) !important;
+    border-color: var(--primary) !important;
+}
+
+body.theme-future .eco-shop-item .item-status {
+    color: #8080a0;
+}
+
+/* HUD mais discreto */
+body.theme-future .eco-hud {
+    background: rgba(10, 5, 21, 0.8) !important;
+    border: 1px solid var(--neon-shadow);
+    backdrop-filter: blur(8px);
+}
+
+/* --- Quiz Futurista (Simulação de Terminal de Dados) --- */
+body.theme-future .quiz-container {
+    background: rgba(10, 5, 21, 0.9) !important;
+    border: 2px solid var(--primary);
+    box-shadow: 0 0 40px var(--neon-shadow);
+    color: #e0e0fb;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Linha de energia no topo do quiz */
+body.theme-future .quiz-container::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: var(--primary);
+    box-shadow: 0 0 15px var(--primary);
+}
+
+body.theme-future .progress-bar-container {
+    background: #1a1a2e;
+    height: 6px;
+    border-radius: 10px;
+}
+
+body.theme-future .progress-fill {
+    background: var(--primary);
+    box-shadow: 0 0 10px var(--primary);
+}
+
+body.theme-future .option-btn {
+    background: rgba(26, 26, 46, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #e0e0fb;
+}
+
+body.theme-future .option-btn:hover {
+    background: rgba(var(--primary-rgb, 0, 243, 255), 0.1);
+    border-color: var(--primary);
+    box-shadow: 0 0 15px var(--neon-shadow);
+}
+
+/* Estados de Resposta (Sinal de Dados) */
+body.theme-future .option-btn.correct {
+    background: rgba(57, 255, 20, 0.1) !important;
+    border-color: #39ff14 !important;
+    color: #39ff14 !important;
+    box-shadow: 0 0 20px rgba(57, 255, 20, 0.3) !important;
+}
+
+body.theme-future .option-btn.wrong {
+    background: rgba(255, 0, 60, 0.1) !important;
+    border-color: #ff003c !important;
+    color: #ff003c !important;
+    box-shadow: 0 0 20px rgba(255, 0, 60, 0.3) !important;
+}
+
+body.theme-future .intro-slide-content {
+    background: rgba(26, 26, 46, 0.4);
+    border-color: var(--primary);
+    color: #a0a0c0;
+}
+
+body.theme-future .intro-slide-title {
+    color: var(--primary);
+}
+
+body.theme-future .result-gaia-box {
+    background: rgba(16, 5, 32, 0.9) !important;
+    border: 1px solid var(--primary);
+}
+
+/* --- Efeito: Chuva de Dados G.A.I.A. --- */
+.eco-data-bit {
+    position: absolute;
+    top: -50px;
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: bold;
+    color: var(--primary);
+    text-shadow: 0 0 8px var(--primary);
+    pointer-events: none;
+    z-index: 5;
+    animation: data-fall linear forwards;
+    white-space: nowrap;
+}
+
+@keyframes data-fall {
+    0% {
+        transform: translateY(0);
+        opacity: 0;
+    }
+
+    10% {
+        opacity: 1;
+    }
+
+    90% {
+        opacity: 1;
+    }
+
+    100% {
+        transform: translateY(105vh);
+        opacity: 0;
+    }
+}
+
+.eco-data-bit.matrix-style {
+    color: var(--primary) !important;
+    text-shadow: 0 0 15px var(--primary), 0 0 25px rgba(0, 0, 0, 0.9) !important;
+    font-size: 1.1em;
+}
+
+@keyframes glitch {
+    0% {
+        transform: translate(0);
+    }
+
+    20% {
+        transform: translate(-3px, 3px);
+        filter: hue-rotate(90deg);
+    }
+
+    40% {
+        transform: translate(-3px, -3px);
+    }
+
+    60% {
+        transform: translate(3px, 3px);
+        filter: hue-rotate(-90deg);
+    }
+
+    80% {
+        transform: translate(3px, -3px);
+    }
+
+    100% {
+        transform: translate(0);
+    }
+}
+
+/* Scanline removido por causar poluição visual e cansaço ocular */

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Interativo - Aprende Mais</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#2d5a27">
+</head>
+
+<body class="bg-dots theme-game">
+
+    <nav class="navbar">
+        <div class="container">
+            <div class="logo">
+                <img src="logo.png" alt="Logo" class="nav-logo">
+                <span>APRENDE MAIS</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="reciclagem.html">Guia de Reciclagem</a></li>
+                <li><a href="artesanato.html">Oficina</a></li>
+                <li><a href="quizes.html">Quizes</a></li>
+                <li><a href="sobre.html">Quem Somos</a></li>
+            </ul>
+            <div class="eco-hud" id="ecoHud" title="Carregando perfil...">
+                <span class="eco-level-icon">🌱</span>
+                <div class="eco-bar-container">
+                    <div class="eco-bar-fill" id="ecoBarFill" style="width: 0%"></div>
+                </div>
+                <span class="eco-xp-text" id="ecoXpText">...</span>
+            </div>
+            <button class="dark-mode-toggle" id="darkModeToggle" aria-label="Toggle Dark Mode">
+                <i class="fas fa-moon"></i>
+            </button>
+            <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle Menu">
+                <i class="fas fa-bars"></i>
+            </button>
+    </nav>
+
+    <main class="container">
+        <div class="quiz-container" id="quiz-player" data-aos="zoom-in">
+            <div class="progress-bar-container">
+                <div class="progress-fill" id="progress-fill"></div>
+            </div>
+
+            <!-- Seção de Introdução (Conteúdo Educativo) -->
+            <div id="intro-section" style="display: none;">
+                <div class="intro-slide-container">
+                    <i id="intro-icon" class="fas fa-info-circle intro-slide-icon"></i>
+                    <h2 id="intro-title" class="intro-slide-title">Título da Aula</h2>
+                    <div id="intro-content" class="intro-slide-content">
+                        <!-- Conteúdo será inserido via JS -->
+                    </div>
+                    <button id="next-intro-btn" class="btn btn-primary w-full">Entendi, próximo! <i
+                            class="fas fa-arrow-right"></i></button>
+                </div>
+            </div>
+
+            <!-- Seção de Perguntas (Escondida inicialmente) -->
+            <div id="question-container" style="display: none;">
+                <h2 id="question-text">Carregando pergunta...</h2>
+                <div class="options-grid" id="options-grid">
+                    <!-- Opções aqui -->
+                </div>
+            </div>
+
+            <div id="result-container" style="display: none; text-align: center;">
+                <i class="fas fa-trophy" style="font-size: 5rem; color: #ffd700; margin-bottom: 20px;"></i>
+                <h2>Quiz Finalizado!</h2>
+                <p id="score-text" style="font-size: 1.5rem; margin: 20px 0;"></p>
+                <div style="display: flex; gap: 15px; justify-content: center; margin-bottom: 30px;">
+                    <a href="quizes.html" class="btn btn-outline">Voltar</a>
+                    <button onclick="location.reload()" class="btn btn-primary">Tentar Novamente</button>
+                </div>
+
+                <div class="result-gaia-box">
+                    <img src="gaia_icon.png" alt="GAIA Icon">
+                    <div>
+                        <h3 id="gaia-msg-title">Próximo Passo?</h3>
+                        <p id="gaia-msg-text">Agora que você aprendeu como descartar, <strong>converse com a
+                                G.A.I.A.</strong> para saber qual é o ponto de coleta mais próximo de você!</p>
+                        <a href="index.html#gaia-promo" class="gaia-link-btn">Conhecer a G.A.I.A. <i
+                                class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({
+            duration: 800,
+            once: true
+        });
+    </script>
+    <script src="gamification.js"></script>
+    <script src="script.js"></script>
+    <script src="quiz-engine.js"></script>
+</body>
+
+</html>

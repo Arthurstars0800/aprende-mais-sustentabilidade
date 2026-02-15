@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guia de Reciclagem - Aprende Mais</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#2d5a27">
+    <style>
+        /* Estilos específicos para a página de reciclagem */
+        .page-header {
+            padding: 120px 0 60px;
+            background: linear-gradient(135deg, var(--primary), #1b3d17);
+            color: white;
+            text-align: center;
+        }
+
+        .page-header h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+
+        .page-header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .search-area {
+            margin-top: -50px;
+            position: relative;
+            z-index: 10;
+        }
+    </style>
+</head>
+
+<body class="theme-guide">
+
+    <nav class="navbar">
+        <div class="container">
+            <div class="logo">
+                <img src="logo.png" alt="Logo" class="nav-logo">
+                <span>APRENDE MAIS</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="reciclagem.html" class="active">Guia de Reciclagem</a></li>
+                <li><a href="artesanato.html">Oficina</a></li>
+                <li><a href="quizes.html">Quizes</a></li>
+                <li><a href="sobre.html">Quem Somos</a></li>
+            </ul>
+            <div class="eco-hud" id="ecoHud" title="Carregando perfil...">
+                <span class="eco-level-icon">🌱</span>
+                <div class="eco-bar-container">
+                    <div class="eco-bar-fill" id="ecoBarFill" style="width: 0%"></div>
+                </div>
+                <span class="eco-xp-text" id="ecoXpText">...</span>
+            </div>
+            <button class="dark-mode-toggle" id="darkModeToggle" aria-label="Toggle Dark Mode">
+                <i class="fas fa-moon"></i>
+            </button>
+            <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle Menu">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <header class="page-header">
+        <div class="container" data-aos="fade-down">
+            <h1>Guia de Reciclagem Consciente</h1>
+            <p>Sua enciclopédia pessoal para saber o que fazer com cada tipo de resíduo, do papelão ao cabelo humano.
+            </p>
+        </div>
+    </header>
+
+    <main class="container search-area">
+        <div class="search-container" data-aos="zoom-in">
+            <input type="text" id="waste-search" placeholder="O que você quer reciclar? (Ex: Papelão, vidro...)">
+            <i class="fas fa-search search-icon"></i>
+        </div>
+        <section class="results-container-big" id="search-results">
+            <!-- Resultados aqui -->
+        </section>
+    </main>
+
+    <footer class="main-footer">
+        <div class="container">
+            <p>&copy; 2025 Aprende Mais: Sustentabilidade. Desenvolvido para um futuro melhor.</p>
+        </div>
+    </footer>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="gamification.js"></script>
+    <script src="script.js"></script>
+    <script>
+        // Inicializa a busca com todos os itens ao carregar a página
+        window.addEventListener('load', () => {
+            if (typeof displayResults === 'function') {
+                displayResults("");
+            }
+        });
+    </script>
+</body>
+
+</html>

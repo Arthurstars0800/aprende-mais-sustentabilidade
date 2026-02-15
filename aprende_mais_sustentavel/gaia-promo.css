@@ -1,0 +1,64 @@
+/* CSS para o Box da GAIA no final do Quiz */
+.result-gaia-box {
+    background: linear-gradient(135deg, #e6f4ea, #ccebd4);
+    border: 2px solid var(--primary);
+    border-radius: 20px;
+    padding: 30px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    text-align: left;
+    margin-top: 30px;
+    box-shadow: 0 10px 20px rgba(45, 90, 39, 0.1);
+    animation: slideIn 0.5s ease-out;
+}
+
+.result-gaia-box img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    border: 3px solid white;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.result-gaia-box h3 {
+    color: var(--primary);
+    font-size: 1.4rem;
+    margin-bottom: 5px;
+}
+
+.result-gaia-box p {
+    color: var(--text-dark);
+    font-size: 1rem;
+    margin-bottom: 15px;
+    line-height: 1.4;
+}
+
+.gaia-link-btn {
+    display: inline-block;
+    background: var(--primary);
+    color: white;
+    padding: 8px 20px;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 0.9rem;
+    transition: var(--transition);
+}
+
+.gaia-link-btn:hover {
+    background: #1b3d17;
+    transform: translateX(5px);
+}
+
+@media (max-width: 600px) {
+    .result-gaia-box {
+        flex-direction: column;
+        text-align: center;
+        padding: 20px;
+    }
+
+    .gaia-link-btn {
+        width: 100%;
+    }
+}
