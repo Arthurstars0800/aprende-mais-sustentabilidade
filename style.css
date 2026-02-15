@@ -332,46 +332,66 @@ body.dark-mode .eco-xp-text {
     }
 
     .nav-links {
+        display: none;
+        /* Esconde o menu padrão no mobile */
+    }
+
+    /* O menu mobile (solto no body) */
+    body>.nav-links {
+        display: flex !important;
         position: fixed;
         top: 0;
         right: -100%;
         width: 80%;
-        max-width: 300px;
+        max-width: 320px;
         height: 100vh;
-        background: white;
+        background: #ffffff;
         flex-direction: column;
         justify-content: center;
         align-items: center;
         padding: 40px;
-        gap: 20px;
-        box-shadow: -10px 0 30px rgba(0, 0, 0, 0.2);
-        transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        z-index: 99999 !important;
-        /* Camada altíssima */
+        gap: 25px;
+        box-shadow: -15px 0 50px rgba(0, 0, 0, 0.3);
+        transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        z-index: 1000000 !important;
+        /* Absolutamente no topo */
     }
 
-    body.dark-mode .nav-links {
-        background: #1a1a1a;
+    body.dark-mode>.nav-links {
+        background: #121212;
+        box-shadow: -15px 0 50px rgba(0, 0, 0, 0.8);
     }
 
-    .nav-links.active {
+    body>.nav-links.active {
         right: 0 !important;
+    }
+
+    body>.nav-links a {
+        font-size: 1.5rem !important;
+        text-align: center;
+        width: 100%;
+        padding: 15px;
+        color: var(--text-dark);
+        text-decoration: none;
+        font-weight: 800;
+        border-radius: 12px;
+    }
+
+    body>.nav-links a:hover {
+        background: rgba(49, 100, 45, 0.1);
+        color: var(--primary);
     }
 
     .mobile-menu-toggle {
         display: block !important;
-        font-size: 2rem;
-        padding: 15px;
-        /* Área de toque maior */
-        margin-left: 5px;
+        font-size: 2.2rem;
+        padding: 10px;
         cursor: pointer;
-        z-index: 100000 !important;
-        /* O mais alto de todos */
-        background: rgba(49, 100, 45, 0.1);
-        /* Fundo sutil para ver o botão */
-        border-radius: 10px;
+        z-index: 10001 !important;
+        background: none;
         border: none;
         color: var(--text-dark);
+        margin-left: 10px;
     }
 
     .dark-mode-toggle {
@@ -384,21 +404,18 @@ body.dark-mode .eco-xp-text {
         left: 0;
         width: 100%;
         height: 100%;
-        background: rgba(0, 0, 0, 0.6);
-        backdrop-filter: blur(4px);
+        background: rgba(0, 0, 0, 0.7);
+        backdrop-filter: blur(8px);
         opacity: 0;
-        /* Começa invisível */
         visibility: hidden;
-        /* Começa não clicável */
-        transition: all 0.3s ease;
-        z-index: 99998;
+        transition: 0.3s ease;
+        z-index: 999999;
+        /* Logo abaixo do menu lateral */
     }
 
     .menu-overlay.active {
         opacity: 1;
-        /* Fica visível */
         visibility: visible;
-        /* Fica clicável */
     }
 }
 
