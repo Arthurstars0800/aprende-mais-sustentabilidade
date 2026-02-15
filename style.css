@@ -386,13 +386,19 @@ body.dark-mode .eco-xp-text {
         height: 100%;
         background: rgba(0, 0, 0, 0.6);
         backdrop-filter: blur(4px);
-        display: none;
+        opacity: 0;
+        /* Começa invisível */
+        visibility: hidden;
+        /* Começa não clicável */
+        transition: all 0.3s ease;
         z-index: 99998;
-        /* Logo abaixo do menu */
     }
 
     .menu-overlay.active {
-        display: block !important;
+        opacity: 1;
+        /* Fica visível */
+        visibility: visible;
+        /* Fica clicável */
     }
 }
 
