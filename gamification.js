@@ -1103,8 +1103,14 @@ function renderShop(category) {
         const levelUnlocked = userProfile.level >= item.reqLevel;
         let themeUnlocked = item.reqTheme ? userProfile.equipped.theme === item.reqTheme : true;
         let quizzesUnlocked = item.reqAllQuizzes ? userProfile.completedQuizzes.length >= (userProfile.totalQuizzes || 6) : (item.reqQuizzes ? userProfile.completedQuizzes.length >= item.reqQuizzes : true);
+
+        // Easter eggs remain hidden until found
         if (item.isEasterEgg && !userProfile.unlockedEasterEgg) return '';
-        const isUnlocked = levelUnlocked && quizzesUnlocked && themeUnlocked;
+
+        // FORCE UNLOCK FOR AVATARS (User Request)
+        const isAvatar = category === 'avatars';
+        const isUnlocked = isAvatar || (levelUnlocked && quizzesUnlocked && themeUnlocked);
+
         const isEquipped = category === 'effects' ? userProfile.equipped.effect === item.id : (category === 'avatars' ? userProfile.equipped.avatar === item.id : userProfile.equipped.theme === item.id);
 
         let statusText = isEquipped ? 'Equipado' : 'Usar';
