@@ -1324,8 +1324,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     showToast("🕵️ MODO HACKER ATIVADO!");
                 }
 
-                // 100 cliques = Console para Celular (Eruda)
-                if (window.clickCount === 100) {
+                // 30 cliques = Console para Celular (Eruda)
+                if (window.clickCount === 30) {
                     showToast("🛠️ ABRINDO CONSOLE DE DEV...");
                     const script = document.createElement('script');
                     script.src = "//cdn.jsdelivr.net/npm/eruda";
