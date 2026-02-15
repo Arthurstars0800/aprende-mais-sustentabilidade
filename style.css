@@ -299,6 +299,25 @@ body.dark-mode .nav-links a.active {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
 }
 
+/* Cores Temáticas das Abas Desktop */
+body.theme-recycle .nav-links a.active {
+    background: #2563eb;
+    /* Azul */
+    box-shadow: 0 4px 10px rgba(37, 99, 235, 0.3);
+}
+
+body.theme-craft .nav-links a.active {
+    background: #ea580c;
+    /* Laranja */
+    box-shadow: 0 4px 10px rgba(234, 88, 12, 0.3);
+}
+
+body.theme-game .nav-links a.active {
+    background: #9333ea;
+    /* Roxo */
+    box-shadow: 0 4px 10px rgba(147, 51, 234, 0.3);
+}
+
 .nav-links a.active::after {
     display: none;
     /* Remove a linha antiga */
@@ -470,6 +489,37 @@ body.dark-mode .eco-xp-text {
     .bottom-nav-item.active {
         color: var(--primary);
         font-weight: 700;
+        position: relative;
+    }
+
+    /* Cores Temáticas da Bottom Nav */
+    body.theme-recycle .bottom-nav-item.active {
+        color: #2563eb;
+        /* Azul da Reciclagem */
+    }
+
+    body.theme-craft .bottom-nav-item.active {
+        color: #ea580c;
+        /* Laranja da Oficina */
+    }
+
+    body.theme-game .bottom-nav-item.active {
+        color: #9333ea;
+        /* Roxo dos Jogos */
+    }
+
+    .bottom-nav-item.active::after {
+        content: '';
+        position: absolute;
+        top: -10px;
+        /* Gruda no topo da barra */
+        left: 50%;
+        transform: translateX(-50%);
+        width: 40px;
+        height: 3px;
+        background: currentColor;
+        /* Usa a cor do texto (tema) */
+        border-radius: 0 0 4px 4px;
     }
 
     .bottom-nav-item.active i {
