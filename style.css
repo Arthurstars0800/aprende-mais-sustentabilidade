@@ -214,9 +214,13 @@ main {
     position: fixed;
     top: 0;
     width: 100%;
-    z-index: 1000;
     box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
     transition: var(--transition);
+}
+
+/* Oculta Bottom Nav no Desktop */
+.bottom-nav {
+    display: none;
 }
 
 body.dark-mode .navbar {
