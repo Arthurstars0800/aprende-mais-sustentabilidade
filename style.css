@@ -3488,3 +3488,74 @@ body.dark-mode .cta-icon {
     }
 }
 
+
+/* --- Mobile Navbar Premium Upgrade & Spacing --- */
+@media (max-width: 900px) {
+    /* 1. Espaçamento Seguro: Empurra TUDO para baixo no mobile */
+    body {
+        padding-top: 90px !important; /* Altura da navbar + respiro extra */
+        padding-bottom: 90px !important; /* Altura da bottom-nav + respiro */
+    }
+
+    /* 2. Visual 'App Nativo' da Navbar Superior */
+    .navbar {
+        height: 75px !important;
+        background: rgba(255, 255, 255, 0.85) !important; /* Translúcido */
+        backdrop-filter: blur(15px) !important; /* Efeito de vidro forte */
+        -webkit-backdrop-filter: blur(15px);
+        border-bottom: 1px solid rgba(0,0,0,0.05);
+        box-shadow: 0 4px 30px rgba(0,0,0,0.03);
+        display: flex !important;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 20px !important;
+        position: fixed !important;
+        top: 0;
+        left: 0;
+        width: 100%;
+        z-index: 10000;
+        transition: all 0.3s ease;
+    }
+
+    /* Logo mais delicado */
+    .nav-logo {
+        height: 32px !important;
+        width: auto;
+    }
+
+    .logo span {
+        font-size: 1.1rem !important;
+        font-weight: 700;
+        letter-spacing: -0.5px;
+        margin-left: 8px;
+    }
+
+    /* HUD (Pontos) Compacto */
+    .eco-hud {
+        padding: 6px 12px !important;
+        background: rgba(49, 100, 45, 0.1) !important;
+        border: 1px solid rgba(49, 100, 45, 0.1) !important;
+    }
+    
+    .eco-level-icon {
+        font-size: 1.1rem !important;
+    }
+
+    /* Dark Mode Premium */
+    body.dark-mode .navbar {
+        background: rgba(20, 20, 20, 0.85) !important;
+        border-bottom: 1px solid rgba(255,255,255,0.08);
+        box-shadow: 0 4px 30px rgba(0,0,0,0.3);
+    }
+
+    body.dark-mode .eco-hud {
+        background: rgba(255, 255, 255, 0.05) !important;
+        border-color: rgba(255, 255, 255, 0.1) !important;
+    }
+
+    /* Ajuste Header (Hero) para não somar padding excessivo */
+    .hero {
+        padding-top: 20px !important; /* Já temos 90px do body, então reduzimos aqui */
+    }
+}
+
