@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oficina de Artesanato - Aprende Mais</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <!-- Estilos movidos para style.css -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#2d5a27">
+</head>
+
+<body class="theme-craft">
+
+    <nav class="navbar">
+        <div class="container">
+            <div class="logo">
+                <img src="logo.png" alt="Logo" class="nav-logo">
+                <span>APRENDE MAIS</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="reciclagem.html">Guia de Reciclagem</a></li>
+                <li><a href="artesanato.html" class="active">Oficina</a></li>
+                <li><a href="quizes.html">Quizes</a></li>
+                <li><a href="sobre.html">Quem Somos</a></li>
+            </ul>
+            <div class="eco-hud" id="ecoHud" title="Carregando perfil...">
+                <span class="eco-level-icon">🌱</span>
+                <div class="eco-bar-container">
+                    <div class="eco-bar-fill" id="ecoBarFill" style="width: 0%"></div>
+                </div>
+                <span class="eco-xp-text" id="ecoXpText">...</span>
+            </div>
+            <button class="dark-mode-toggle" id="darkModeToggle" aria-label="Toggle Dark Mode">
+                <i class="fas fa-moon"></i>
+            </button>
+            <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle Menu">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <header class="page-header">
+        <div class="container" data-aos="fade-down">
+            <span class="badge" style="background: rgba(255,255,255,0.2); color: white;">Faça Você Mesmo</span>
+            <h1>Oficina de Artesanato</h1>
+            <p>Transforme lixo em luxo! Ideias criativas e tutoriais passo a passo para dar vida nova aos seus resíduos.
+            </p>
+        </div>
+    </header>
+
+    <main class="container" style="margin-top: 60px;">
+
+        <main class="container" style="margin-top: 60px;">
+
+            <!-- Aviso de Segurança -->
+            <div class="safety-tip" data-aos="fade-right">
+                <i class="fas fa-exclamation-triangle"></i>
+                <div>
+                    <h4>Dica de Segurança</h4>
+                    <p>Se for uma criança, peça ajuda a um adulto para usar tesouras ou colas. Transformar resíduos é
+                        divertido, mas a segurança vem em primeiro lugar!</p>
+                </div>
+            </div>
+
+            <!-- Filtros de Categoria -->
+            <div class="craft-filters" data-aos="fade-up">
+                <button class="filter-btn active" data-filter="all">Todos</button>
+                <button class="filter-btn" data-filter="plastico">Plástico</button>
+                <button class="filter-btn" data-filter="metal">Metal</button>
+                <button class="filter-btn" data-filter="papel">Papel e Papelão</button>
+                <button class="filter-btn" data-filter="vidro">Vidro</button>
+            </div>
+
+            <div class="craft-grid">
+
+                <!-- Tutorial 1: PET -->
+                <div class="craft-card" data-aos="fade-up" data-category="plastico">
+                    <div class="craft-badge plastico">Plástico</div>
+                    <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" target="_blank" class="thumbnail-container">
+                        <img src="https://img.youtube.com/vi/dQw4w9WgXcQ/maxresdefault.jpg" alt="Vaso Autoirrigável">
+                        <div class="thumbnail-overlay">
+                            <i class="fas fa-play"></i>
+                        </div>
+                    </a>
+                    <div class="craft-content">
+                        <h3>Vaso Autoirrigável</h3>
+                        <p>Crie um sistema que rega suas plantas sozinho usando apenas garrafas PET.</p>
+                        <div class="material-list">
+                            <ul>
+                                <li><i class="fas fa-check"></i> Garrafa PET 2L</li>
+                                <li><i class="fas fa-check"></i> Barbante de algodão</li>
+                            </ul>
+                        </div>
+                        <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" target="_blank" class="btn yt-btn">
+                            <i class="fab fa-youtube"></i> Ver Tutorial
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Tutorial 2: Metal -->
+                <div class="craft-card" data-aos="fade-up" data-aos-delay="100" data-category="metal">
+                    <div class="craft-badge metal">Metal</div>
+                    <div class="thumbnail-placeholder" style="background: linear-gradient(45deg, #718096, #2d3748);">
+                        <i class="fas fa-hammer"></i>
+                    </div>
+                    <div class="craft-content">
+                        <h3>Organizador de Latas</h3>
+                        <p>Transforme latas de conserva em organizadores de mesa modernos e industriais.</p>
+                        <div class="material-list">
+                            <ul>
+                                <li><i class="fas fa-check"></i> Latas (Alumínio/Aço)</li>
+                                <li><i class="fas fa-check"></i> Tinta spray ou tecido</li>
+                            </ul>
+                        </div>
+                        <button class="btn btn-outline" onclick="alert('Tutorial completo em breve!')">Ler Passo a
+                            Passo</button>
+                    </div>
+                </div>
+
+                <!-- Tutorial 3: Papel -->
+                <div class="craft-card" data-aos="fade-up" data-aos-delay="200" data-category="papel">
+                    <div class="craft-badge papel">Papelão</div>
+                    <div class="thumbnail-placeholder" style="background: linear-gradient(45deg, #b58900, #856404);">
+                        <i class="fas fa-car"></i>
+                    </div>
+                    <div class="craft-content">
+                        <h3>Carrinho de Controle... Humano!</h3>
+                        <p>Um brinquedo clássico feito inteiramente de caixas de sapato e tampinhas.</p>
+                        <div class="material-list">
+                            <ul>
+                                <li><i class="fas fa-check"></i> Caixa de papelão</li>
+                                <li><i class="fas fa-check"></i> 4 Tampinhas de PET</li>
+                            </ul>
+                        </div>
+                        <button class="btn btn-outline">Ver Esquema</button>
+                    </div>
+                </div>
+
+                <!-- Tutorial 4: Vidro -->
+                <div class="craft-card" data-aos="fade-up" data-aos-delay="300" data-category="vidro">
+                    <div class="craft-badge vidro">Vidro</div>
+                    <div class="thumbnail-placeholder" style="background: linear-gradient(45deg, #4fd1c5, #285e61);">
+                        <i class="fas fa-lightbulb"></i>
+                    </div>
+                    <div class="craft-content">
+                        <h3>Luminária de Pote</h3>
+                        <p>Dê um clima aconchegante ao seu quarto com potes de conserva e luzes LED.</p>
+                        <div class="material-list">
+                            <ul>
+                                <li><i class="fas fa-check"></i> Pote de vidro limpo</li>
+                                <li><i class="fas fa-check"></i> Fio de fada (LED)</li>
+                            </ul>
+                        </div>
+                        <button class="btn btn-outline">Acessar Guia</button>
+                    </div>
+                </div>
+
+            </div>
+
+        </main>
+
+        <footer class="main-footer">
+            <div class="container">
+                <p>&copy; 2025 Aprende Mais: Sustentabilidade. Desenvolvido para um futuro melhor.</p>
+            </div>
+        </footer>
+
+        <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+        <script src="gamification.js"></script>
+        <script src="script.js"></script>
+</body>
+
+</html>

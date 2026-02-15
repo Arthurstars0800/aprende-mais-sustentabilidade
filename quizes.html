@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quizes de Sustentabilidade - Aprende Mais</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#2d5a27">
+</head>
+
+<body class="theme-game">
+
+    <nav class="navbar">
+        <div class="container">
+            <div class="logo">
+                <img src="logo.png" alt="Logo" class="nav-logo">
+                <span>APRENDE MAIS</span>
+            </div>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="reciclagem.html">Guia de Reciclagem</a></li>
+                <li><a href="artesanato.html">Oficina</a></li>
+                <li><a href="quizes.html" class="active">Quizes</a></li>
+                <li><a href="sobre.html">Quem Somos</a></li>
+            </ul>
+            <div class="eco-hud" id="ecoHud" title="Carregando perfil...">
+                <span class="eco-level-icon">🌱</span>
+                <div class="eco-bar-container">
+                    <div class="eco-bar-fill" id="ecoBarFill" style="width: 0%"></div>
+                </div>
+                <span class="eco-xp-text" id="ecoXpText">...</span>
+            </div>
+            <button class="dark-mode-toggle" id="darkModeToggle" aria-label="Toggle Dark Mode">
+                <i class="fas fa-moon"></i>
+            </button>
+            <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle Menu">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <header class="hero-mini">
+        <div class="container" data-aos="fade-down">
+            <span class="badge">Desafio</span>
+            <h1>Teste seus Conhecimentos</h1>
+            <p>Escolha um dos temas abaixo e prove que você é um mestre da sustentabilidade!</p>
+        </div>
+    </header>
+
+    <section class="container quiz-grid">
+
+        <!-- Quiz Lixo Orgânico -->
+        <div class="quiz-card" data-aos="fade-up">
+            <div class="quiz-visual orgânico">
+                <i class="fas fa-apple-whole"></i>
+            </div>
+            <div class="quiz-info">
+                <h3>Lixo Orgânico</h3>
+                <p>Você sabe o que pode ir para a composteira? Teste seus conhecimentos sobre resíduos naturais.</p>
+                <a href="quiz-player.html?type=organico" class="btn btn-primary w-full">Iniciar Quiz</a>
+            </div>
+        </div>
+
+        <!-- Quiz Pilhas e Baterias -->
+        <div class="quiz-card" data-aos="fade-up" data-aos-delay="100">
+            <div class="quiz-visual pilhas">
+                <i class="fas fa-battery-three-quarters"></i>
+            </div>
+            <div class="quiz-info">
+                <h3>Pilhas e Baterias</h3>
+                <p>Descubra se você sabe como lidar com resíduos perigosos e proteger o solo.</p>
+                <a href="quiz-player.html?type=pilhas" class="btn btn-primary w-full">Iniciar Quiz</a>
+            </div>
+        </div>
+
+        <!-- Quiz Lixo Seco -->
+        <div class="quiz-card" data-aos="fade-up" data-aos-delay="200">
+            <div class="quiz-visual seco">
+                <i class="fas fa-recycle"></i>
+            </div>
+            <div class="quiz-info">
+                <h3>Papel e Papelão</h3>
+                <p>Papel limpo, seco e pronto para reciclar. Você sabe separar tudo corretamente?</p>
+                <a href="quiz-player.html?type=seco" class="btn btn-primary w-full">Iniciar Quiz</a>
+            </div>
+        </div>
+
+        <!-- Quiz Vidro -->
+        <div class="quiz-card" data-aos="fade-up" data-aos-delay="300">
+            <div class="quiz-visual vidro">
+                <i class="fas fa-wine-glass"></i>
+            </div>
+            <div class="quiz-info">
+                <h3>Vidro</h3>
+                <p>O material infinitamente reciclável. Aprenda como descartar vidros com segurança.</p>
+                <a href="quiz-player.html?type=vidro" class="btn btn-primary w-full">Iniciar Quiz</a>
+            </div>
+        </div>
+
+        <!-- Quiz Metal -->
+        <div class="quiz-card" data-aos="fade-up" data-aos-delay="400">
+            <div class="quiz-visual metal">
+                <i class="fas fa-tools"></i>
+            </div>
+            <div class="quiz-info">
+                <h3>Metal</h3>
+                <p>De latinhas a ferragens. Teste seu conhecimento sobre um dos materiais mais valiosos na reciclagem.
+                </p>
+                <a href="quiz-player.html?type=metal" class="btn btn-primary w-full">Iniciar Quiz</a>
+            </div>
+        </div>
+
+        <!-- Quiz Plástico -->
+        <div class="quiz-card" data-aos="fade-up" data-aos-delay="500">
+            <div class="quiz-visual plastico">
+                <i class="fas fa-bottle-water"></i>
+            </div>
+            <div class="quiz-info">
+                <h3>Plástico</h3>
+                <p>Um desafio global. Entenda os tipos de plástico, microplásticos e como reduzir o impacto.</p>
+                <a href="quiz-player.html?type=plastico" class="btn btn-primary w-full">Iniciar Quiz</a>
+            </div>
+        </div>
+
+    </section>
+
+    <footer class="main-footer">
+        <div class="container">
+            <p>&copy; 2025 Aprende Mais: Sustentabilidade. Desenvolvido para um futuro melhor.</p>
+        </div>
+    </footer>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="gamification.js"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>

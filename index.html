@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aprende Mais: Sustentabilidade</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#2d5a27">
+</head>
+
+<body>
+
+    <!-- Header / Navbar -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="logo">
+                <img src="logo.png" alt="Logo" class="nav-logo">
+                <span>APRENDE MAIS</span>
+            </div>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="index.html" class="active">Home</a></li>
+                <li><a href="reciclagem.html">Guia de Reciclagem</a></li>
+                <li><a href="artesanato.html">Oficina</a></li>
+                <li><a href="quizes.html">Quizes</a></li>
+                <li><a href="sobre.html">Quem Somos</a></li>
+            </ul>
+            <div class="eco-hud" id="ecoHud" title="Carregando perfil...">
+                <span class="eco-level-icon">🌱</span>
+                <div class="eco-bar-container">
+                    <div class="eco-bar-fill" id="ecoBarFill" style="width: 0%"></div>
+                </div>
+                <span class="eco-xp-text" id="ecoXpText">...</span>
+            </div>
+            <button class="dark-mode-toggle" id="darkModeToggle" aria-label="Toggle Dark Mode">
+                <i class="fas fa-moon"></i>
+            </button>
+            <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle Menu">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header id="home" class="hero">
+        <div class="container hero-grid">
+            <div class="hero-content" data-aos="fade-right">
+                <div class="badge">Sustentabilidade</div>
+                <h1>Aprende Mais: <span>Sustentabilidade</span></h1>
+                <p>Com o Aprende Mais: Sustentabilidade você aprende facilmente como tratar o seu lixo. Teste esses
+                    conhecimentos com nossos quizes focados em cada tipo de resíduo e aproveite também para consultar
+                    nosso guia de reciclagem para criar objetos, brinquedos e artesanatos!</p>
+                <div class="hero-buttons">
+                    <a href="reciclagem.html" class="btn btn-primary">Começar a Aprender</a>
+                    <a href="quizes.html" class="btn btn-outline">Ver Quizes</a>
+                </div>
+            </div>
+            <div class="hero-image">
+                <div class="hero-logo-container">
+                    <img src="logo.png" alt="Aprende Mais Sustentabilidade" class="hero-logo">
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Intro Text Box -->
+    <section class="intro-box-section container" data-aos="fade-up" id="explorar">
+        <div class="intro-card">
+            <p>Quer aprender a importância da reciclagem correta? Quer aprimorar os seus conhecimentos sobre
+                sustentabilidade e compostagem? Explore nosso novo guia inteligente de reciclagem e teste seus
+                aprendizados conosco!!</p>
+        </div>
+    </section>
+
+    <!-- Parallax Banner -->
+    <section class="parallax-banner">
+        <div class="parallax-content">
+            <h2>Pequenas Atitudes, Grandes Impactos</h2>
+            <p>"A natureza não faz nada em vão." - Aristóteles</p>
+        </div>
+    </section>
+
+    <!-- Call to Action Reciclagem -->
+    <section class="cta-reciclagem container" data-aos="fade-up">
+        <div class="cta-card">
+            <div class="cta-content">
+                <h2>Guia de Reciclagem Inteligente</h2>
+                <p>Você sabia que até o <strong>cabelo humano</strong> tem um destino especial? Conheça nosso guia
+                    completo e descubra como reciclar seus resíduos.</p>
+                <a href="reciclagem.html" class="btn btn-primary">Acessar o Guia de Reciclagem</a>
+            </div>
+            <div class="cta-icon">
+                <i class="fas fa-recycle"></i>
+            </div>
+        </div>
+    </section>
+
+    <!-- Cards Section -->
+    <section class="content-cards container">
+
+        <!-- Card Geral sobre Quizes -->
+        <div class="info-card" id="quizes-info" data-aos="fade-up">
+            <div class="card-visual" style="background: linear-gradient(135deg, #a78bfa, #7c3aed);">
+                <i class="fas fa-gamepad main-icon"></i>
+                <h2>Desafie-se!</h2>
+            </div>
+            <div class="card-content">
+                <h3>Teste seus conhecimentos</h3>
+                <p>Você sabe mesmo dividir o lixo corretamente? Preparamos diversos quizes interativos para você
+                    aprender brincando.</p>
+                <ul>
+                    <li><i class="fas fa-check"></i> Aprenda sobre práticas de descarte correto;</li>
+                    <li><i class="fas fa-check"></i> Descubra curiosidades incríveis;</li>
+                </ul>
+                <a href="quizes.html" class="quiz-btn" style="background-color: #7c3aed;">Ir para os Quizes <i
+                        class="fas fa-arrow-right"></i></a>
+            </div>
+        </div>
+
+    </section>
+
+    <!-- GAIA Promo Section -->
+    <section id="gaia-promo" class="gaia-promo container" data-aos="zoom-in">
+        <div class="gaia-card glass-hover">
+            <div class="gaia-glow"></div>
+            <div class="gaia-header-side">
+                <span class="badge gaia-badge">Próximo Nível</span>
+                <div class="gaia-icon-side">
+                    <img src="gaia_icon.png" alt="G.A.I.A. Icon" class="floating-icon">
+                </div>
+            </div>
+            <div class="gaia-text">
+                <h2>Conheça a <span>G.A.I.A.</span></h2>
+                <p>Muito mais que uma assistente, a <strong>G.A.I.A.</strong> (Gestora Ambiental de IA Avançada) utiliza
+                    inteligência artificial para guiar sua jornada sustentável de forma personalizada.</p>
+                <div class="gaia-features">
+                    <div class="feature-tag"><i class="fas fa-eye"></i> GAIA Vision</div>
+                    <div class="feature-tag"><i class="fas fa-map-marked-alt"></i> Ecomapa</div>
+                    <div class="feature-tag"><i class="fas fa-brain"></i> IA Nativa</div>
+                </div>
+                <div class="gaia-cta">
+                    <a href="#" class="btn btn-gaia disabled"><i class="fab fa-google-play"></i> Google Play</a>
+                    <a href="#" class="btn btn-gaia disabled"><i class="fab fa-apple"></i> App Store</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="main-footer">
+        <div class="container footer-grid">
+            <div class="footer-logo">
+                <img src="logo.png" alt="Logo">
+                <span>APRENDE MAIS</span>
+            </div>
+            <div class="footer-copy">
+                <p>&copy; 2025 Aprende Mais: Sustentabilidade</p>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-github"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="gamification.js"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>

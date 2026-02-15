@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quem Somos - Aprende Mais</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#2d5a27">
+</head>
+
+<body class="theme-nature">
+
+    <nav class="navbar">
+        <div class="container">
+            <div class="logo">
+                <img src="logo.png" alt="Logo" class="nav-logo">
+                <span>APRENDE MAIS</span>
+            </div>
+            <ul class="nav-links" id="main-nav">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="reciclagem.html">Guia de Reciclagem</a></li>
+                <li><a href="artesanato.html">Oficina</a></li>
+                <li><a href="quizes.html">Quizes</a></li>
+                <li><a href="sobre.html" class="active">Quem Somos</a></li>
+            </ul>
+            <div class="eco-hud" id="ecoHud" title="Carregando perfil...">
+                <span class="eco-level-icon">🌱</span>
+                <div class="eco-bar-container">
+                    <div class="eco-bar-fill" id="ecoBarFill" style="width: 0%"></div>
+                </div>
+                <span class="eco-xp-text" id="ecoXpText">...</span>
+            </div>
+            <button class="dark-mode-toggle" id="darkModeToggle" aria-label="Toggle Dark Mode">
+                <i class="fas fa-moon"></i>
+            </button>
+            <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle Menu">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <header class="page-header" style="background: linear-gradient(135deg, #1b3d17, #31642d);">
+        <div class="container" data-aos="fade-down">
+            <h1>Minha Missão</h1>
+            <p>Educação sustentável, gratuita e acessível para transformar o futuro.</p>
+        </div>
+    </header>
+
+    <main class="container" style="padding: 80px 20px;">
+        <div class="about-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center;">
+            <div class="about-text" data-aos="fade-right">
+                <h2 style="color: var(--primary); font-size: 2.5rem; margin-bottom: 20px;">Sobre o Projeto</h2>
+                <p style="font-size: 1.15rem; margin-bottom: 20px;">O <strong>Aprende Mais: Sustentabilidade</strong>
+                    nasceu como um projeto desenvolvido para fins escolares por <strong>Arthur da Silva
+                        Arcari</strong>.
+                    O que começou como um trabalho acadêmico se tornou uma plataforma dedicada a disseminar conhecimento
+                    prático sobre o meio ambiente.</p>
+                <p style="font-size: 1.15rem; margin-bottom: 20px;">Meu grande objetivo é oferecer <strong>aprendizado
+                        sustentável gratuito e acessível para todos</strong>. Acredito que a mudança começa com a
+                    informação correta sobre como lidamos com os resíduos que geramos diariamente.</p>
+                <p style="font-size: 1.15rem; margin-bottom: 20px;">Afirmo que o nome <strong>Aprende Mais:
+                        Sustentabilidade</strong> foi inspirado pelo nome <em>Aprende Mais</em>, da política pública que
+                    designou livros aos estudantes para revisar a educação básica nos anos finais de cada etapa do
+                    ensino escolar no estado do Rio Grande do Sul em 2025, ainda mais por ambos terem objetivos
+                    semelhantes de oferecer educação gratuita e acessível.</p>
+            </div>
+            <div class="about-image" data-aos="fade-left"
+                style="background: var(--white); padding: 40px; border-radius: 40px; box-shadow: var(--card-shadow); text-align: center;">
+                <img src="logo.png" alt="Arthur da Silva Arcari" style="width: 200px; margin-bottom: 20px;">
+                <h3 id="dev-name" style="cursor: pointer; user-select: none; color: var(--text-dark);">Arthur da Silva
+                    Arcari
+                </h3>
+                <p style="color: var(--text-muted);">Desenvolvedor do Projeto</p>
+            </div>
+        </div>
+    </main>
+
+    <footer class="main-footer">
+        <div class="container">
+            <p>&copy; 2025 Aprende Mais: Sustentabilidade. Desenvolvido para um futuro melhor.</p>
+        </div>
+    </footer>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="gamification.js"></script>
+    <script src="script.js"></script>
+    <script>
+        // Easter Egg: 5 cliques no nome
+        let clickCount = 0;
+        const devName = document.getElementById('dev-name');
+
+        if (devName) {
+            devName.addEventListener('click', function () {
+                clickCount++;
+
+                if (clickCount === 5) {
+                    // Gamification Integration
+                    if (window.gamification) {
+                        gamification.addXp(500, "(Hacker do Bem!)");
+                    }
+
+                    // Check theme for colors
+                    const isDark = document.body.classList.contains('dark-mode');
+                    const bgColor = isDark ? '#2a2a2a' : 'white';
+                    const titleColor = isDark ? '#4ade80' : 'var(--primary)';
+                    const textColor = isDark ? '#e5e5e5' : 'var(--text-dark)';
+                    const mutedColor = isDark ? '#a3a3a3' : 'var(--text-muted)';
+
+                    // Criar overlay escuro
+                    const overlay = document.createElement('div');
+                    overlay.style.cssText = `
+                        position: fixed;
+                        top: 0;
+                        left: 0;
+                        width: 100%;
+                        height: 100%;
+                        background: rgba(0, 0, 0, 0.8);
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        z-index: 9999;
+                        animation: fadeIn 0.3s ease;
+                    `;
+
+                    // Criar popup
+                    const popup = document.createElement('div');
+                    popup.style.cssText = `
+                        background: ${bgColor};
+                        padding: 40px;
+                        border-radius: 20px;
+                        max-width: 600px;
+                        margin: 20px;
+                        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+                        animation: slideUp 0.4s ease;
+                        position: relative;
+                    `;
+
+                    popup.innerHTML = `
+                        <h2 style="color: ${titleColor}; margin-bottom: 20px; font-size: 1.8rem;">💚 Uma Mensagem do Desenvolvedor</h2>
+                        <p style="color: ${textColor}; line-height: 1.8; font-size: 1.1rem; margin-bottom: 10px;">
+                            O mundo acaba e nós estamos assistindo tudo acontecendo ao nosso redor, este site é uma forma de tentar fazer o que a mídia tradicional não faz, reclamar de aquecimento global é fácil mas dar uma solução para tudo isso é para poucos, espero que este projeto e o G.A.I.A. acabem dando certo pois assim poderei cumprir meus objetivos de espalhar educação ecológica gratuita e acessível para todos com meus projetos.
+                        </p>
+                        <p style="color: ${mutedColor}; font-style: italic; font-size: 1rem; margin-bottom: 30px; text-align: right;">
+                            - Arthur da Silva Arcari, 2026
+                        </p>
+                        <button id="closePopup" style="
+                            background: var(--primary);
+                            color: white;
+                            border: none;
+                            padding: 12px 30px;
+                            border-radius: 10px;
+                            font-weight: 700;
+                            cursor: pointer;
+                            font-size: 1rem;
+                            transition: all 0.3s;
+                        ">Fechar</button>
+                    `;
+
+                    overlay.appendChild(popup);
+                    document.body.appendChild(overlay);
+
+                    // Fechar popup
+                    document.getElementById('closePopup').addEventListener('click', function () {
+                        overlay.style.animation = 'fadeOut 0.3s ease';
+                        setTimeout(() => overlay.remove(), 300);
+                        clickCount = 0; // Reset contador
+                    });
+
+                    // Fechar ao clicar fora
+                    overlay.addEventListener('click', function (e) {
+                        if (e.target === overlay) {
+                            overlay.style.animation = 'fadeOut 0.3s ease';
+                            setTimeout(() => overlay.remove(), 300);
+                            clickCount = 0;
+                        }
+                    });
+                }
+            });
+        }
+
+        // Adicionar animações CSS
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes fadeIn {
+                from { opacity: 0; }
+                to { opacity: 1; }
+            }
+            @keyframes fadeOut {
+                from { opacity: 1; }
+                to { opacity: 0; }
+            }
+            @keyframes slideUp {
+                from { 
+                    opacity: 0;
+                    transform: translateY(30px);
+                }
+                to { 
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+
+</html>

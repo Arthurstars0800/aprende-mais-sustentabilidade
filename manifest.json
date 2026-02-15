@@ -1,0 +1,17 @@
+{
+    "name": "Aprende Mais: Sustentabilidade",
+    "short_name": "Aprende Mais",
+    "description": "Guia interativo de sustentabilidade e reciclagem com gamificação.",
+    "start_url": "index.html",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#2d5a27",
+    "icons": [
+        {
+            "src": "logo.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "any maskable"
+        }
+    ]
+}
