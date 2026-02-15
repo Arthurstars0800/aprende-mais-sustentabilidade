@@ -219,10 +219,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Mobile Menu Toggle logic with Overlay
     const mobileMenuToggle = document.getElementById('mobileMenuToggle');
-    const navLinks = document.getElementById('navLinks');
+    const navLinks = document.getElementById('navLinks'); // Única declaração permitida
     const menuIcon = mobileMenuToggle?.querySelector('i');
 
-    // Inject overlay if it doesn't exist
+    // Injeta overlay se não existir
     let menuOverlay = document.querySelector('.menu-overlay');
     if (!menuOverlay) {
         menuOverlay = document.createElement('div');
@@ -238,18 +238,26 @@ document.addEventListener('DOMContentLoaded', () => {
             menuOverlay.classList.add('active');
             menuIcon?.classList.remove('fa-bars');
             menuIcon?.classList.add('fa-times');
-            document.body.style.overflow = 'hidden'; // Prevent scrolling
+            document.body.style.overflow = 'hidden';
         } else {
             navLinks?.classList.remove('active');
             menuOverlay.classList.remove('active');
             menuIcon?.classList.remove('fa-times');
             menuIcon?.classList.add('fa-bars');
-            document.body.style.overflow = ''; // Allow scrolling
+            document.body.style.overflow = '';
         }
     };
 
-    mobileMenuToggle?.addEventListener('click', () => toggleMenu());
-    menuOverlay.addEventListener('click', () => toggleMenu(true));
+    if (mobileMenuToggle) {
+        mobileMenuToggle.addEventListener('click', (e) => {
+            e.stopPropagation();
+            toggleMenu();
+        });
+    }
+
+    if (menuOverlay) {
+        menuOverlay.addEventListener('click', () => toggleMenu(true));
+    }
 
     // Fechar menu ao clicar em um link
     navLinks?.querySelectorAll('a').forEach(link => {
