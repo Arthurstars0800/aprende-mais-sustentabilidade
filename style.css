@@ -3302,6 +3302,7 @@ body.dark-mode .about-card p {
 body.dark-mode .about-card img {
     border-color: #333;
 }
+
 /* --- CTA Reciclagem Styles (Adicionado para corrigir Botão Cortado) --- */
 .cta-reciclagem {
     padding: 80px 0;
@@ -3387,19 +3388,23 @@ body.dark-mode .cta-icon {
         margin-left: auto;
         margin-right: auto;
     }
-    
+
     .cta-card .btn {
-        width: 100%; /* Botão full width no mobile */
-        display: block; /* Garante bloco */
+        width: 100%;
+        /* Botão full width no mobile */
+        display: block;
+        /* Garante bloco */
         text-align: center;
         padding: 15px 10px;
-        white-space: normal; /* Permite quebra de linha se texto for longo */
-        height: auto; 
+        white-space: normal;
+        /* Permite quebra de linha se texto for longo */
+        height: auto;
     }
 
     .cta-icon {
         font-size: 6rem;
-        order: -1; /* Ícone sobe para o topo */
+        order: -1;
+        /* Ícone sobe para o topo */
         margin-bottom: 10px;
     }
 }
@@ -3408,7 +3413,8 @@ body.dark-mode .cta-icon {
 /* --- Hero Section Mobile Adjustment (Centralizado e Compacto) --- */
 @media (max-width: 900px) {
     .hero {
-        padding-top: 60px !important; /* Redução drástica do topo */
+        padding-top: 60px !important;
+        /* Redução drástica do topo */
         padding-bottom: 40px !important;
         text-align: center;
         min-height: auto;
@@ -3425,8 +3431,9 @@ body.dark-mode .cta-icon {
         display: flex;
         flex-direction: column;
         align-items: center;
-        order: 2; /* Texto depois da imagem (opcional, mas comum) - Vou manter ordem original por enquanto */
-        order: 1; 
+        order: 2;
+        /* Texto depois da imagem (opcional, mas comum) - Vou manter ordem original por enquanto */
+        order: 1;
     }
 
     /* Forçar centralização do Badge */
@@ -3440,7 +3447,7 @@ body.dark-mode .cta-icon {
         width: 100%;
         flex-wrap: wrap;
     }
-    
+
     .hero-content h1 {
         font-size: 2.8rem;
     }
@@ -3451,7 +3458,8 @@ body.dark-mode .cta-icon {
     }
 
     .hero-image {
-        display: none; /* Ocultar imagem no mobile para economizar espaço e focar no texto? O print não mostra imagem. Vou assumir que ela fica em baixo ou oculta. Vou manter visivel mas ajustada */
+        display: none;
+        /* Ocultar imagem no mobile para economizar espaço e focar no texto? O print não mostra imagem. Vou assumir que ela fica em baixo ou oculta. Vou manter visivel mas ajustada */
         margin-bottom: 20px;
         order: 0;
     }
@@ -3466,14 +3474,15 @@ body.dark-mode .cta-icon {
         top: 0;
         left: 0;
         width: 100%;
-        z-index: 900; /* Abaixo de modais, acima de conteúdo */
+        z-index: 900;
+        /* Abaixo de modais, acima de conteúdo */
         background: rgba(255, 255, 255, 0.95);
         backdrop-filter: blur(10px);
         padding: 10px 0;
         height: auto;
         min-height: 60px;
     }
-    
+
     body.dark-mode .navbar {
         background: rgba(26, 26, 26, 0.95);
     }
@@ -3491,20 +3500,25 @@ body.dark-mode .cta-icon {
 
 /* --- Mobile Navbar Premium Upgrade & Spacing --- */
 @media (max-width: 900px) {
+
     /* 1. Espaçamento Seguro: Empurra TUDO para baixo no mobile */
     body {
-        padding-top: 90px !important; /* Altura da navbar + respiro extra */
-        padding-bottom: 90px !important; /* Altura da bottom-nav + respiro */
+        padding-top: 90px !important;
+        /* Altura da navbar + respiro extra */
+        padding-bottom: 90px !important;
+        /* Altura da bottom-nav + respiro */
     }
 
     /* 2. Visual 'App Nativo' da Navbar Superior */
     .navbar {
         height: 75px !important;
-        background: rgba(255, 255, 255, 0.85) !important; /* Translúcido */
-        backdrop-filter: blur(15px) !important; /* Efeito de vidro forte */
+        background: rgba(255, 255, 255, 0.85) !important;
+        /* Translúcido */
+        backdrop-filter: blur(15px) !important;
+        /* Efeito de vidro forte */
         -webkit-backdrop-filter: blur(15px);
-        border-bottom: 1px solid rgba(0,0,0,0.05);
-        box-shadow: 0 4px 30px rgba(0,0,0,0.03);
+        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.03);
         display: flex !important;
         align-items: center;
         justify-content: space-between;
@@ -3536,7 +3550,7 @@ body.dark-mode .cta-icon {
         background: rgba(49, 100, 45, 0.1) !important;
         border: 1px solid rgba(49, 100, 45, 0.1) !important;
     }
-    
+
     .eco-level-icon {
         font-size: 1.1rem !important;
     }
@@ -3544,8 +3558,8 @@ body.dark-mode .cta-icon {
     /* Dark Mode Premium */
     body.dark-mode .navbar {
         background: rgba(20, 20, 20, 0.85) !important;
-        border-bottom: 1px solid rgba(255,255,255,0.08);
-        box-shadow: 0 4px 30px rgba(0,0,0,0.3);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
     }
 
     body.dark-mode .eco-hud {
@@ -3555,7 +3569,8 @@ body.dark-mode .cta-icon {
 
     /* Ajuste Header (Hero) para não somar padding excessivo */
     .hero {
-        padding-top: 20px !important; /* Já temos 90px do body, então reduzimos aqui */
+        padding-top: 20px !important;
+        /* Já temos 90px do body, então reduzimos aqui */
     }
 }
 
@@ -3570,18 +3585,19 @@ body.dark-mode .cta-icon {
         display: flex !important;
         justify-content: space-between !important;
         align-items: center !important;
-        flex-direction: row !important; /* Garante linha horizontal */
+        flex-direction: row !important;
+        /* Garante linha horizontal */
     }
 
     /* Garantir que logo e HUD apareçam */
-    .navbar .logo, 
+    .navbar .logo,
     .navbar .eco-hud,
     .navbar .dark-mode-toggle {
         display: flex !important;
         opacity: 1 !important;
         visibility: visible !important;
     }
-    
+
     /* Esconder APENAS os links de texto, pois temos bottom-nav */
     .navbar .nav-links {
         display: none !important;
@@ -3599,10 +3615,10 @@ body.dark-mode .cta-icon {
         padding: 0 15px !important;
         background: rgba(255, 255, 255, 0.9) !important;
         backdrop-filter: blur(12px) !important;
-        box-shadow: 0 4px 20px rgba(0,0,0,0.03);
-        border-bottom: 1px solid rgba(0,0,0,0.03);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+        border-bottom: 1px solid rgba(0, 0, 0, 0.03);
     }
-    
+
     .navbar .container {
         display: flex !important;
         align-items: center !important;
@@ -3612,17 +3628,18 @@ body.dark-mode .cta-icon {
 
     /* Logo Compacto */
     .navbar .logo {
-        flex: 0 0 auto; /* Não encolhe */
+        flex: 0 0 auto;
+        /* Não encolhe */
         display: flex;
         align-items: center;
         gap: 8px;
     }
-    
+
     .nav-logo {
         height: 32px !important;
         width: auto !important;
     }
-    
+
     .logo span {
         font-size: 1rem !important;
         font-weight: 800;
@@ -3638,7 +3655,7 @@ body.dark-mode .cta-icon {
         align-items: center;
         gap: 12px;
     }
-    
+
     /* HUD de XP (Pílula) */
     .eco-hud {
         display: flex !important;
@@ -3651,30 +3668,31 @@ body.dark-mode .cta-icon {
         border-radius: 50px !important;
         margin: 0 !important;
     }
-    
+
     .eco-level-icon {
         font-size: 1rem !important;
     }
-    
+
     .eco-xp-text {
         font-size: 0.75rem !important;
         font-weight: 700;
         color: var(--primary);
     }
-    
+
     .eco-bar-container {
-        width: 40px !important; 
+        width: 40px !important;
         height: 4px !important;
-        background: rgba(0,0,0,0.1) !important;
+        background: rgba(0, 0, 0, 0.1) !important;
     }
 
     /* Botões de Ação (Lua/Som) */
-    .dark-mode-toggle, #audioToggle {
+    .dark-mode-toggle,
+    #audioToggle {
         width: 36px !important;
         height: 36px !important;
         border-radius: 50% !important;
         background: transparent !important;
-        border: 1px solid rgba(0,0,0,0.05) !important;
+        border: 1px solid rgba(0, 0, 0, 0.05) !important;
         display: flex !important;
         align-items: center;
         justify-content: center !important;
@@ -3684,21 +3702,23 @@ body.dark-mode .cta-icon {
         padding: 0 !important;
     }
 
-    .dark-mode-toggle:active, #audioToggle:active {
+    .dark-mode-toggle:active,
+    #audioToggle:active {
         transform: scale(0.9);
-        background: rgba(0,0,0,0.05) !important;
+        background: rgba(0, 0, 0, 0.05) !important;
     }
 
     /* --- 2. Bottom Nav (App Bar) --- */
     .bottom-nav {
         display: flex !important;
-        justify-content: space-around !important; /* Distribuição uniforme */
+        justify-content: space-around !important;
+        /* Distribuição uniforme */
         align-items: center !important;
         height: 70px !important;
         background: rgba(255, 255, 255, 0.95) !important;
         backdrop-filter: blur(15px) !important;
-        border-top: 1px solid rgba(0,0,0,0.05);
-        box-shadow: 0 -4px 20px rgba(0,0,0,0.05);
+        border-top: 1px solid rgba(0, 0, 0, 0.05);
+        box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.05);
         padding: 0 10px !important;
         position: fixed !important;
         bottom: 0 !important;
@@ -3714,7 +3734,8 @@ body.dark-mode .cta-icon {
         align-items: center !important;
         justify-content: center !important;
         text-decoration: none !important;
-        color: #9ca3af !important; /* Cinza inativo */
+        color: #9ca3af !important;
+        /* Cinza inativo */
         gap: 4px;
         transition: all 0.2s ease;
         background: transparent !important;
@@ -3743,10 +3764,10 @@ body.dark-mode .cta-icon {
     }
 
     /* Dark Mode Adjustments */
-    body.dark-mode .navbar, 
+    body.dark-mode .navbar,
     body.dark-mode .bottom-nav {
         background: rgba(26, 26, 26, 0.95) !important;
-        border-color: rgba(255,255,255,0.08);
+        border-color: rgba(255, 255, 255, 0.08);
         color: white;
     }
 
@@ -3757,11 +3778,219 @@ body.dark-mode .cta-icon {
     body.dark-mode .bottom-nav-item.active {
         color: var(--primary-light) !important;
     }
-    
-    body.dark-mode .dark-mode-toggle, 
+
+    body.dark-mode .dark-mode-toggle,
     body.dark-mode #audioToggle {
         color: #e5e5e5 !important;
-        border-color: rgba(255,255,255,0.1) !important;
+        border-color: rgba(255, 255, 255, 0.1) !important;
     }
 }
 
+
+/* --- MASTER MOBILE CLEANUP (EXTRA FIXES) --- */
+@media (max-width: 600px) {
+
+    /* Optimization: Prevent horizontal scroll more aggressively */
+    html,
+    body {
+        width: 100% !important;
+        overflow-x: hidden !important;
+        position: relative;
+    }
+
+    /* Fixed Padding Overrides - Reduções para telas pequenas */
+    body {
+        padding-top: 70px !important;
+        /* Navbar compacta */
+        padding-bottom: 75px !important;
+        /* Bottom nav compacta */
+    }
+
+    .container {
+        padding: 0 15px !important;
+    }
+
+    /* Hero Section Mobile Polish */
+    .hero {
+        padding: 40px 0 !important;
+        min-height: auto !important;
+    }
+
+    .hero-content h1 {
+        font-size: 2.2rem !important;
+        /* Mais legível em telas 320px-375px */
+    }
+
+    .hero-content p {
+        font-size: 1rem !important;
+        line-height: 1.5 !important;
+    }
+
+    .hero-buttons {
+        flex-direction: column !important;
+        width: 100%;
+        gap: 12px !important;
+    }
+
+    .btn {
+        width: 100% !important;
+        padding: 14px 20px !important;
+        text-align: center;
+    }
+
+    /* Page Headers (Reciclagem, Oficina, Sobre, Quizes) */
+    .page-header,
+    .hero-mini {
+        padding: 60px 0 40px !important;
+        /* Redução drástica do respiro branco */
+    }
+
+    .page-header h1,
+    .hero-mini h1 {
+        font-size: 1.8rem !important;
+    }
+
+    /* Grid Adjustments for ultra-small screens */
+    .results-grid,
+    .quiz-grid,
+    .craft-grid {
+        grid-template-columns: 1fr !important;
+        gap: 20px !important;
+    }
+
+    /* Card Contents Cleanup */
+    .card-content,
+    .result-content-side,
+    .cta-card,
+    .about-card,
+    .intro-card,
+    .eco-modal-content {
+        padding: 20px 15px !important;
+        /* Padronização de padding mobile */
+    }
+
+    /* Modal Overrides */
+    .eco-modal {
+        width: 95% !important;
+        max-height: 90vh !important;
+    }
+
+    .eco-modal-header {
+        padding: 15px 20px !important;
+    }
+
+    .eco-shop-grid {
+        grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)) !important;
+        gap: 10px !important;
+    }
+
+    .eco-shop-item {
+        padding: 10px !important;
+    }
+
+    .item-icon {
+        font-size: 1.5rem !important;
+    }
+
+    /* Developer Popup Fix (via ID do overlay se possível ou seletor genérico) */
+    div[style*="z-index: 9999"]>div {
+        /* Seletor para o popup do Arthur */
+        padding: 25px 20px !important;
+        font-size: 0.95rem !important;
+        width: 90% !important;
+        margin: 10px !important;
+    }
+
+    div[style*="z-index: 9999"] h2 {
+        font-size: 1.4rem !important;
+    }
+
+    /* Info Cards (About, Home) */
+    .info-card {
+        margin-bottom: 30px !important;
+    }
+
+    .card-visual h2 {
+        font-size: 1.8rem !important;
+    }
+
+    /* Search area adjustment */
+    .search-area {
+        margin-top: -30px !important;
+    }
+
+    .search-container input {
+        padding: 15px 20px !important;
+        padding-right: 50px !important;
+        font-size: 1rem !important;
+    }
+
+    /* Result Cards (Reciclagem) */
+    .result-visual-side {
+        padding: 30px 15px !important;
+    }
+
+    .result-visual-side i {
+        font-size: 4rem !important;
+    }
+
+    .guide-box-big {
+        padding: 20px !important;
+        margin-top: 15px !important;
+    }
+
+    /* About Page Specifics */
+    .about-text h2 {
+        font-size: 1.8rem !important;
+        text-align: center;
+    }
+
+    .about-text p {
+        font-size: 1rem !important;
+        line-height: 1.6 !important;
+    }
+
+    .about-card img {
+        width: 120px !important;
+        height: 120px !important;
+    }
+
+    /* Footer Cleanup */
+    .main-footer {
+        padding: 40px 0 !important;
+        margin-top: 40px !important;
+    }
+
+    /* GAIA Card Adjustments */
+    .gaia-card {
+        padding: 30px 15px !important;
+    }
+
+    .gaia-text h2 {
+        font-size: 1.8rem !important;
+    }
+
+    .gaia-features {
+        gap: 8px !important;
+    }
+
+    .feature-tag {
+        padding: 6px 12px !important;
+        font-size: 0.8rem !important;
+    }
+}
+
+/* Extra fix for very small screens (iPhone SE, etc) */
+@media (max-width: 360px) {
+    .hero-content h1 {
+        font-size: 1.9rem !important;
+    }
+
+    .nav-logo {
+        height: 28px !important;
+    }
+
+    .logo span {
+        font-size: 0.85rem !important;
+    }
+}

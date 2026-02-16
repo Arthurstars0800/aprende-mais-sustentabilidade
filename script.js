@@ -133,15 +133,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         filtered.forEach(item => {
-            // Open Profile Modal (Desktop & Mobile)
-            const ecoHud = document.getElementById('ecoHud');
-            if (ecoHud) {
-                ecoHud.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    e.stopPropagation(); // Garante que o clique seja capturado apenas aqui
-                    openProfile();
-                });
-            } const card = document.createElement('div');
+            const card = document.createElement('div');
             card.className = 'result-card-big';
             card.innerHTML = `
                 <div class="result-visual-side">
@@ -162,6 +154,18 @@ document.addEventListener('DOMContentLoaded', () => {
             `;
             resultsGrid.appendChild(card);
         });
+    }
+
+    // Fixed: Adicionando o listener do ecoHud APENAS UMA VEZ ao carregar a página
+    const ecoHud = document.getElementById('ecoHud');
+    if (ecoHud) {
+        ecoHud.onclick = (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            if (typeof openProfile === 'function') {
+                openProfile();
+            }
+        };
     }
 
     if (searchInput) {
