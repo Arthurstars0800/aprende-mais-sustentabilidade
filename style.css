@@ -141,9 +141,9 @@ main {
 }
 
 .container {
-    max-width: 1100px;
+    max-width: 1200px;
     margin: 0 auto;
-    padding: 0 20px;
+    padding: 0 30px;
 }
 
 /* Navbar */
@@ -377,10 +377,35 @@ body.dark-mode .eco-xp-text {
 
 /* Hero Section */
 .hero {
-    padding: 160px 0 80px;
-    min-height: 90vh;
+    padding: 180px 0 120px;
+    min-height: 80vh;
     display: flex;
     align-items: center;
+}
+
+/* Parallax Banner */
+.parallax-banner {
+    background: linear-gradient(rgba(49, 100, 45, 0.7), rgba(0, 0, 0, 0.7)),
+        url('https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?auto=format&fit=crop&w=1200&q=80');
+    background-attachment: fixed;
+    background-position: center;
+    background-size: cover;
+    padding: 120px 0;
+    color: white;
+    text-align: center;
+    margin: 40px 0;
+}
+
+.parallax-content h2 {
+    font-size: 3.5rem;
+    margin-bottom: 20px;
+    font-weight: 800;
+}
+
+.parallax-content p {
+    font-size: 1.4rem;
+    font-style: italic;
+    opacity: 0.9;
 }
 
 .hero-grid {
@@ -493,7 +518,7 @@ body.dark-mode .eco-xp-text {
 
 /* CTA Reciclagem Home */
 .cta-reciclagem {
-    padding-bottom: 80px;
+    padding: 100px 0;
 }
 
 .cta-card {
@@ -1013,7 +1038,7 @@ body.dark-mode .option-btn.wrong {
 
 /* GAIA Promo Styles */
 .gaia-promo {
-    padding-bottom: 80px;
+    padding: 100px 0;
 }
 
 .gaia-card {
@@ -1102,7 +1127,7 @@ body.dark-mode .option-btn.wrong {
 }
 
 .intro-box-section {
-    margin-bottom: 80px;
+    padding: 100px 0;
 }
 
 .intro-card {
@@ -1125,18 +1150,20 @@ body.dark-mode .option-btn.wrong {
 .content-cards {
     display: flex;
     flex-direction: column;
-    gap: 40px;
-    padding-bottom: 80px;
+    gap: 60px;
+    padding: 100px 0;
 }
 
 .info-card {
     display: grid;
     grid-template-columns: 1fr 1fr;
     background: var(--white);
-    border-radius: 30px;
+    border-radius: 40px;
     overflow: hidden;
     box-shadow: var(--card-shadow);
     transition: var(--transition);
+    gap: 0;
+    /* Uncrossed in PC, text/image meet */
 }
 
 .info-card:hover {
@@ -1158,7 +1185,7 @@ body.dark-mode .info-card {
 }
 
 .card-visual {
-    padding: 60px;
+    padding: 50px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -1244,7 +1271,7 @@ body.dark-mode .quiz-visual.plastico {
 }
 
 .card-content {
-    padding: 60px;
+    padding: 50px;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -1300,7 +1327,7 @@ body.dark-mode .card-content {
 
 /* Footer */
 .main-footer {
-    padding: 40px 0;
+    padding: 80px 0;
     background: var(--white);
     text-align: center;
     border-top: 1px solid #e5e7eb;
@@ -3203,7 +3230,7 @@ body.dark-mode .material-list {
 
 /* --- About Page Styles (Página Sobre) --- */
 .about-section {
-    padding: 60px 0;
+    padding: 100px 0;
 }
 
 .about-grid {
@@ -3303,9 +3330,8 @@ body.dark-mode .about-card img {
     border-color: #333;
 }
 
-/* --- CTA Reciclagem Styles (Adicionado para corrigir Botão Cortado) --- */
 .cta-reciclagem {
-    padding: 80px 0;
+    padding: 100px 0;
 }
 
 .cta-card {
@@ -3807,17 +3833,17 @@ body.dark-mode .cta-icon {
     }
 
     .container {
-        padding: 0 15px !important;
+        padding: 0 20px !important;
     }
 
     /* Hero Section Mobile Polish */
     .hero {
-        padding: 40px 0 !important;
+        padding: 100px 0 60px !important;
         min-height: auto !important;
     }
 
     .hero-content h1 {
-        font-size: 2.2rem !important;
+        font-size: 2.3rem !important;
         /* Mais legível em telas 320px-375px */
     }
 
@@ -3841,13 +3867,38 @@ body.dark-mode .cta-icon {
     /* Page Headers (Reciclagem, Oficina, Sobre, Quizes) */
     .page-header,
     .hero-mini {
-        padding: 60px 0 40px !important;
+        padding: 100px 0 60px !important;
         /* Redução drástica do respiro branco */
     }
 
     .page-header h1,
     .hero-mini h1 {
+        font-size: 1.9rem !important;
+    }
+
+    /* Standard Section Spacing for Mobile */
+    .intro-box-section,
+    .cta-reciclagem,
+    .content-cards,
+    .gaia-promo,
+    .about-section,
+    .parallax-banner {
+        padding: 60px 0 !important;
+        margin: 0 !important;
+    }
+
+    /* Parallax Banner Mobile */
+    .parallax-banner {
+        background-attachment: scroll !important;
+        /* Melhor performance mobile */
+    }
+
+    .parallax-content h2 {
         font-size: 1.8rem !important;
+    }
+
+    .parallax-content p {
+        font-size: 1.1rem !important;
     }
 
     /* Grid Adjustments for ultra-small screens */
@@ -3865,7 +3916,7 @@ body.dark-mode .cta-icon {
     .about-card,
     .intro-card,
     .eco-modal-content {
-        padding: 20px 15px !important;
+        padding: 30px 20px !important;
         /* Padronização de padding mobile */
     }
 
@@ -3892,9 +3943,8 @@ body.dark-mode .cta-icon {
         font-size: 1.5rem !important;
     }
 
-    /* Developer Popup Fix (via ID do overlay se possível ou seletor genérico) */
+    /* Developer Popup Fix */
     div[style*="z-index: 9999"]>div {
-        /* Seletor para o popup do Arthur */
         padding: 25px 20px !important;
         font-size: 0.95rem !important;
         width: 90% !important;
@@ -3908,6 +3958,7 @@ body.dark-mode .cta-icon {
     /* Info Cards (About, Home) */
     .info-card {
         margin-bottom: 30px !important;
+        gap: 0 !important;
     }
 
     .card-visual h2 {
@@ -3963,7 +4014,7 @@ body.dark-mode .cta-icon {
 
     /* GAIA Card Adjustments */
     .gaia-card {
-        padding: 30px 15px !important;
+        padding: 30px 20px !important;
     }
 
     .gaia-text h2 {
@@ -3971,19 +4022,20 @@ body.dark-mode .cta-icon {
     }
 
     .gaia-features {
-        gap: 8px !important;
+        gap: 10px !important;
+        justify-content: center !important;
     }
 
     .feature-tag {
-        padding: 6px 12px !important;
-        font-size: 0.8rem !important;
+        padding: 8px 15px !important;
+        font-size: 0.85rem !important;
     }
 }
 
 /* Extra fix for very small screens (iPhone SE, etc) */
 @media (max-width: 360px) {
     .hero-content h1 {
-        font-size: 1.9rem !important;
+        font-size: 2.1rem !important;
     }
 
     .nav-logo {
