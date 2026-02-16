@@ -3838,7 +3838,7 @@ body.dark-mode .cta-icon {
 
     /* Hero Section Mobile Polish */
     .hero {
-        padding: 100px 0 60px !important;
+        padding: 100px 20px 60px !important;
         min-height: auto !important;
     }
 
@@ -3867,8 +3867,7 @@ body.dark-mode .cta-icon {
     /* Page Headers (Reciclagem, Oficina, Sobre, Quizes) */
     .page-header,
     .hero-mini {
-        padding: 100px 0 60px !important;
-        /* Redução drástica do respiro branco */
+        padding: 100px 20px 60px !important;
     }
 
     .page-header h1,
@@ -3883,7 +3882,7 @@ body.dark-mode .cta-icon {
     .gaia-promo,
     .about-section,
     .parallax-banner {
-        padding: 60px 0 !important;
+        padding: 60px 20px !important;
         margin: 0 !important;
     }
 
