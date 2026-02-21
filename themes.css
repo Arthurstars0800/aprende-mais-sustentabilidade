@@ -107,34 +107,33 @@ body[class*="theme-"] .hero-mini .badge {
 
 /* --- TEMA SECRETO: FUTURISTA (Cyberpunk / G.A.I.A. Core) --- */
 body.theme-future {
-    --primary: #0099aa;
-    /* Ciano mais escuro para ler em fundo claro */
-    --primary-light: #00bcd4;
-    --bg-light: #f0fafa;
-    --text-dark: #0a1b1b;
-    --white: #ffffff;
-    --neon-shadow: rgba(0, 153, 170, 0.15);
-
-    background-color: var(--bg-light);
-    background-image:
-        linear-gradient(rgba(0, 153, 170, 0.05) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0, 153, 170, 0.05) 1px, transparent 1px);
-    background-size: 80px 80px;
-}
-
-/* Versão Dark do G.A.I.A. Core (Cyberpunk Real) */
-body.theme-future.dark-mode {
+    /* G.A.I.A. Core - "Dark-Tech" Light Mode (Ainda escuro, mas tons de ardósia/azul) */
     --primary: #00f3ff;
     --primary-light: #70ffff;
+    --bg-light: #0d1117;
+    /* Slate escuro ao invés de preto puro */
+    --text-dark: #c9d1d9;
+    --white: #161b22;
+    --neon-shadow: rgba(0, 243, 255, 0.2);
+
+    background-color: #0d1117;
+    background-image:
+        linear-gradient(rgba(0, 243, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 243, 255, 0.03) 1px, transparent 1px);
+    background-size: 50px 50px;
+    color: var(--text-dark);
+}
+
+/* Versão Dark do G.A.I.A. Core (Blackest Night / Cyberpunk Real) */
+body.theme-future.dark-mode {
     --bg-light: #05010a;
-    --text-dark: #e0e0fb;
-    --white: #100520;
-    --neon-shadow: rgba(0, 243, 255, 0.3);
+    --white: #0a0515;
+    --neon-shadow: rgba(0, 243, 255, 0.4);
 
     background-color: #05010a;
     background-image:
-        linear-gradient(rgba(0, 243, 255, 0.05) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0, 243, 255, 0.05) 1px, transparent 1px);
+        linear-gradient(rgba(0, 243, 255, 0.07) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 243, 255, 0.07) 1px, transparent 1px);
 }
 
 /* Overrides de Cores por Aba no Tema Futurista */
@@ -169,9 +168,15 @@ body.theme-future.theme-nature {
 body.theme-future .page-header,
 body.theme-future .hero-mini,
 body.theme-future .navbar {
-    background: linear-gradient(135deg, #100520, #05010a) !important;
+    background: linear-gradient(135deg, #161b22, #0d1117) !important;
     border-bottom: 2px solid var(--primary) !important;
     box-shadow: 0 5px 25px var(--neon-shadow) !important;
+}
+
+body.theme-future.dark-mode .page-header,
+body.theme-future.dark-mode .hero-mini,
+body.theme-future.dark-mode .navbar {
+    background: linear-gradient(135deg, #0a0515, #05010a) !important;
 }
 
 body.theme-future .card,
@@ -183,11 +188,11 @@ body.theme-future .cta-card,
 body.theme-future .intro-card,
 body.theme-future .gaia-card,
 body.theme-future .result-card-big {
-    background: rgba(255, 255, 255, 0.8) !important;
-    border: 2px solid var(--primary) !important;
-    box-shadow: 0 8px 25px var(--neon-shadow) !important;
+    background: rgba(22, 27, 34, 0.7) !important;
+    border: 1px solid rgba(0, 243, 255, 0.2) !important;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3) !important;
     backdrop-filter: blur(12px);
-    color: var(--text-dark) !important;
+    color: #c9d1d9 !important;
 }
 
 body.theme-future.dark-mode .card,
@@ -199,9 +204,17 @@ body.theme-future.dark-mode .cta-card,
 body.theme-future.dark-mode .intro-card,
 body.theme-future.dark-mode .gaia-card,
 body.theme-future.dark-mode .result-card-big {
-    background: rgba(16, 5, 32, 0.8) !important;
-    box-shadow: 0 0 20px var(--neon-shadow) !important;
-    color: #e0e0fb !important;
+    background: rgba(10, 5, 21, 0.8) !important;
+    border-color: var(--primary) !important;
+    box-shadow: 0 0 25px var(--neon-shadow) !important;
+    color: #00f3ff !important;
+}
+
+body.theme-future h1,
+body.theme-future h2,
+body.theme-future h3,
+body.theme-future p {
+    color: #c9d1d9 !important;
 }
 
 /* Forçar cores de destaque no tema futuro */
