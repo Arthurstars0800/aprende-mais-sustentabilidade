@@ -156,17 +156,8 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Fixed: Adicionando o listener do ecoHud APENAS UMA VEZ ao carregar a página
-    const ecoHud = document.getElementById('ecoHud');
-    if (ecoHud) {
-        ecoHud.onclick = (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            if (typeof openProfile === 'function') {
-                openProfile();
-            }
-        };
-    }
+    // The ecoHud listener has been removed from here to prevent duplicate menus.
+    // gamification.js now fully handles the ecoHud click event.
 
     if (searchInput) {
         searchInput.addEventListener('input', (e) => {
