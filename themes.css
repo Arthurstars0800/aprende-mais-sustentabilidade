@@ -107,8 +107,24 @@ body[class*="theme-"] .hero-mini .badge {
 
 /* --- TEMA SECRETO: FUTURISTA (Cyberpunk / G.A.I.A. Core) --- */
 body.theme-future {
+    --primary: #0099aa;
+    /* Ciano mais escuro para ler em fundo claro */
+    --primary-light: #00bcd4;
+    --bg-light: #f0fafa;
+    --text-dark: #0a1b1b;
+    --white: #ffffff;
+    --neon-shadow: rgba(0, 153, 170, 0.15);
+
+    background-color: var(--bg-light);
+    background-image:
+        linear-gradient(rgba(0, 153, 170, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 153, 170, 0.05) 1px, transparent 1px);
+    background-size: 80px 80px;
+}
+
+/* Versão Dark do G.A.I.A. Core (Cyberpunk Real) */
+body.theme-future.dark-mode {
     --primary: #00f3ff;
-    /* Ciano Neon Padrão */
     --primary-light: #70ffff;
     --bg-light: #05010a;
     --text-dark: #e0e0fb;
@@ -116,11 +132,9 @@ body.theme-future {
     --neon-shadow: rgba(0, 243, 255, 0.3);
 
     background-color: #05010a;
-    /* Grid de fundo muito sutil para não poluir */
     background-image:
         linear-gradient(rgba(0, 243, 255, 0.05) 1px, transparent 1px),
         linear-gradient(90deg, rgba(0, 243, 255, 0.05) 1px, transparent 1px);
-    background-size: 80px 80px;
 }
 
 /* Overrides de Cores por Aba no Tema Futurista */
@@ -167,14 +181,26 @@ body.theme-future .craft-card,
 body.theme-future .quiz-card,
 body.theme-future .cta-card,
 body.theme-future .intro-card,
-body.theme-future .gaia-card {
-    background: rgba(16, 5, 32, 0.8) !important;
-    border: 1px solid var(--primary) !important;
-    border-color: rgba(var(--primary-rgb, 0, 243, 255), 0.3) !important;
-    /* Nota: como não definimos RGB individualmente, vamos usar opacidade sutil no CSS fixo ou var */
-    border: 1px solid var(--primary) !important;
-    box-shadow: 0 0 20px var(--neon-shadow) !important;
+body.theme-future .gaia-card,
+body.theme-future .result-card-big {
+    background: rgba(255, 255, 255, 0.8) !important;
+    border: 2px solid var(--primary) !important;
+    box-shadow: 0 8px 25px var(--neon-shadow) !important;
     backdrop-filter: blur(12px);
+    color: var(--text-dark) !important;
+}
+
+body.theme-future.dark-mode .card,
+body.theme-future.dark-mode .waste-card,
+body.theme-future.dark-mode .info-card,
+body.theme-future.dark-mode .craft-card,
+body.theme-future.dark-mode .quiz-card,
+body.theme-future.dark-mode .cta-card,
+body.theme-future.dark-mode .intro-card,
+body.theme-future.dark-mode .gaia-card,
+body.theme-future.dark-mode .result-card-big {
+    background: rgba(16, 5, 32, 0.8) !important;
+    box-shadow: 0 0 20px var(--neon-shadow) !important;
     color: #e0e0fb !important;
 }
 
@@ -211,6 +237,21 @@ body.theme-future .quiz-btn:hover {
 
 body.theme-future .nav-logo {
     filter: drop-shadow(0 0 8px var(--primary)) brightness(1.2);
+}
+
+body.theme-future .result-visual-side {
+    background: linear-gradient(135deg, var(--primary), var(--primary-light)) !important;
+    color: white !important;
+    border-right: none !important;
+}
+
+body.theme-future .guide-box-big {
+    background: rgba(0, 0, 0, 0.03) !important;
+    border-color: var(--primary) !important;
+}
+
+body.theme-future.dark-mode .guide-box-big {
+    background: rgba(255, 255, 255, 0.05) !important;
 }
 
 /* Corrigir ícones e tags */
