@@ -3380,6 +3380,36 @@ body.dark-mode .about-card img {
     border-color: #333;
 }
 
+/* G.A.I.A. Core Overrides for Personal Card (About) */
+body.theme-future .about-card {
+    background: rgba(22, 27, 34, 0.8) !important;
+    border: 1px solid rgba(0, 243, 255, 0.2) !important;
+    border-top: 5px solid var(--primary) !important;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4) !important;
+    backdrop-filter: blur(15px);
+    color: #c9d1d9 !important;
+}
+
+body.theme-future .about-card img {
+    border: 3px solid var(--primary);
+    box-shadow: 0 0 15px var(--neon-shadow);
+    background: #0d1117;
+}
+
+body.theme-future .about-card h3 {
+    color: var(--primary) !important;
+    text-shadow: 0 0 10px var(--neon-shadow);
+}
+
+body.theme-future .about-card p {
+    color: #8080a0 !important;
+}
+
+body.theme-future.dark-mode .about-card {
+    background: rgba(10, 5, 21, 0.9) !important;
+    box-shadow: 0 0 30px var(--neon-shadow) !important;
+}
+
 .cta-reciclagem {
     padding: 100px 0;
 }
