@@ -680,10 +680,11 @@ body.dark-mode .cta-card {
 }
 
 .result-card-big {
-    background: white;
-    border-radius: 40px;
+    background: linear-gradient(135deg, #f3fcf5, #e0f2e5);
+    border: 2px solid rgba(45, 90, 39, 0.2);
+    border-radius: 35px;
     overflow: hidden;
-    box-shadow: var(--card-shadow);
+    box-shadow: 0 15px 30px rgba(45, 90, 39, 0.08);
     display: flex;
     align-items: stretch;
     transition: var(--transition);
@@ -692,29 +693,34 @@ body.dark-mode .cta-card {
 
 .result-card-big:hover {
     transform: scale(1.02);
+    border-color: var(--primary);
+    box-shadow: 0 20px 40px rgba(45, 90, 39, 0.15);
 }
 
 .result-visual-side {
     width: 350px;
-    background: linear-gradient(135deg, var(--primary), var(--primary-light));
+    background: rgba(255, 255, 255, 0.5);
+    border-right: 2px solid rgba(45, 90, 39, 0.1);
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    color: white;
+    color: var(--primary);
     padding: 60px 40px;
     text-align: center;
+    backdrop-filter: blur(5px);
 }
 
 .result-visual-side i {
     font-size: 6rem;
     margin-bottom: 25px;
-    filter: drop-shadow(0 10px 15px rgba(0, 0, 0, 0.2));
+    filter: drop-shadow(0 10px 15px rgba(45, 90, 39, 0.2));
 }
 
 .result-visual-side h3 {
     font-size: 1.8rem;
     font-weight: 800;
+    color: var(--primary);
 }
 
 .result-content-side {
@@ -758,7 +764,24 @@ body.dark-mode .cta-card {
 
 /* Dark Mode - Search Results */
 body.dark-mode .result-card-big {
-    background: #2a2a2a;
+    background: linear-gradient(135deg, #1e293b, #0f172a);
+    border-color: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+}
+
+body.dark-mode .result-visual-side {
+    background: rgba(0, 0, 0, 0.2);
+    border-right-color: rgba(255, 255, 255, 0.05);
+    color: #e2e8f0;
+}
+
+body.dark-mode .result-visual-side h3 {
+    color: #f8fafc;
+}
+
+body.dark-mode .result-visual-side i {
+    color: #6ee7b7;
+    filter: drop-shadow(0 10px 15px rgba(0, 0, 0, 0.5));
 }
 
 body.dark-mode .result-info-text {
