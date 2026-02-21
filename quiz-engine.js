@@ -20,44 +20,24 @@ const quizzes = {
         ],
         questions: [
             {
-                q: "Quais materiais compõem a definição de lixo orgânico?",
-                options: [
-                    "Cascas de frutas, plástico e pilhas",
-                    "Restos de comida, cascas de frutas, dejetos de animais, papéis sujos e aparas de lápis",
-                    "Aparas de lápis, dejetos de animais e plástico",
-                    "Pilhas, baterias e vidro"
-                ],
-                correct: 1
-            },
-            {
-                q: "Por que o lixo orgânico pode ser perigoso para o planeta?",
-                options: [
-                    "Pois polui o ar com gás metano (efeito estufa) e a terra/água com o chorume",
-                    "Ele não é perigoso em nenhuma circunstância",
-                    "Pois o lixo orgânico atrai apenas animais domésticos",
-                    "Pois emite gases que fazem a atmosfera entrar em combustão"
-                ],
+                q: "Qual destes itens não alimentares é classificado como orgânico pelo projeto?",
+                options: ["Aparas de lápis", "Papel higiênico limpo", "Resíduos de metal", "Plásticos pequenos"],
                 correct: 0
             },
             {
-                q: "Além da poluição, qual outro perigo o lixo orgânico mal tratado oferece?",
-                options: [
-                    "Melhora a estética das ruas",
-                    "Proliferação de causadores de doenças como ratos, mosquitos e baratas",
-                    "Geração de energia solar gratuita",
-                    "Não oferece nenhum perigo à saúde"
-                ],
+                q: "O lixo orgânico descartado a céu aberto contribui para o efeito estufa através de qual gás?",
+                options: ["Oxigênio puro", "Gás Metano", "Gás Carbônico", "Nitrogênio"],
                 correct: 1
             },
             {
-                q: "O que pode ser feito para 'reciclar' o lixo orgânico de forma útil?",
-                options: [
-                    "Queimar o lixo para beneficiar o ar com fumaça",
-                    "Descartar em lixos comuns para os coletores",
-                    "Fazer compostagem, enriquecer o solo ou alimentar animais cuidadosamente",
-                    "Jogar na rua para fortalecer o asfalto"
-                ],
+                q: "Sobre a compostagem, qual afirmação é tecnicamente correta?",
+                options: ["É a queima de lixo", "É um fertilizante químico", "Transforma matéria orgânica em solo fértil", "Serve para reciclar pilhas"],
                 correct: 2
+            },
+            {
+                q: "Qual destes subprodutos perigosos é gerado pelo lixo orgânico em decomposição?",
+                options: ["Lodo tóxico", "Ar seco", "Fumaça preta", "Chorume escuro"],
+                correct: 3
             }
         ]
     },
@@ -82,33 +62,18 @@ const quizzes = {
         ],
         questions: [
             {
-                q: "Quais os perigos de descartar incorretamente as pilhas e baterias?",
-                options: [
-                    "Não há perigos no descarte comum",
-                    "Os metais em sua composição poluem o solo causando apenas mau cheiro",
-                    "Quando sua queima acontece elas explodem sem liberar gases",
-                    "Seus gases e metais poluentes são extremamente prejudiciais à água, solo e ar"
-                ],
-                correct: 3
+                q: "Quais metais pesados são o maior perigo no interior de pilhas e baterias?",
+                options: ["Ferro e Cobre", "Prata e Ouro", "Mercúrio e Chumbo", "Alumínio e Zinco"],
+                correct: 2
             },
             {
-                q: "Como deve se descartar corretamente pilhas e baterias?",
-                options: [
-                    "Descartando no lixo comum ou reciclável de papel",
-                    "Devolvendo ao local de compra ou procurando locais de coleta seletiva",
-                    "Queimando pois os metais podem ser vendidos no futuro",
-                    "Enterrando no quintal para não poluir os rios"
-                ],
+                q: "A devolução do produto ao fabricante para descarte chama-se:",
+                options: ["Reciclagem Simples", "Logística Reversa", "Entrega Grátis", "Venda de Lixo"],
                 correct: 1
             },
             {
-                q: "O que acontece se as pilhas forem queimadas?",
-                options: [
-                    "Elas desaparecem sem deixar resíduos",
-                    "Liberam metais pesados como mercúrio e chumbo no ar",
-                    "Transformam-se em cinzas orgânicas úteis",
-                    "Ajudam a purificar a fumaça de incêndios"
-                ],
+                q: "Ao queimar pilhas, o maior risco para a saúde humana é:",
+                options: ["Calor excessivo", "Inalação de metais pesados voláteis", "Brilho intenso", "Ruído alto das explosões"],
                 correct: 1
             }
         ]
@@ -134,23 +99,18 @@ const quizzes = {
         ],
         questions: [
             {
-                q: "Quais materiais compõem a definição de lixo seco?",
-                options: ["Papel, Papelão e Plástico", "Cascas de Frutas, Papelão e Plástico", "Papel, Vidro, Metais, Papelão e Plástico", "Vidro, Papel e Papelão"],
-                correct: 2
-            },
-            {
-                q: "Qual deste é um perigo do lixo seco descartado incorretamente?",
-                options: ["Geração de adubo orgânico", "Obstrução de canais de drenagem", "Melhora da qualidade do ar", "Aumento da biodiversidade local"],
+                q: "Como o descarte de papel e papelão afeta as cidades durante chuvas fortes?",
+                options: ["Fertilizam o gramado", "Entopem canais de drenagem", "Limpam as poças", "Melhoram a aderência"],
                 correct: 1
             },
             {
-                q: "Qual a melhor forma de tratar caixas e tampas de lixo seco?",
-                options: ["Queimar para reduzir o volume", "Praticar o artesanato e fazer brinquedos", "Enterrar para decomposição", "Descartar sem lavar ou tratar"],
+                q: "A reciclagem de papel beneficia o meio ambiente pois:",
+                options: ["Cria árvores novas", "Pupa árvores e economiza água", "O papel vira plástico", "Purifica a água suja"],
                 correct: 1
             },
             {
-                q: "Neste quiz, qual o foco principal para evitar confusão com outros resíduos?",
-                options: ["Apenas Plásticos", "Apenas Metais", "Papel e Papelão", "Apenas Vidros"],
+                q: "Qual item de papel NÃO deve ir para a lixeira reciclável comum?",
+                options: ["Jornais velhos", "Revistas limpas", "Papel higiênico usado", "Cartazes de papel"],
                 correct: 2
             }
         ]
@@ -171,13 +131,13 @@ const quizzes = {
         ],
         questions: [
             {
-                q: "Quantas vezes o vidro pode ser reciclado?",
-                options: ["Apenas 2 vezes", "Cerca de 10 vezes", "Infinitas vezes", "O vidro não é reciclável"],
-                correct: 2
+                q: "Sobre a vida útil da reciclagem do vidro, é correto afirmar:",
+                options: ["Sempre perde a qualidade", "Recicla até 7 vezes", "Dura 10 ciclos", "Recicla infinitas vezes"],
+                correct: 3
             },
             {
-                q: "Qual a forma mais segura de descartar um copo quebrado?",
-                options: ["Jogar livremente na lixeira", "Envolver em papel jornal ou colocar dentro de uma embalagem protetora", "Enterrar no jardim", "Queimar para derreter o vidro"],
+                q: "Como proteger coletores ao descartar um objeto cortante de vidro?",
+                options: ["Jogar no saco preto", "Embalar em jornal ou caixa", "Enterrar para cimentar", "Deixar visível no chão"],
                 correct: 1
             }
         ]
@@ -198,14 +158,14 @@ const quizzes = {
         ],
         questions: [
             {
-                q: "Qual vantagem principal de reciclar o alumínio?",
-                options: ["Deixa as latas mais pesadas", "Economiza até 95% da energia de produção", "Faz o metal brilhar mais", "Não há vantagem real"],
+                q: "Qual a economia de energia gerada pela reciclagem de uma lata de alumínio?",
+                options: ["Poupa 20% de luz", "Até 95% de economia", "Usa mais energia", "Gera energia solar"],
                 correct: 1
             },
             {
-                q: "O que deve ser feito com latas de conserva antes do descarte?",
-                options: ["Nada, pode descartar suja", "Esvaziar e passar uma água para retirar resíduos", "Pintar para proteger do sol", "Amassar sem lavar"],
-                correct: 1
+                q: "Retirar restos de comida das latas serve principalmente para:",
+                options: ["Não atrair vetores e cheiro", "Facilitar a solda", "A lata ficar mais cara", "Evitar explosões"],
+                correct: 0
             }
         ]
     },
@@ -225,14 +185,14 @@ const quizzes = {
         ],
         questions: [
             {
-                q: "Quanto tempo o plástico pode levar para se decompor na natureza?",
-                options: ["10 anos", "50 anos", "Até 500 anos", "1 mês"],
+                q: "Quanto tempo o plástico leva para se decompor?",
+                options: ["1 ano", "10 mil anos", "Até 500 anos", "Nunca se decompõe"],
                 correct: 2
             },
             {
-                q: "O que são microplásticos?",
-                options: ["Plásticos pequenos feitos para brinquedos", "Partículas minúsculas que poluem a água e entram na cadeia alimentar", "Um tipo de adubo plástico", "Pedaços de plástico usados na construção civil"],
-                correct: 1
+                q: "O perigo sistêmico dos plásticos quebrados no mar chama-se:",
+                options: ["Nano-metais", "Nano-artesanato", "Bio-degradação", "Microplásticos"],
+                correct: 3
             }
         ]
     }
@@ -242,6 +202,20 @@ const urlParams = new URLSearchParams(window.location.search);
 const quizType = urlParams.get('type') || 'organico';
 const quiz = quizzes[quizType];
 
+// --- Auxiliary Function: Shuffle ---
+function shuffleArray(array, correctIndex) {
+    const arr = [...array];
+    const originalCorrect = arr[correctIndex];
+
+    for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+
+    const newCorrect = arr.indexOf(originalCorrect);
+    return { shuffledOptions: arr, newCorrectIndex: newCorrect };
+}
+
 // Atualizar total de quizes dinamicamente para a gamificação
 if (window.gamification) {
     gamification.updateTotalQuizzes(Object.keys(quizzes).length);
@@ -250,6 +224,7 @@ if (window.gamification) {
 let currentIntroSlide = 0;
 let currentQuestion = 0;
 let score = 0;
+let currentCorrectIndex = -1; // New state to track correct index after shuffle
 
 const introSection = document.getElementById('intro-section');
 const questionContainer = document.getElementById('question-container');
@@ -319,7 +294,11 @@ function loadQuestion() {
     const progress = (currentStep / totalSteps) * 100;
     progressFill.style.width = `${progress}%`;
 
-    qData.options.forEach((opt, index) => {
+    // Shuffle options
+    const { shuffledOptions, newCorrectIndex } = shuffleArray(qData.options, qData.correct);
+    currentCorrectIndex = newCorrectIndex;
+
+    shuffledOptions.forEach((opt, index) => {
         const btn = document.createElement('button');
         btn.className = 'option-btn';
         btn.innerText = opt;
@@ -329,17 +308,16 @@ function loadQuestion() {
 }
 
 function checkAnswer(index, btn) {
-    const qData = quiz.questions[currentQuestion];
     const allButtons = optionsGrid.querySelectorAll('.option-btn');
 
     allButtons.forEach(b => b.style.pointerEvents = 'none');
 
-    if (index === qData.correct) {
+    if (index === currentCorrectIndex) {
         btn.classList.add('correct');
         score++;
     } else {
         btn.classList.add('wrong');
-        allButtons[qData.correct].classList.add('correct');
+        allButtons[currentCorrectIndex].classList.add('correct');
     }
 
     setTimeout(() => {
