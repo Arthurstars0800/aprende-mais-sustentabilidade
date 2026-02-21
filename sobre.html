@@ -126,10 +126,23 @@
 
                     // Check theme for colors
                     const isDark = document.body.classList.contains('dark-mode');
-                    const bgColor = isDark ? '#2a2a2a' : 'white';
-                    const titleColor = isDark ? '#4ade80' : 'var(--primary)';
-                    const textColor = isDark ? '#e5e5e5' : 'var(--text-dark)';
-                    const mutedColor = isDark ? '#a3a3a3' : 'var(--text-muted)';
+                    const isFuture = document.body.classList.contains('theme-future');
+                    
+                    let bgColor = isDark ? '#2a2a2a' : 'white';
+                    let titleColor = isDark ? '#4ade80' : 'var(--primary)';
+                    let textColor = isDark ? '#e5e5e5' : 'var(--text-dark)';
+                    let mutedColor = isDark ? '#a3a3a3' : 'var(--text-muted)';
+                    let borderColor = 'none';
+                    let boxShadow = '0 20px 60px rgba(0, 0, 0, 0.5)';
+
+                    if (isFuture) {
+                        bgColor = isDark ? '#05010a' : '#0d1117';
+                        titleColor = '#00f3ff';
+                        textColor = '#c9d1d9';
+                        mutedColor = '#8080a0';
+                        borderColor = '2px solid #00f3ff';
+                        boxShadow = '0 0 40px rgba(0, 243, 255, 0.3)';
+                    }
 
                     // Criar overlay escuro
                     const overlay = document.createElement('div');
@@ -139,12 +152,13 @@
                         left: 0;
                         width: 100%;
                         height: 100%;
-                        background: rgba(0, 0, 0, 0.8);
+                        background: rgba(0, 0, 0, 0.85);
                         display: flex;
                         align-items: center;
                         justify-content: center;
                         z-index: 9999;
                         animation: fadeIn 0.3s ease;
+                        backdrop-filter: blur(8px);
                     `;
 
                     // Criar popup
@@ -155,9 +169,11 @@
                         border-radius: 20px;
                         max-width: 600px;
                         margin: 20px;
-                        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+                        border: ${borderColor};
+                        box-shadow: ${boxShadow};
                         animation: slideUp 0.4s ease;
                         position: relative;
+                        ${isFuture ? 'font-family: monospace;' : ''}
                     `;
 
                     popup.innerHTML = `
