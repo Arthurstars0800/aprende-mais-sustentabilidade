@@ -2326,8 +2326,8 @@ body.dark-mode .eco-profile-summary {
     width: 3px;
     height: 25px;
     background: linear-gradient(to bottom, transparent, rgba(59, 130, 246, 0.9));
-    animation: ecoFall linear infinite;
-    top: -20px;
+    animation: ecoFall 0.7s linear forwards;
+    top: -30px;
 }
 
 @keyframes ecoFall {
@@ -2342,9 +2342,8 @@ body.dark-mode .eco-profile-summary {
     width: 2px;
     height: 40px;
     background: linear-gradient(to bottom, transparent, rgba(100, 116, 139, 0.9));
-    animation: ecoStormFall 0.4s linear infinite;
+    animation: ecoStormFall 0.4s linear forwards;
     top: -50px;
-    transform: rotate(15deg);
 }
 
 @keyframes ecoStormFall {
