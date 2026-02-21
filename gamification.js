@@ -1159,16 +1159,44 @@ function equipItem(category, itemId, isUnlocked) {
 }
 
 function showStormWarning(onConfirm) {
+    const isFuture = document.body.classList.contains('theme-future');
+    const isDark = document.body.classList.contains('dark-mode');
+
     const modal = document.createElement('div');
     modal.className = 'eco-modal-overlay';
+    modal.style.zIndex = '10000';
+    modal.style.backdropFilter = 'blur(10px)';
+
+    const accentColor = isFuture ? '#00f3ff' : '#d97706';
+    const bgColor = isFuture ? (isDark ? '#05010a' : '#0d1117') : (isDark ? '#2a2a2a' : '#fff');
+    const textColor = isFuture ? '#c9d1d9' : 'var(--text-dark)';
+
     modal.innerHTML = `
-    <div class="eco-modal" style="max-width: 400px; text-align: center;">
-        <h3>⚠️ Aviso</h3>
-        <p>Este efeito contém flashes intensos. Prosseguir?</p>
-        <button class="btn btn-primary" id="confirmStorm">Sim</button>
-        <button class="btn btn-outline" id="cancelStorm">Não</button>
+    <div class="eco-modal" style="max-width: 450px; text-align: center; border: 2px solid ${accentColor}; background: ${bgColor}; box-shadow: 0 0 30px ${isFuture ? 'rgba(0,243,255,0.2)' : 'rgba(0,0,0,0.3)'};">
+        <div style="font-size: 3rem; margin-bottom: 20px;">⚡</div>
+        <h3 style="color: ${accentColor}; font-size: 1.8rem; margin-bottom: 15px; ${isFuture ? 'text-shadow: 0 0 10px #00f3ff;' : ''}">ALERTA DE SEGURANÇA</h3>
+        <p style="color: ${textColor}; font-size: 1.1rem; line-height: 1.6; margin-bottom: 30px;">
+            O efeito <strong>Tempestade Feroz</strong> contém relâmpagos com flashes de luz intensos que podem causar desconforto ou crises em pessoas com fotossensibilidade.
+            <br><br>
+            Deseja prosseguir com a ativação?
+        </p>
+        <div style="display: flex; gap: 15px; justify-content: center;">
+            <button class="btn btn-primary" id="confirmStorm" style="background: ${accentColor}; border: none; flex: 1; padding: 15px; font-weight: 800; border-radius: 12px; cursor: pointer;">SIM, ATIVAR</button>
+            <button class="btn btn-outline" id="cancelStorm" style="border: 2px solid ${accentColor}; color: ${accentColor}; background: transparent; flex: 1; padding: 15px; font-weight: 800; border-radius: 12px; cursor: pointer;">CANCELAR</button>
+        </div>
     </div>`;
+
     document.body.appendChild(modal);
+
+    const confirmBtn = modal.querySelector('#confirmStorm');
+    const cancelBtn = modal.querySelector('#cancelStorm');
+
+    confirmBtn.onmouseover = () => { confirmBtn.style.transform = 'scale(1.05)'; confirmBtn.style.boxShadow = `0 0 20px ${accentColor}`; };
+    confirmBtn.onmouseout = () => { confirmBtn.style.transform = 'scale(1)'; confirmBtn.style.boxShadow = 'none'; };
+
+    cancelBtn.onmouseover = () => { cancelBtn.style.background = accentColor; cancelBtn.style.color = (isFuture || isDark) ? '#000' : '#fff'; };
+    cancelBtn.onmouseout = () => { cancelBtn.style.background = 'transparent'; cancelBtn.style.color = accentColor; };
+
     modal.querySelector('#confirmStorm').onclick = () => { modal.remove(); onConfirm(); };
     modal.querySelector('#cancelStorm').onclick = () => modal.remove();
 }
@@ -1243,11 +1271,13 @@ function applyEffects() {
     if (effect === 'effect_rain' || effect === 'effect_storm') {
         const isStorm = effect === 'effect_storm';
         window.ecoEffectInterval = setInterval(() => {
+            if (!document.getElementById('ecoEffectLayer')) return; // Safety check
             const drop = document.createElement('div');
             drop.className = isStorm ? 'eco-storm-drop' : 'eco-rain-drop';
             drop.style.left = Math.random() * 100 + 'vw';
             layer.appendChild(drop);
-            setTimeout(() => drop.remove(), 1000);
+            // Optimized lifetime: enough to fall off screen but cleared faster
+            setTimeout(() => { if (drop.parentNode) drop.remove(); }, 800);
         }, isStorm ? 15 : 40);
 
         if (isStorm) {
