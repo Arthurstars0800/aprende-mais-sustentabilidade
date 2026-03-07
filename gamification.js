@@ -31,771 +31,54 @@ let userProfile = {
     audioMuted: true
 };
 
-// --- Audio Engine (Procedural Web Audio API) ---
-let audioCtx = null;
-let masterGain = null;
-let activeAudioNodes = [];
+// --- Audio Engine (High Quality Assets) ---
+let activeAudioElements = {};
 let currentAmbienceType = null;
 
-function getAudioCtx() {
-    if (!audioCtx || audioCtx.state === 'closed') {
-        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        masterGain = audioCtx.createGain();
-        masterGain.gain.value = 0.35;
-        masterGain.connect(audioCtx.destination);
-    }
-    if (audioCtx.state === 'suspended') {
-        audioCtx.resume();
-    }
-    return audioCtx;
-}
-
-function stopAllAudioNodes() {
-    activeAudioNodes.forEach(node => {
-        try {
-            if (node.stop) node.stop();
-            if (node.disconnect) node.disconnect();
-        } catch (e) { }
+function stopAllAudio() {
+    Object.values(activeAudioElements).forEach(audio => {
+        audio.pause();
+        audio.currentTime = 0;
     });
-    activeAudioNodes = [];
     if (window._ambienceTimers) {
         window._ambienceTimers.forEach(t => clearTimeout(t));
         window._ambienceTimers = [];
     }
 }
 
-// Creates filtered noise (wind, rain, etc.)
-function createNoise(ctx, type = 'brown', duration = Infinity) {
-    const bufferSize = ctx.sampleRate * 2;
-    const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
-    const data = buffer.getChannelData(0);
-
-    if (type === 'white') {
-        for (let i = 0; i < bufferSize; i++) data[i] = Math.random() * 2 - 1;
-    } else if (type === 'pink') {
-        let b0 = 0, b1 = 0, b2 = 0, b3 = 0, b4 = 0, b5 = 0, b6 = 0;
-        for (let i = 0; i < bufferSize; i++) {
-            const white = Math.random() * 2 - 1;
-            b0 = 0.99886 * b0 + white * 0.0555179;
-            b1 = 0.99332 * b1 + white * 0.0750759;
-            b2 = 0.96900 * b2 + white * 0.1538520;
-            b3 = 0.86650 * b3 + white * 0.3104856;
-            b4 = 0.55000 * b4 + white * 0.5329522;
-            b5 = -0.7616 * b5 - white * 0.0168980;
-            data[i] = (b0 + b1 + b2 + b3 + b4 + b5 + b6 + white * 0.5362) * 0.11;
-            b6 = white * 0.115926;
-        }
-    } else { // brown
-        let lastOut = 0;
-        for (let i = 0; i < bufferSize; i++) {
-            const white = Math.random() * 2 - 1;
-            data[i] = (lastOut + (0.02 * white)) / 1.02;
-            lastOut = data[i];
-            data[i] *= 3.5;
-        }
+function getAudioElement(id, src, loop = true) {
+    if (!activeAudioElements[id]) {
+        const audio = new Audio(src);
+        audio.loop = loop;
+        audio.volume = 0.4;
+        activeAudioElements[id] = audio;
     }
-
-    const source = ctx.createBufferSource();
-    source.buffer = buffer;
-    source.loop = true;
-    return source;
+    return activeAudioElements[id];
 }
 
-// --- Soundscape Generators ---
+function playAmbience(type) {
+    if (userProfile.audioMuted) return;
 
-function playForestAmbience() {
-    const ctx = getAudioCtx();
+    const sounds = {
+        'forest': 'assets/sounds/floresta.mp3',
+        'wind': 'assets/sounds/floresta.mp3', // Usando floresta como base para vento também
+        'rain': 'assets/sounds/chuva.mp3',
+        'storm': 'assets/sounds/tempestade.mp3',
+        'crickets': 'assets/sounds/grilo.mp3',
+        'digital': 'assets/sounds/matrix.mp3',
+        'matrix': 'assets/sounds/matrix.mp3',
+        'scifi': 'assets/sounds/matrix.mp3'
+    };
 
-    // Soft brown noise = gentle breeze through trees
-    const wind = createNoise(ctx, 'brown');
-    const windFilter = ctx.createBiquadFilter();
-    windFilter.type = 'lowpass';
-    windFilter.frequency.value = 220;
-    const windGain = ctx.createGain();
-    windGain.gain.value = 0.15;
-    wind.connect(windFilter);
-    windFilter.connect(windGain);
-    windGain.connect(masterGain);
-    wind.start();
-    activeAudioNodes.push(wind, windFilter, windGain);
+    const src = sounds[type];
+    if (!src) return;
 
-    // Gentle wind modulation (soft breathing)
-    const windLFO = ctx.createOscillator();
-    const windLFOGain = ctx.createGain();
-    windLFO.frequency.value = 0.08;
-    windLFOGain.gain.value = 0.05;
-    windLFO.connect(windLFOGain);
-    windLFOGain.connect(windGain.gain);
-    windLFO.start();
-    activeAudioNodes.push(windLFO, windLFOGain);
-
-    // Bird chirps - random sine tone bursts
-    window._ambienceTimers = [];
-    function scheduleBird() {
-        if (currentAmbienceType !== 'forest') return; // Stop if theme changed
-
-        if (!userProfile.audioMuted) {
-            const osc = ctx.createOscillator();
-            const birdGain = ctx.createGain();
-            const freq = 1800 + Math.random() * 2500;
-            osc.type = 'sine';
-            osc.frequency.value = freq;
-
-            // Quick chirp pattern
-            const now = ctx.currentTime;
-            const chirpDur = 0.05 + Math.random() * 0.08;
-            const numChirps = 2 + Math.floor(Math.random() * 4);
-
-            birdGain.gain.value = 0;
-            for (let i = 0; i < numChirps; i++) {
-                const t = now + i * (chirpDur + 0.03);
-                birdGain.gain.setValueAtTime(0, t);
-                birdGain.gain.linearRampToValueAtTime(0.08 + Math.random() * 0.06, t + chirpDur * 0.3);
-                osc.frequency.setValueAtTime(freq + Math.random() * 400, t);
-                osc.frequency.linearRampToValueAtTime(freq - 200 + Math.random() * 600, t + chirpDur);
-                birdGain.gain.linearRampToValueAtTime(0, t + chirpDur);
-            }
-
-            osc.connect(birdGain);
-            birdGain.connect(masterGain);
-            osc.start(now);
-            osc.stop(now + numChirps * (chirpDur + 0.03) + 0.1);
-        }
-
-        const tid = setTimeout(scheduleBird, 2000 + Math.random() * 5000);
-        window._ambienceTimers.push(tid);
-    }
-    scheduleBird();
-    // Start a second bird with offset
-    const tid2 = setTimeout(scheduleBird, 1000 + Math.random() * 3000);
-    window._ambienceTimers.push(tid2);
+    stopAllAudio();
+    const audio = getAudioElement(type, src);
+    audio.play().catch(err => console.warn("Interação do usuário necessária para áudio:", err));
 }
 
-function playWindAmbience() {
-    const ctx = getAudioCtx();
-
-    // Soft layered wind
-    const wind1 = createNoise(ctx, 'brown');
-    const filter1 = ctx.createBiquadFilter();
-    filter1.type = 'bandpass';
-    filter1.frequency.value = 200;
-    filter1.Q.value = 0.3;
-    const gain1 = ctx.createGain();
-    gain1.gain.value = 0.18;
-    wind1.connect(filter1);
-    filter1.connect(gain1);
-    gain1.connect(masterGain);
-    wind1.start();
-
-    const wind2 = createNoise(ctx, 'pink');
-    const filter2 = ctx.createBiquadFilter();
-    filter2.type = 'lowpass';
-    filter2.frequency.value = 300;
-    const gain2 = ctx.createGain();
-    gain2.gain.value = 0.08;
-    wind2.connect(filter2);
-    filter2.connect(gain2);
-    gain2.connect(masterGain);
-    wind2.start();
-
-    // Slow modulation for gentle gusts
-    const lfo = ctx.createOscillator();
-    const lfoGain = ctx.createGain();
-    lfo.frequency.value = 0.06;
-    lfoGain.gain.value = 0.08;
-    lfo.connect(lfoGain);
-    lfoGain.connect(gain1.gain);
-    lfo.start();
-
-    activeAudioNodes.push(wind1, filter1, gain1, wind2, filter2, gain2, lfo, lfoGain);
-}
-
-function playRainAmbience(isStorm = false) {
-    const ctx = getAudioCtx();
-
-    // Base rain = filtered white noise
-    const rain = createNoise(ctx, 'white');
-    const rainFilter = ctx.createBiquadFilter();
-    rainFilter.type = 'bandpass';
-    rainFilter.frequency.value = isStorm ? 2500 : 3000;
-    rainFilter.Q.value = 0.3;
-    const rainGain = ctx.createGain();
-    rainGain.gain.value = isStorm ? 0.5 : 0.35;
-    rain.connect(rainFilter);
-    rainFilter.connect(rainGain);
-    rainGain.connect(masterGain);
-    rain.start();
-
-    // Low rumble (like distant thunder for storm, or distant water for rain)
-    const rumble = createNoise(ctx, 'brown');
-    const rumbleFilter = ctx.createBiquadFilter();
-    rumbleFilter.type = 'lowpass';
-    rumbleFilter.frequency.value = isStorm ? 150 : 80;
-    const rumbleGain = ctx.createGain();
-    rumbleGain.gain.value = isStorm ? 0.4 : 0.15;
-    rumble.connect(rumbleFilter);
-    rumbleFilter.connect(rumbleGain);
-    rumbleGain.connect(masterGain);
-    rumble.start();
-
-    activeAudioNodes.push(rain, rainFilter, rainGain, rumble, rumbleFilter, rumbleGain);
-
-    // Storm: periodic thunder rumbles
-    if (isStorm) {
-        window._ambienceTimers = window._ambienceTimers || [];
-        function thunder() {
-            if (currentAmbienceType !== 'storm') return; // Stop recursion if theme changed
-
-            if (!userProfile.audioMuted) {
-                const thunderOsc = createNoise(ctx, 'brown');
-                const tFilter = ctx.createBiquadFilter();
-                tFilter.type = 'lowpass';
-                tFilter.frequency.value = 100;
-                const tGain = ctx.createGain();
-                const now = ctx.currentTime;
-                tGain.gain.setValueAtTime(0, now);
-                tGain.gain.linearRampToValueAtTime(0.6 + Math.random() * 0.3, now + 0.1);
-                tGain.gain.exponentialRampToValueAtTime(0.01, now + 1.5 + Math.random());
-                thunderOsc.connect(tFilter);
-                tFilter.connect(tGain);
-                tGain.connect(masterGain);
-                thunderOsc.start(now);
-                thunderOsc.stop(now + 2.5);
-            }
-
-            const tid = setTimeout(thunder, 6000 + Math.random() * 12000);
-            window._ambienceTimers.push(tid);
-        }
-        const tid = setTimeout(thunder, 3000 + Math.random() * 5000);
-        window._ambienceTimers.push(tid);
-    }
-}
-
-function playCricketAmbience() {
-    const ctx = getAudioCtx();
-
-    // Rich nighttime atmosphere - layered
-    const nightBrown = createNoise(ctx, 'brown');
-    const nightBrownFilter = ctx.createBiquadFilter();
-    nightBrownFilter.type = 'lowpass';
-    nightBrownFilter.frequency.value = 200;
-    const nightBrownGain = ctx.createGain();
-    nightBrownGain.gain.value = 0.25;
-    nightBrown.connect(nightBrownFilter);
-    nightBrownFilter.connect(nightBrownGain);
-    nightBrownGain.connect(masterGain);
-    nightBrown.start();
-
-    // Soft high-frequency bed (like distant insects hum)
-    const nightPink = createNoise(ctx, 'pink');
-    const nightPinkFilter = ctx.createBiquadFilter();
-    nightPinkFilter.type = 'bandpass';
-    nightPinkFilter.frequency.value = 3000;
-    nightPinkFilter.Q.value = 0.3;
-    const nightPinkGain = ctx.createGain();
-    nightPinkGain.gain.value = 0.015;
-    nightPink.connect(nightPinkFilter);
-    nightPinkFilter.connect(nightPinkGain);
-    nightPinkGain.connect(masterGain);
-    nightPink.start();
-
-    // Gentle wind
-    const wind = createNoise(ctx, 'brown');
-    const windFilter = ctx.createBiquadFilter();
-    windFilter.type = 'bandpass';
-    windFilter.frequency.value = 200;
-    windFilter.Q.value = 0.3;
-    const windGain = ctx.createGain();
-    windGain.gain.value = 0.06;
-    wind.connect(windFilter);
-    windFilter.connect(windGain);
-    windGain.connect(masterGain);
-    wind.start();
-    // Wind breathing
-    const windLFO = ctx.createOscillator();
-    const windLFOGain = ctx.createGain();
-    windLFO.frequency.value = 0.07;
-    windLFOGain.gain.value = 0.03;
-    windLFO.connect(windLFOGain);
-    windLFOGain.connect(windGain.gain);
-    windLFO.start();
-
-    activeAudioNodes.push(nightBrown, nightBrownFilter, nightBrownGain,
-        nightPink, nightPinkFilter, nightPinkGain,
-        wind, windFilter, windGain, windLFO, windLFOGain);
-
-    // Natural cricket chirps - each "voice" has its own character
-    window._ambienceTimers = window._ambienceTimers || [];
-
-    function makeChirp(baseFreq, volume) {
-        if (userProfile.audioMuted || currentAmbienceType !== 'crickets') return;
-
-        const numPulses = 3 + Math.floor(Math.random() * 6);
-        const pulseGap = 0.025 + Math.random() * 0.02;
-        const pulseDur = 0.015 + Math.random() * 0.015;
-        const totalDur = numPulses * (pulseDur + pulseGap) + 0.15;
-
-        // Main tone + slight harmonic for richness
-        const osc1 = ctx.createOscillator();
-        osc1.type = 'sine';
-        osc1.frequency.value = baseFreq;
-
-        const osc2 = ctx.createOscillator();
-        osc2.type = 'sine';
-        osc2.frequency.value = baseFreq * 2.01; // slight detune on harmonic
-
-        // Bandpass to soften
-        const filter = ctx.createBiquadFilter();
-        filter.type = 'bandpass';
-        filter.frequency.value = baseFreq;
-        filter.Q.value = 2;
-
-        const chirpGain = ctx.createGain();
-        chirpGain.gain.value = 0;
-
-        const harmGain = ctx.createGain();
-        harmGain.gain.value = 0;
-
-        const now = ctx.currentTime;
-        const vol = volume * (0.7 + Math.random() * 0.3);
-
-        // Natural trill: each pulse fades in and out smoothly
-        for (let i = 0; i < numPulses; i++) {
-            const t = now + i * (pulseDur + pulseGap);
-            const peakVol = vol * (0.6 + Math.random() * 0.4);
-            // Gentle fade in
-            chirpGain.gain.setValueAtTime(0, t);
-            chirpGain.gain.linearRampToValueAtTime(peakVol, t + pulseDur * 0.4);
-            // Gentle fade out
-            chirpGain.gain.linearRampToValueAtTime(0, t + pulseDur);
-            // Harmonic follows but quieter
-            harmGain.gain.setValueAtTime(0, t);
-            harmGain.gain.linearRampToValueAtTime(peakVol * 0.15, t + pulseDur * 0.4);
-            harmGain.gain.linearRampToValueAtTime(0, t + pulseDur);
-
-            // Subtle frequency wobble for organic feel
-            osc1.frequency.setValueAtTime(baseFreq + Math.random() * 80 - 40, t);
-        }
-
-        osc1.connect(filter);
-        osc2.connect(filter);
-        filter.connect(chirpGain);
-        chirpGain.connect(masterGain);
-
-        // Parallel harmonic path
-        const harmFilter = ctx.createBiquadFilter();
-        harmFilter.type = 'bandpass';
-        harmFilter.frequency.value = baseFreq * 2;
-        harmFilter.Q.value = 3;
-        osc2.connect(harmFilter);
-        harmFilter.connect(harmGain);
-        harmGain.connect(masterGain);
-
-        osc1.start(now);
-        osc2.start(now);
-        osc1.stop(now + totalDur);
-        osc2.stop(now + totalDur);
-    }
-
-    // Cricket voice 1 - higher pitch, frequent
-    function voice1() {
-        if (userProfile.audioMuted || currentAmbienceType !== 'crickets') return;
-        makeChirp(4200 + Math.random() * 600, 0.04);
-        const tid = setTimeout(voice1, 1500 + Math.random() * 3000);
-        window._ambienceTimers.push(tid);
-    }
-
-    // Cricket voice 2 - lower pitch, less frequent
-    function voice2() {
-        if (userProfile.audioMuted || currentAmbienceType !== 'crickets') return;
-        makeChirp(3200 + Math.random() * 400, 0.035);
-        const tid = setTimeout(voice2, 2500 + Math.random() * 4000);
-        window._ambienceTimers.push(tid);
-    }
-
-    // Cricket voice 3 - medium, sporadic
-    function voice3() {
-        if (userProfile.audioMuted || currentAmbienceType !== 'crickets') return;
-        makeChirp(3800 + Math.random() * 500, 0.03);
-        const tid = setTimeout(voice3, 3000 + Math.random() * 6000);
-        window._ambienceTimers.push(tid);
-    }
-
-    // Stagger the starts for natural feel
-    voice1();
-    const t1 = setTimeout(voice2, 800 + Math.random() * 1200);
-    const t2 = setTimeout(voice3, 1500 + Math.random() * 2000);
-    window._ambienceTimers.push(t1, t2);
-}
-
-// --- NES Chiptune Note Frequencies ---
-const NES_NOTES = {
-    C3: 130.81, D3: 146.83, E3: 164.81, F3: 174.61, G3: 196.00, A3: 220.00, B3: 246.94,
-    C4: 261.63, D4: 293.66, E4: 329.63, F4: 349.23, G4: 392.00, A4: 440.00, B4: 493.88,
-    C5: 523.25, D5: 587.33, E5: 659.25, F5: 698.46, G5: 783.99, A5: 880.00, B5: 987.77,
-    C6: 1046.50, R: 0  // R = rest
-};
-
-// Melody phrases inspired by classic NES platformer tunes
-const CHIPTUNE_MELODIES = [
-    // Upbeat adventure phrase 1
-    [
-        { n: 'E5', d: 0.12 }, { n: 'E5', d: 0.12 }, { n: 'R', d: 0.12 }, { n: 'E5', d: 0.12 },
-        { n: 'R', d: 0.12 }, { n: 'C5', d: 0.12 }, { n: 'E5', d: 0.18 },
-        { n: 'G5', d: 0.3 }, { n: 'R', d: 0.15 }, { n: 'G4', d: 0.3 }
-    ],
-    // Bouncy phrase 2
-    [
-        { n: 'C5', d: 0.15 }, { n: 'G4', d: 0.15 }, { n: 'R', d: 0.15 }, { n: 'E4', d: 0.15 },
-        { n: 'A4', d: 0.15 }, { n: 'B4', d: 0.12 }, { n: 'A4', d: 0.18 },
-        { n: 'G4', d: 0.12 }, { n: 'E5', d: 0.12 }, { n: 'G5', d: 0.15 }, { n: 'A5', d: 0.18 },
-        { n: 'F5', d: 0.12 }, { n: 'G5', d: 0.15 }
-    ],
-    // Underground/mystery phrase
-    [
-        { n: 'C4', d: 0.1 }, { n: 'C5', d: 0.1 }, { n: 'A4', d: 0.1 }, { n: 'A3', d: 0.1 },
-        { n: 'B3', d: 0.1 }, { n: 'B4', d: 0.1 }, { n: 'R', d: 0.2 },
-        { n: 'C4', d: 0.1 }, { n: 'C5', d: 0.1 }, { n: 'A4', d: 0.1 }, { n: 'A3', d: 0.1 },
-        { n: 'B3', d: 0.1 }, { n: 'B4', d: 0.1 }
-    ],
-    // Coin/star power phrase
-    [
-        { n: 'B4', d: 0.08 }, { n: 'E5', d: 0.08 }, { n: 'G5', d: 0.08 }, { n: 'B5', d: 0.08 },
-        { n: 'A5', d: 0.08 }, { n: 'E5', d: 0.08 }, { n: 'G5', d: 0.08 }, { n: 'A5', d: 0.15 },
-        { n: 'R', d: 0.1 },
-        { n: 'A4', d: 0.08 }, { n: 'D5', d: 0.08 }, { n: 'F5', d: 0.08 }, { n: 'A5', d: 0.08 },
-        { n: 'G5', d: 0.08 }, { n: 'D5', d: 0.08 }, { n: 'F5', d: 0.08 }, { n: 'G5', d: 0.15 }
-    ],
-    // Victory fanfare
-    [
-        { n: 'G4', d: 0.1 }, { n: 'C5', d: 0.1 }, { n: 'E5', d: 0.1 }, { n: 'G5', d: 0.15 },
-        { n: 'E5', d: 0.1 }, { n: 'G5', d: 0.3 },
-        { n: 'R', d: 0.15 },
-        { n: 'A4', d: 0.1 }, { n: 'D5', d: 0.1 }, { n: 'F5', d: 0.1 }, { n: 'A5', d: 0.15 },
-        { n: 'F5', d: 0.1 }, { n: 'A5', d: 0.3 }
-    ],
-    // Fast running phrase
-    [
-        { n: 'E5', d: 0.08 }, { n: 'D5', d: 0.08 }, { n: 'C5', d: 0.08 }, { n: 'D5', d: 0.08 },
-        { n: 'E5', d: 0.08 }, { n: 'E5', d: 0.08 }, { n: 'E5', d: 0.15 }, { n: 'R', d: 0.08 },
-        { n: 'D5', d: 0.08 }, { n: 'D5', d: 0.08 }, { n: 'D5', d: 0.15 }, { n: 'R', d: 0.08 },
-        { n: 'E5', d: 0.08 }, { n: 'G5', d: 0.08 }, { n: 'G5', d: 0.15 }
-    ]
-];
-
-// Bass patterns
-const CHIPTUNE_BASS = [
-    [{ n: 'C3', d: 0.15 }, { n: 'G3', d: 0.15 }, { n: 'C3', d: 0.15 }, { n: 'G3', d: 0.15 }, { n: 'E3', d: 0.15 }, { n: 'G3', d: 0.15 }, { n: 'E3', d: 0.15 }, { n: 'G3', d: 0.15 }],
-    [{ n: 'C3', d: 0.12 }, { n: 'R', d: 0.06 }, { n: 'C3', d: 0.12 }, { n: 'R', d: 0.06 }, { n: 'G3', d: 0.12 }, { n: 'R', d: 0.06 }, { n: 'G3', d: 0.12 }, { n: 'R', d: 0.06 }, { n: 'A3', d: 0.12 }, { n: 'R', d: 0.06 }, { n: 'A3', d: 0.12 }],
-    [{ n: 'F3', d: 0.15 }, { n: 'R', d: 0.08 }, { n: 'F3', d: 0.1 }, { n: 'A3', d: 0.15 }, { n: 'R', d: 0.08 }, { n: 'C3', d: 0.15 }, { n: 'R', d: 0.08 }, { n: 'C3', d: 0.1 }, { n: 'E3', d: 0.15 }]
-];
-
-function playChiptuneMelody(ctx, targetNode, melody, volume, waveType = 'square') {
-    const now = ctx.currentTime;
-    let time = now;
-
-    melody.forEach(note => {
-        const freq = NES_NOTES[note.n];
-        if (freq > 0) {
-            const osc = ctx.createOscillator();
-            osc.type = waveType;
-            osc.frequency.value = freq;
-
-            const noteGain = ctx.createGain();
-            // NES-style sharp attack, slight decay
-            noteGain.gain.setValueAtTime(0, time);
-            noteGain.gain.linearRampToValueAtTime(volume, time + 0.005);
-            noteGain.gain.setValueAtTime(volume * 0.8, time + 0.01);
-            noteGain.gain.setValueAtTime(volume * 0.7, time + note.d * 0.7);
-            noteGain.gain.linearRampToValueAtTime(0, time + note.d);
-
-            osc.connect(noteGain);
-            noteGain.connect(targetNode);
-            osc.start(time);
-            osc.stop(time + note.d + 0.01);
-        }
-        time += note.d;
-    });
-
-    return time - now; // total duration
-}
-
-function playDigitalAmbience(isMatrix = false) {
-    const ctx = getAudioCtx();
-
-    // Low digital drone (quieter to let the melody shine)
-    const osc1 = ctx.createOscillator();
-    osc1.type = 'sawtooth';
-    osc1.frequency.value = isMatrix ? 55 : 80;
-    const droneFilter = ctx.createBiquadFilter();
-    droneFilter.type = 'lowpass';
-    droneFilter.frequency.value = isMatrix ? 200 : 300;
-    const droneGain = ctx.createGain();
-    droneGain.gain.value = isMatrix ? 0.06 : 0.05;
-    osc1.connect(droneFilter);
-    droneFilter.connect(droneGain);
-    droneGain.connect(masterGain);
-    osc1.start();
-
-    // Soft shimmer
-    const shimmer = createNoise(ctx, 'white');
-    const shimmerFilter = ctx.createBiquadFilter();
-    shimmerFilter.type = 'bandpass';
-    shimmerFilter.frequency.value = isMatrix ? 6000 : 4000;
-    shimmerFilter.Q.value = 5;
-    const shimmerGain = ctx.createGain();
-    shimmerGain.gain.value = isMatrix ? 0.02 : 0.01;
-    shimmer.connect(shimmerFilter);
-    shimmerFilter.connect(shimmerGain);
-    shimmerGain.connect(masterGain);
-    shimmer.start();
-
-    // Pulsing modulation
-    const lfo = ctx.createOscillator();
-    const lfoGain = ctx.createGain();
-    lfo.frequency.value = isMatrix ? 0.5 : 0.3;
-    lfoGain.gain.value = 0.02;
-    lfo.connect(lfoGain);
-    lfoGain.connect(droneGain.gain);
-    lfo.start();
-
-    activeAudioNodes.push(osc1, droneFilter, droneGain, shimmer, shimmerFilter, shimmerGain, lfo, lfoGain);
-
-    // === 8-BIT CHIPTUNE MUSIC LOOP ===
-    window._ambienceTimers = window._ambienceTimers || [];
-    const ambiType = isMatrix ? 'matrix' : 'digital';
-
-    function playMelodyLoop() {
-        if (userProfile.audioMuted || currentAmbienceType !== ambiType) return;
-
-        // Pick random melody and bass
-        const melody = CHIPTUNE_MELODIES[Math.floor(Math.random() * CHIPTUNE_MELODIES.length)];
-        const bass = CHIPTUNE_BASS[Math.floor(Math.random() * CHIPTUNE_BASS.length)];
-
-        // Lead melody (square wave — classic NES pulse 1)
-        const melodyVol = isMatrix ? 0.045 : 0.035;
-        const melodyDur = playChiptuneMelody(ctx, masterGain, melody, melodyVol, 'square');
-
-        // Bass line (triangle-ish — NES triangle channel)
-        const bassVol = isMatrix ? 0.03 : 0.025;
-        playChiptuneMelody(ctx, masterGain, bass, bassVol, 'triangle');
-
-        // Arpeggio harmony on some loops (50% chance)
-        if (Math.random() > 0.5) {
-            // Simple arpeggio based on first note of melody
-            const rootFreq = NES_NOTES[melody[0].n] || 523.25;
-            const arpNotes = [
-                { n: melody[0].n, d: 0.08 },
-                { n: Object.keys(NES_NOTES).find(k => Math.abs(NES_NOTES[k] - rootFreq * 1.25) < 20) || melody[0].n, d: 0.08 },
-                { n: Object.keys(NES_NOTES).find(k => Math.abs(NES_NOTES[k] - rootFreq * 1.5) < 20) || melody[0].n, d: 0.08 }
-            ];
-            // Repeat arpeggio pattern
-            const arpPattern = [];
-            for (let i = 0; i < 6; i++) {
-                arpPattern.push(arpNotes[i % 3]);
-            }
-            playChiptuneMelody(ctx, masterGain, arpPattern, melodyVol * 0.4, 'square');
-        }
-
-        // Gap between phrases + schedule next
-        const gap = 0.8 + Math.random() * 2.0;
-        const tid = setTimeout(playMelodyLoop, (melodyDur + gap) * 1000);
-        window._ambienceTimers.push(tid);
-    }
-
-    // Start the music after a short delay
-    const startTid = setTimeout(playMelodyLoop, 500);
-    window._ambienceTimers.push(startTid);
-}
-
-function playSciFiAmbience() {
-    const ctx = getAudioCtx();
-
-    // === RADIO BUS — everything goes through this for the "Alastor" effect ===
-
-    // 1. Bandpass filter = the classic "tinny radio" sound (300Hz - 3500Hz)
-    const radioLowCut = ctx.createBiquadFilter();
-    radioLowCut.type = 'highpass';
-    radioLowCut.frequency.value = 300;
-    radioLowCut.Q.value = 0.7;
-
-    const radioHighCut = ctx.createBiquadFilter();
-    radioHighCut.type = 'lowpass';
-    radioHighCut.frequency.value = 3500;
-    radioHighCut.Q.value = 0.7;
-
-    // 2. Mid-range resonance peak (makes it sound "boxy" like a small speaker)
-    const radioResonance = ctx.createBiquadFilter();
-    radioResonance.type = 'peaking';
-    radioResonance.frequency.value = 1200;
-    radioResonance.Q.value = 1.5;
-    radioResonance.gain.value = 6;
-
-    // 3. Distortion/saturation (warm tube-like overdrive)
-    const distortion = ctx.createWaveShaper();
-    function makeDistortionCurve(amount) {
-        const samples = 44100;
-        const curve = new Float32Array(samples);
-        for (let i = 0; i < samples; i++) {
-            const x = (i * 2) / samples - 1;
-            curve[i] = (Math.PI + amount) * x / (Math.PI + amount * Math.abs(x));
-        }
-        return curve;
-    }
-    distortion.curve = makeDistortionCurve(8);
-    distortion.oversample = '2x';
-
-    // Radio bus gain
-    const radioBusGain = ctx.createGain();
-    radioBusGain.gain.value = 0.7;
-
-    // Chain: source → lowcut → highcut → resonance → distortion → busGain → master
-    radioLowCut.connect(radioHighCut);
-    radioHighCut.connect(radioResonance);
-    radioResonance.connect(distortion);
-    distortion.connect(radioBusGain);
-    radioBusGain.connect(masterGain);
-
-    // === SOUND SOURCES (all routed into the radio bus) ===
-
-    // Deep humming drone (like old radio electronics)
-    const osc = ctx.createOscillator();
-    osc.type = 'sawtooth';
-    osc.frequency.value = 110;
-    const oscGain = ctx.createGain();
-    oscGain.gain.value = 0.12;
-    osc.connect(oscGain);
-    oscGain.connect(radioLowCut);
-    osc.start();
-
-    // 60Hz mains hum (classic radio interference)
-    const hum = ctx.createOscillator();
-    hum.type = 'sine';
-    hum.frequency.value = 60;
-    const humGain = ctx.createGain();
-    humGain.gain.value = 0.08;
-    hum.connect(humGain);
-    humGain.connect(radioLowCut);
-    hum.start();
-
-    // Second harmonic of hum
-    const hum2 = ctx.createOscillator();
-    hum2.type = 'sine';
-    hum2.frequency.value = 120;
-    const humGain2 = ctx.createGain();
-    humGain2.gain.value = 0.04;
-    hum2.connect(humGain2);
-    humGain2.connect(radioLowCut);
-    hum2.start();
-
-    // Eerie ambient tone (mysterious radio broadcast feel)
-    const eerieOsc = ctx.createOscillator();
-    eerieOsc.type = 'sine';
-    eerieOsc.frequency.value = 440;
-    const eerieGain = ctx.createGain();
-    eerieGain.gain.value = 0.03;
-    eerieOsc.connect(eerieGain);
-    eerieGain.connect(radioLowCut);
-    eerieOsc.start();
-    // Slow vibrato on the eerie tone
-    const eerieLFO = ctx.createOscillator();
-    const eerieLFOGain = ctx.createGain();
-    eerieLFO.frequency.value = 0.3;
-    eerieLFOGain.gain.value = 15;
-    eerieLFO.connect(eerieLFOGain);
-    eerieLFOGain.connect(eerieOsc.frequency);
-    eerieLFO.start();
-
-    // === RADIO STATIC & CRACKLE (directly to master, not through distortion) ===
-
-    // Continuous light static
-    const staticNoise = createNoise(ctx, 'white');
-    const staticFilter = ctx.createBiquadFilter();
-    staticFilter.type = 'bandpass';
-    staticFilter.frequency.value = 2000;
-    staticFilter.Q.value = 0.5;
-    const staticGain = ctx.createGain();
-    staticGain.gain.value = 0.04;
-    staticNoise.connect(staticFilter);
-    staticFilter.connect(staticGain);
-    staticGain.connect(masterGain);
-    staticNoise.start();
-
-    // Static volume flutter (radio signal wavering)
-    const staticLFO = ctx.createOscillator();
-    const staticLFOGain = ctx.createGain();
-    staticLFO.frequency.value = 0.4;
-    staticLFOGain.gain.value = 0.02;
-    staticLFO.connect(staticLFOGain);
-    staticLFOGain.connect(staticGain.gain);
-    staticLFO.start();
-
-    activeAudioNodes.push(
-        radioLowCut, radioHighCut, radioResonance, distortion, radioBusGain,
-        osc, oscGain, hum, humGain, hum2, humGain2,
-        eerieOsc, eerieGain, eerieLFO, eerieLFOGain,
-        staticNoise, staticFilter, staticGain, staticLFO, staticLFOGain
-    );
-
-    // === RANDOM CRACKLE POPS & RADIO TUNING ===
-    window._ambienceTimers = window._ambienceTimers || [];
-
-    // Random crackle/pops (like old vinyl or radio interference)
-    function crackle() {
-        if (currentAmbienceType !== 'scifi') return; // Stop if theme changed
-
-        if (!userProfile.audioMuted) {
-            const numPops = 1 + Math.floor(Math.random() * 4);
-            const now = ctx.currentTime;
-
-            for (let i = 0; i < numPops; i++) {
-                const popNoise = createNoise(ctx, 'white');
-                const popFilter = ctx.createBiquadFilter();
-                popFilter.type = 'highpass';
-                popFilter.frequency.value = 1000 + Math.random() * 3000;
-                const popGain = ctx.createGain();
-                const t = now + i * (0.02 + Math.random() * 0.05);
-                const popVol = 0.05 + Math.random() * 0.08;
-                popGain.gain.setValueAtTime(0, t);
-                popGain.gain.linearRampToValueAtTime(popVol, t + 0.003);
-                popGain.gain.exponentialRampToValueAtTime(0.001, t + 0.02 + Math.random() * 0.03);
-                popNoise.connect(popFilter);
-                popFilter.connect(popGain);
-                popGain.connect(masterGain);
-                popNoise.start(t);
-                popNoise.stop(t + 0.08);
-            }
-        }
-
-        const tid = setTimeout(crackle, 500 + Math.random() * 2500);
-        window._ambienceTimers.push(tid);
-    }
-
-    // 8-bit chiptune melody through the radio filter (Mario on vintage radio!)
-    function radioMelody() {
-        if (currentAmbienceType !== 'scifi') return; // Stop if theme changed
-
-        let nextTime = 2000; // Default gap if muted
-
-        if (!userProfile.audioMuted) {
-            const melody = CHIPTUNE_MELODIES[Math.floor(Math.random() * CHIPTUNE_MELODIES.length)];
-            const bass = CHIPTUNE_BASS[Math.floor(Math.random() * CHIPTUNE_BASS.length)];
-
-            // Lead melody goes through the radio bus for that Alastor crunch
-            const melodyDur = playChiptuneMelody(ctx, radioLowCut, melody, 0.06, 'square');
-            playChiptuneMelody(ctx, radioLowCut, bass, 0.04, 'triangle');
-
-            nextTime = (melodyDur + 1.5 + Math.random() * 3.0) * 1000;
-        }
-
-        const tid = setTimeout(radioMelody, nextTime);
-        window._ambienceTimers.push(tid);
-    }
-
-    crackle();
-    const t1 = setTimeout(radioMelody, 1000 + Math.random() * 2000);
-    window._ambienceTimers.push(t1);
-}
+// Funções de ambiente removidas em favor da playAmbience geral para assets.
 
 function getAmbienceType() {
     const effect = userProfile.equipped.effect;
@@ -816,7 +99,7 @@ function getAmbienceType() {
 
 function updateAmbience() {
     if (userProfile.audioMuted) {
-        stopAllAudioNodes();
+        stopAllAudio();
         currentAmbienceType = null;
         return;
     }
@@ -826,21 +109,12 @@ function updateAmbience() {
     // Don't restart if already playing the right ambience
     if (targetType === currentAmbienceType) return;
 
-    stopAllAudioNodes();
+    stopAllAudio();
     currentAmbienceType = targetType;
     window._ambienceTimers = [];
 
     try {
-        switch (targetType) {
-            case 'forest': playForestAmbience(); break;
-            case 'wind': playWindAmbience(); break;
-            case 'rain': playRainAmbience(false); break;
-            case 'storm': playRainAmbience(true); break;
-            case 'crickets': playCricketAmbience(); break;
-            case 'digital': playDigitalAmbience(false); break;
-            case 'matrix': playDigitalAmbience(true); break;
-            case 'scifi': playSciFiAmbience(); break;
-        }
+        playAmbience(targetType);
         console.log(`🎵 Ambience: ${targetType}`);
     } catch (err) {
         console.warn("Erro ao iniciar áudio:", err);
@@ -880,11 +154,10 @@ function toggleMute() {
     saveProgress();
     updateAudioUI();
     if (!userProfile.audioMuted) {
-        // Resume AudioContext in user gesture context (required by browsers)
-        try { getAudioCtx().resume(); } catch (e) { }
+        // Agora usando Audio elements, não precisamos mais de resume explicito do actx
         updateAmbience();
     } else {
-        stopAllAudioNodes();
+        stopAllAudio();
         currentAmbienceType = null;
     }
     showToast(userProfile.audioMuted ? "Rádio Silenciada 🔇" : "Rádio Ligada 📻");
