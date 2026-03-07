@@ -111,6 +111,167 @@ document.addEventListener('DOMContentLoaded', () => {
             icon: "fas fa-compact-disc",
             info: "Material plástico e metálico complexo.",
             guide: "Ideia: Quebre em pedaços pequenos para fazer mosaicos em vasos, espelhos ou crie um espanta-pássaros para sua horta."
+        },
+        {
+            name: "Óleo de Cozinha",
+            type: "special",
+            icon: "fas fa-oil-can",
+            info: "Poluente pesado se descartado no ralo.",
+            guide: "Ideia: Guarde em garrafas PET e entregue em postos de coleta. Pode ser transformado em sabão caseiro ecológico ou biodiesel."
+        },
+        {
+            name: "Pilhas e Baterias",
+            type: "special",
+            icon: "fas fa-battery-half",
+            info: "Contém metais tóxicos.",
+            guide: "Ideia: Nunca jogue no lixo comum. Procure totens de descarte em supermercados ou farmácias para a logística reversa."
+        },
+        {
+            name: "Vidro Quebrado",
+            type: "recycle",
+            icon: "fas fa-burst",
+            info: "Reciclável, mas perigoso para coletores.",
+            guide: "Ideia: Coloque dentro de uma garrafa PET cortada ou caixa de leite e lacre bem com fita, escrevendo 'VIDRO' por fora."
+        },
+        {
+            name: "Isopor (EPS)",
+            type: "recycle",
+            icon: "fas fa-box-open",
+            info: "É um tipo de plástico (número 6).",
+            guide: "Ideia: Limpe bem para remover restos de comida. Pode ser usado como drenagem em vasos de plantas ou proteção para envio de pacotes."
+        },
+        {
+            name: "Cascas de Alimentos",
+            type: "compost",
+            icon: "fas fa-apple-whole",
+            info: "Matéria orgânica rica.",
+            guide: "Ideia: Transforme em adubo em uma composteira doméstica ou enterre no jardim para nutrir a terra naturalmente."
+        },
+        {
+            name: "Teclados e Mouses",
+            type: "special",
+            icon: "fas fa-keyboard",
+            info: "Lixo eletrônico com componentes plásticos e metálicos.",
+            guide: "Ideia: Doe se ainda funcionar. Se não, leve a pontos de coleta de e-lixo para recuperação de metais nobres."
+        },
+        {
+            name: "Cápsulas de Café",
+            type: "special",
+            icon: "fas fa-mug-hot",
+            info: "Mistura de alumínio ou plástico com resíduo orgânico.",
+            guide: "Ideia: Abra a cápsula, use o pó de café na horta e leve a embalagem limpa aos pontos de coleta da marca."
+        },
+        {
+            name: "Esponja de Cozinha",
+            type: "special",
+            icon: "fas fa-soap",
+            info: "Feita de poliuretano, difícil de reciclar comercialmente.",
+            guide: "Ideia: Use para limpar áreas externas antes de descartar. Existem programas de logística reversa (como da TerraCycle)."
+        },
+        {
+            name: "Medicamentos Vencidos",
+            type: "special",
+            icon: "fas fa-pills",
+            info: "Risco químico e biológico se descartados incorretamente.",
+            guide: "Ideia: Jamais jogue no lixo ou vaso sanitário. Leve a farmácias que possuem coletores específicos para incineração."
+        },
+        {
+            name: "Radiografias (Raio-X)",
+            type: "special",
+            icon: "fas fa-x-ray",
+            info: "Contém sais de prata (metais pesados).",
+            guide: "Ideia: Entregue em hospitais ou centros de saúde que façam a recuperação da prata e reciclagem correta do plástico."
+        },
+        {
+            name: "Papelão de Pizza",
+            type: "compost",
+            icon: "fas fa-pizza-slice",
+            info: "A gordura impede a reciclagem tradicional do papel.",
+            guide: "Ideia: A parte limpa vai para a reciclagem. A parte suja de gordura deve ser picada e colocada na composteira."
+        },
+        {
+            name: "Lâmpadas Fluorescentes",
+            type: "special",
+            icon: "fas fa-lightbulb",
+            info: "Contêm vapor de mercúrio altamente tóxico.",
+            guide: "Ideia: Devem ser entregues intactas em locais que praticam logística reversa para serem descontaminadas."
+        },
+        {
+            name: "Roupas Velhas",
+            type: "recycle",
+            icon: "fas fa-shirt",
+            info: "Fibras que podem ser reaproveitadas.",
+            guide: "Ideia: Doe se estiverem boas. Se não, transforme em panos de limpeza, enchimento de almofadas ou retalhos para artesanato."
+        },
+        {
+            name: "Bitucas de Cigarro",
+            type: "special",
+            icon: "fas fa-smoking",
+            info: "Altamente tóxicas para o solo e água.",
+            guide: "Ideia: Existem empresas que transformam bitucas em papel. Se não houver coleta, jogue no lixo comum, nunca no chão."
+        },
+        {
+            name: "Filtro de Papel (Café)",
+            type: "compost",
+            icon: "fas fa-filter",
+            info: "Papel biodegradável e matéria orgânica.",
+            guide: "Ideia: Pode ir direto para a composteira junto com o pó de café. Ajuda no fornecimento de carbono para o composto."
+        },
+        {
+            name: "Rolhas de Cortiça",
+            type: "recycle",
+            icon: "fas fa-wine-bottle",
+            info: "Material natural premium.",
+            guide: "Ideia: Use para fazer quadros de aviso, descanso de panelas ou até chaveiros que flutuam na água."
+        },
+        {
+            name: "Escova de Dentes",
+            type: "special",
+            icon: "fas fa-tooth",
+            info: "Mistura de plásticos e nylon.",
+            guide: "Ideia: Ótima para limpar cantos difíceis, rejuntes, correntes de bicicleta ou teclados antes do descarte final."
+        },
+        {
+            name: "Potes de Iogurte",
+            type: "recycle",
+            icon: "fas fa-cup-straw",
+            info: "Plástico rígido reciclável.",
+            guide: "Ideia: Lave bem e use como sementeiras para pequenas mudas ou para organizar pregos e parafusos na oficina."
+        },
+        {
+            name: "Móveis de Madeira",
+            type: "special",
+            icon: "fas fa-chair",
+            info: "Ocupam grande volume nos aterros.",
+            guide: "Ideia: Tente restaurar com pintura ou pátina. Se estiverem inutilizáveis, use a madeira para criar prateleiras pequenas."
+        },
+        {
+            name: "Óculos Antigos",
+            type: "recycle",
+            icon: "fas fa-glasses",
+            info: "Compostos de vários materiais (metal/plástico).",
+            guide: "Ideia: Muitas óticas recolhem óculos usados para doação a bancos de olhos após higienização e ajuste."
+        },
+        {
+            name: "Papel de Presente",
+            type: "recycle",
+            icon: "fas fa-gift",
+            info: "Papel comum é reciclável, metalizados não.",
+            guide: "Ideia: Tente abrir presentes com cuidado para REUSAR o papel no próximo aniversário. O planeta agradece!"
+        },
+        {
+            name: "Tampinhas Plásticas",
+            type: "recycle",
+            icon: "fas fa-capsules",
+            info: "Plástico tipo PP, muito valorizado.",
+            guide: "Ideia: Junte para projetos sociais. Elas também são excelentes para ensinar contagem e cores para crianças."
+        },
+        {
+            name: "Palitos de Madeira",
+            type: "compost",
+            icon: "fas fa-lines-leaning",
+            info: "Madeira natural de reflorestamento.",
+            guide: "Ideia: Ideais para construir maquetes, suporte para pequenas plantas ou podem ir para a composteira."
         }
     ];
 
