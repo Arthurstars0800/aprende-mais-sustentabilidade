@@ -5,7 +5,11 @@ let lives = 3;
 let isGameActive = false;
 let currentLevel = 1;
 let itemsLeftInWave = 0;
+
 let selectedWaste = null;
+let isDragging = false;
+let dragX, dragY; 
+let initialX, initialY;
 
 const WASTE_TYPES = [
     { name: 'Garrafa PET', type: 'plastic', color: '#ef4444', icon: '🍶' },
@@ -36,12 +40,11 @@ const BINS = {
     metal: { name: 'Metal', color: '#eab308', icon: 'fa-can-food' }
 };
 
-// --- Efeitos Sonoros (Procedural Pop) ---
+// --- Efeitos Sonoros ---
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
 function playPopSound(type = 'correct') {
     if (audioCtx.state === 'suspended') audioCtx.resume();
-
     const oscillator = audioCtx.createOscillator();
     const gainNode = audioCtx.createGain();
 
@@ -61,12 +64,9 @@ function playPopSound(type = 'correct') {
         oscillator.frequency.exponentialRampToValueAtTime(800, audioCtx.currentTime + 0.3);
         gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
     }
-
     gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.3);
-
     oscillator.connect(gainNode);
     gainNode.connect(audioCtx.destination);
-
     oscillator.start();
     oscillator.stop(audioCtx.currentTime + 0.3);
 }
@@ -79,6 +79,9 @@ function startCatchGame() {
 function closeGame() {
     isGameActive = false;
     clearInterval(gameInterval);
+    const canvas = document.getElementById('gameCanvas');
+    canvas.onpointermove = null;
+    canvas.onpointerup = null;
     document.getElementById('gameStage').style.display = 'none';
 }
 
@@ -95,17 +98,16 @@ function initCatchGame() {
     lives = 3;
     isGameActive = true;
     selectedWaste = null;
+    isDragging = false;
     
     document.getElementById('gameInstructions').style.display = 'none';
     document.getElementById('gameScore').textContent = '0';
     updateLivesUI();
     
     const canvas = document.getElementById('gameCanvas');
-    canvas.querySelectorAll('.game-waste-item').forEach(w => w.remove());
-    
-    const oldBins = canvas.querySelector('.game-bins');
-    if (oldBins) oldBins.remove();
+    canvas.innerHTML = ''; // Limpa tudo
 
+    // Recria as lixeiras
     const binsContainer = document.createElement('div');
     binsContainer.className = 'game-bins';
     Object.keys(BINS).forEach(type => {
@@ -113,27 +115,69 @@ function initCatchGame() {
         bin.className = `game-bin bin-${type}`;
         bin.id = `bin-${type}`;
         bin.innerHTML = `<i class="fas ${BINS[type].icon}"></i><span>${BINS[type].name}</span>`;
+        binsContainer.appendChild(bin);
+    });
+    canvas.appendChild(binsContainer);
+
+    // --- Lógica de Arrastar (Canvas Listeners) ---
+    canvas.onpointermove = (e) => {
+        if (!isGameActive || !isDragging || !selectedWaste) return;
         
-        bin.onclick = () => {
-            if (!isGameActive || !selectedWaste) return;
-            
-            const wasteData = selectedWaste.dataset;
-            if (wasteData.type === type) {
-                collectWaste(selectedWaste, bin);
-                selectedWaste = null;
+        const rect = canvas.getBoundingClientRect();
+        const x = e.clientX - rect.left - dragX;
+        const y = e.clientY - rect.top - dragY;
+        
+        // Mantém dentro do canvas
+        const bx = Math.max(0, Math.min(x, rect.width - 60));
+        const by = Math.max(0, Math.min(y, rect.height - 60));
+
+        selectedWaste.style.left = bx + 'px';
+        selectedWaste.style.top = by + 'px';
+    };
+
+    canvas.onpointerup = (e) => {
+        if (!isGameActive || !isDragging || !selectedWaste) return;
+        isDragging = false;
+        
+        const bins = document.querySelectorAll('.game-bin');
+        let droppedBin = null;
+
+        bins.forEach(bin => {
+            const bRect = bin.getBoundingClientRect();
+            if (e.clientX >= bRect.left && e.clientX <= bRect.right &&
+                e.clientY >= bRect.top && e.clientY <= bRect.bottom) {
+                droppedBin = bin;
+            }
+        });
+
+        if (droppedBin) {
+            const type = droppedBin.id.replace('bin-', '');
+            if (selectedWaste.dataset.type === type) {
+                collectWaste(selectedWaste, droppedBin);
             } else {
                 playPopSound('error');
                 lives--;
                 updateLivesUI();
-                bin.style.animation = 'shake 0.3s ease';
-                setTimeout(() => bin.style.animation = '', 300);
+                droppedBin.style.animation = 'shake 0.3s ease';
+                setTimeout(() => droppedBin.style.animation = '', 300);
+                
+                // Reset position
+                selectedWaste.style.transition = 'all 0.3s ease';
+                selectedWaste.style.left = initialX + 'px';
+                selectedWaste.style.top = initialY + 'px';
+                
                 if (lives <= 0) endGame();
             }
-        };
-        
-        binsContainer.appendChild(bin);
-    });
-    canvas.appendChild(binsContainer);
+        } else {
+            // Reset position if dropped outside
+            selectedWaste.style.transition = 'all 0.3s ease';
+            selectedWaste.style.left = initialX + 'px';
+            selectedWaste.style.top = initialY + 'px';
+        }
+
+        selectedWaste.classList.remove('selected');
+        selectedWaste = null;
+    };
 
     startRound();
 }
@@ -143,13 +187,10 @@ function startRound() {
 
     timeLeft = Math.max(5, 12 - currentLevel);
     document.getElementById('gameTime').textContent = timeLeft;
-    
     itemsLeftInWave = 2 + currentLevel;
     
     for (let i = 0; i < itemsLeftInWave; i++) {
-        setTimeout(() => {
-            spawnWaste();
-        }, i * 200);
+        setTimeout(spawnWaste, i * 300);
     }
 
     if (gameInterval) clearInterval(gameInterval);
@@ -163,12 +204,9 @@ function startRound() {
             updateLivesUI();
             playPopSound('error');
             
-            if (lives <= 0) {
-                endGame();
-            } else {
-                const canvas = document.getElementById('gameCanvas');
-                canvas.querySelectorAll('.game-waste-item').forEach(w => w.remove());
-                selectedWaste = null;
+            if (lives <= 0) endGame();
+            else {
+                document.querySelectorAll('.game-waste-item').forEach(w => w.remove());
                 startRound();
             }
         }
@@ -180,47 +218,59 @@ function spawnWaste() {
 
     const canvas = document.getElementById('gameCanvas');
     const waste = document.createElement('div');
-    const randomWaste = WASTE_TYPES[Math.floor(Math.random() * WASTE_TYPES.length)];
+    const data = WASTE_TYPES[Math.floor(Math.random() * WASTE_TYPES.length)];
     
     waste.className = 'game-waste-item';
-    waste.dataset.type = randomWaste.type;
-    waste.innerHTML = randomWaste.icon;
-    waste.style.left = Math.random() * 80 + 10 + '%';
-    waste.style.top = Math.random() * 50 + 50 + 'px';
+    waste.dataset.type = data.type;
+    waste.innerHTML = data.icon;
+    
+    // Posição inicial randômica
+    const startX = Math.random() * (canvas.offsetWidth - 80) + 10;
+    const startY = Math.random() * 100 + 50;
+    
+    waste.style.left = startX + 'px';
+    waste.style.top = startY + 'px';
     
     canvas.appendChild(waste);
 
-    waste.onclick = (e) => {
-        e.stopPropagation();
+    waste.onpointerdown = (e) => {
         if (!isGameActive) return;
-        
-        document.querySelectorAll('.game-waste-item').forEach(w => w.classList.remove('selected'));
-        
+        isDragging = true;
         selectedWaste = waste;
         waste.classList.add('selected');
+        waste.style.transition = 'none';
+
+        const rect = canvas.getBoundingClientRect();
+        const wRect = waste.getBoundingClientRect();
+        
+        dragX = e.clientX - wRect.left;
+        dragY = e.clientY - wRect.top;
+        
+        initialX = wRect.left - rect.left;
+        initialY = wRect.top - rect.top;
+
+        waste.setPointerCapture(e.pointerId);
     };
 }
 
 function collectWaste(waste, bin) {
     playPopSound('correct');
-    
     const canvas = document.getElementById('gameCanvas');
-    const rect = bin.getBoundingClientRect();
-    const canvasRect = canvas.getBoundingClientRect();
+    const bRect = bin.getBoundingClientRect();
+    const cRect = canvas.getBoundingClientRect();
     
-    const targetX = rect.left - canvasRect.left + rect.width / 2;
-    const targetY = rect.top - canvasRect.top;
+    const targetX = bRect.left - cRect.left + bRect.width / 2;
+    const targetY = bRect.top - cRect.top;
 
     waste.style.transition = 'all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
     waste.style.left = targetX + 'px';
     waste.style.top = targetY + 'px';
-    waste.style.transform = 'scale(0.0) rotate(720deg)';
+    waste.style.transform = 'scale(0) rotate(720deg)';
     waste.style.opacity = '0';
     waste.style.pointerEvents = 'none';
 
-    score += 10;
+    score += 15;
     document.getElementById('gameScore').textContent = score;
-    
     itemsLeftInWave--;
     
     setTimeout(() => {
@@ -231,25 +281,22 @@ function collectWaste(waste, bin) {
             clearInterval(gameInterval);
             setTimeout(startRound, 800);
         }
-    }, 400);
+    }, 450);
 }
 
 function endGame() {
     isGameActive = false;
     clearInterval(gameInterval);
-    
-    const xpGained = Math.floor(score / 2);
-    if (window.gamification) {
-        window.gamification.addXp(xpGained, "(Minigame de Coleta)");
-    }
-
     const canvas = document.getElementById('gameCanvas');
+    const xp = Math.floor(score / 2);
+    if (window.gamification) window.gamification.addXp(xp, "(Minigame)");
+
     canvas.innerHTML = `
         <div class="game-instructions">
-            <h2>${lives <= 0 ? 'Fim de Jogo!' : 'Fim da Missão!'}</h2>
+            <h2>${lives <= 0 ? 'Fim de Jogo!' : 'Tempo Esgotado!'}</h2>
             <p>Você alcançou o <strong>Nível ${currentLevel}</strong>.</p>
             <p>Pontuação: <strong>${score}</strong></p>
-            <p>Ganhou <strong>${xpGained} XP</strong> para seu perfil!</p>
+            <p>Ganhou <strong>${xp} XP</strong>!</p>
             <button class="btn btn-primary" onclick="initCatchGame()">Jogar Novamente</button>
         </div>
     `;
@@ -283,7 +330,7 @@ function initMemoryGame() {
     
     const gameCards = [...MEMORY_PAIRS].sort(() => Math.random() - 0.5);
     
-    gameCards.forEach((data, index) => {
+    gameCards.forEach((data) => {
         const card = document.createElement('div');
         card.className = 'memory-card';
         card.dataset.id = data.id;
@@ -310,20 +357,14 @@ function initMemoryGame() {
 
 function flipCard(card) {
     if (!isGameActive || flippedCards.length >= 2 || card.classList.contains('flipped') || card.classList.contains('matched')) return;
-    
     card.classList.add('flipped');
     flippedCards.push(card);
-    
-    if (flippedCards.length === 2) {
-        checkMatch();
-    }
+    if (flippedCards.length === 2) checkMatch();
 }
 
 function checkMatch() {
     const [card1, card2] = flippedCards;
-    const match = card1.dataset.id === card2.dataset.id;
-    
-    if (match) {
+    if (card1.dataset.id === card2.dataset.id) {
         matchedPairs++;
         memoryScore += 50;
         document.getElementById('gameScore').textContent = memoryScore;
@@ -331,10 +372,7 @@ function checkMatch() {
         card2.classList.add('matched');
         flippedCards = [];
         playPopSound('nextLevel');
-        
-        if (matchedPairs === MEMORY_PAIRS.length / 2) {
-            endMemoryGame(true);
-        }
+        if (matchedPairs === MEMORY_PAIRS.length / 2) endMemoryGame(true);
     } else {
         setTimeout(() => {
             card1.classList.remove('flipped');
@@ -348,18 +386,15 @@ function checkMatch() {
 function endMemoryGame(win) {
     isGameActive = false;
     clearInterval(gameInterval);
-    
-    const xpGained = win ? Math.floor(memoryScore / 10) + 20 : Math.floor(memoryScore / 10);
-    if (window.gamification) {
-        window.gamification.addXp(xpGained, "(Memória Ecológica)");
-    }
+    const xp = win ? Math.floor(memoryScore / 10) + 20 : Math.floor(memoryScore / 10);
+    if (window.gamification) window.gamification.addXp(xp, "(Memória)");
 
     const canvas = document.getElementById('gameCanvas');
     canvas.innerHTML = `
         <div class="game-instructions">
             <h2>${win ? 'Incrível!' : 'Tempo Esgotado!'}</h2>
             <p>Você encontrou <strong>${matchedPairs}</strong> pares.</p>
-            <p>Ganhou <strong>${xpGained} XP</strong>!</p>
+            <p>Ganhou <strong>${xp} XP</strong>!</p>
             <button class="btn btn-primary" onclick="initMemoryGame()">Jogar Novamente</button>
         </div>
     `;
