@@ -375,7 +375,15 @@ function updateHud() {
     let currentLevelData = LEVELS.find(l => l.level === userProfile.level) || LEVELS[0];
     let nextLevelData = LEVELS.find(l => l.level === userProfile.level + 1);
 
-    if (icon) icon.textContent = currentLevelData.icon;
+    if (icon) {
+        if (userProfile.isLoggedIn) {
+            icon.innerHTML = '<i class="fab fa-google"></i>';
+            icon.classList.add('google-active');
+        } else {
+            icon.textContent = currentLevelData.icon;
+            icon.classList.remove('google-active');
+        }
+    }
 
     let percentage = 100;
     if (nextLevelData) {
