@@ -19,18 +19,22 @@ const WASTE_TYPES = [
 ];
 
 const MEMORY_PAIRS = [
-    { id: 1, icon: '🍶', type: 'plastic', label: 'Garrafa' },
-    { id: 1, icon: '👕', type: 'plastic', label: 'Camiseta' },
+    { id: 1, icon: '🍶', type: 'plastic', label: 'Garrafa PET' },
+    { id: 1, icon: '👕', type: 'plastic', label: 'Camiseta PET' },
     { id: 2, icon: '📦', type: 'paper', label: 'Papelão' },
-    { id: 2, icon: '📚', type: 'paper', label: 'Livro' },
+    { id: 2, icon: '📚', type: 'paper', label: 'Livro Novo' },
     { id: 3, icon: '🍷', type: 'glass', label: 'Vidro' },
-    { id: 3, icon: '🏺', type: 'glass', label: 'Vaso' },
-    { id: 4, icon: '🥫', type: 'metal', label: 'Lata' },
+    { id: 3, icon: '🏺', type: 'glass', label: 'Vaso Novo' },
+    { id: 4, icon: '🥫', type: 'metal', label: 'Latinha' },
     { id: 4, icon: '🚲', type: 'metal', label: 'Bicicleta' },
-    { id: 5, icon: '🍎', type: 'compost', label: 'Maçã' },
-    { id: 5, icon: '🌱', type: 'compost', label: 'Adubo' },
-    { id: 6, icon: '💡', type: 'special', label: 'Lâmpada' },
-    { id: 6, icon: '🔋', type: 'special', label: 'Posto' }
+    { id: 5, icon: '🍏', type: 'compost', label: 'Resto Orgânico' },
+    { id: 5, icon: '🌱', type: 'compost', label: 'Fertilizante' },
+    { id: 6, icon: '🔋', type: 'special', label: 'Pilha Velha' },
+    { id: 6, icon: '⚡', type: 'special', label: 'Energia' },
+    { id: 7, icon: '🥛', type: 'special', label: 'Tetra Pak' },
+    { id: 7, icon: '🏠', type: 'special', label: 'Telha' },
+    { id: 8, icon: '⭕', type: 'special', label: 'Pneu Velho' },
+    { id: 8, icon: '👟', type: 'special', label: 'Sapato' }
 ];
 
 const BINS = {
@@ -306,30 +310,52 @@ function endGame() {
 let flippedCards = [];
 let matchedPairs = 0;
 let memoryScore = 0;
+let memoryLevel = 1;
 
 function startMemoryGame() {
     document.getElementById('gameStage').style.display = 'flex';
     document.getElementById('gameStage').scrollIntoView({ behavior: 'smooth' });
+    memoryLevel = 1;
     initMemoryGame();
 }
 
 function initMemoryGame() {
     isGameActive = true;
-    memoryScore = 0;
+    memoryScore = (memoryLevel > 1) ? memoryScore : 0;
     matchedPairs = 0;
     flippedCards = [];
-    timeLeft = 60;
     
+    // Tempo dinâmico baseado no nível
+    timeLeft = 60 - (memoryLevel * 5);
+    if (timeLeft < 20) timeLeft = 20;
+
     document.getElementById('gameInstructions').style.display = 'none';
-    document.getElementById('gameScore').textContent = '0';
-    document.getElementById('gameTime').textContent = '60';
+    document.getElementById('gameScore').textContent = memoryScore;
+    document.getElementById('gameTime').textContent = timeLeft;
     
+    updateLivesUI(); // Reusando o HUD de vidas se necessário, mas memória usa tempo
+
     const canvas = document.getElementById('gameCanvas');
-    canvas.innerHTML = '<div class="memory-grid"></div>';
+    canvas.innerHTML = `
+        <div class="memory-header">
+            <h4>Nível ${memoryLevel}</h4>
+        </div>
+        <div class="memory-grid grid-level-${memoryLevel}"></div>
+    `;
     const grid = canvas.querySelector('.memory-grid');
     
-    const gameCards = [...MEMORY_PAIRS].sort(() => Math.random() - 0.5);
+    // Selecionar número de pares baseado no nível (4, 6, 8 pares...)
+    const numPairs = Math.min(4 + (memoryLevel * 2), MEMORY_PAIRS.length / 2);
+    const selectedPairs = MEMORY_PAIRS.slice(0, numPairs * 2);
     
+    // Embaralhar
+    const gameCards = [...selectedPairs].sort(() => Math.random() - 0.5);
+    
+    // Ajustar colunas da grade
+    if (numPairs > 6) grid.style.gridTemplateColumns = 'repeat(4, 1fr)';
+    else if (numPairs > 4) grid.style.gridTemplateColumns = 'repeat(3, 1fr)';
+    else grid.style.gridTemplateColumns = 'repeat(4, 1fr)';
+
     gameCards.forEach((data) => {
         const card = document.createElement('div');
         card.className = 'memory-card';
@@ -357,45 +383,71 @@ function initMemoryGame() {
 
 function flipCard(card) {
     if (!isGameActive || flippedCards.length >= 2 || card.classList.contains('flipped') || card.classList.contains('matched')) return;
+    
     card.classList.add('flipped');
     flippedCards.push(card);
-    if (flippedCards.length === 2) checkMatch();
+    
+    if (flippedCards.length === 2) {
+        checkMatch();
+    }
 }
 
 function checkMatch() {
     const [card1, card2] = flippedCards;
-    if (card1.dataset.id === card2.dataset.id) {
+    const isMatch = card1.dataset.id === card2.dataset.id;
+    
+    if (isMatch) {
         matchedPairs++;
-        memoryScore += 50;
+        memoryScore += 50 * memoryLevel;
         document.getElementById('gameScore').textContent = memoryScore;
+        
         card1.classList.add('matched');
         card2.classList.add('matched');
         flippedCards = [];
-        playPopSound('nextLevel');
-        if (matchedPairs === MEMORY_PAIRS.length / 2) endMemoryGame(true);
+        playPopSound('correct');
+        
+        const totalPairsNeeded = Math.min(4 + (memoryLevel * 2), MEMORY_PAIRS.length / 2);
+        if (matchedPairs === totalPairsNeeded) {
+            clearInterval(gameInterval);
+            setTimeout(() => {
+                playPopSound('nextLevel');
+                if (memoryLevel < 4) { // Limite de níveis, ajuste conforme necessário
+                    memoryLevel++;
+                    initMemoryGame(); // Próxima onda de memória
+                } else {
+                    endMemoryGame(true);
+                }
+            }, 1000);
+        }
     } else {
         setTimeout(() => {
             card1.classList.remove('flipped');
             card2.classList.remove('flipped');
             flippedCards = [];
             playPopSound('error');
-        }, 1000);
+        }, 800);
     }
 }
 
 function endMemoryGame(win) {
     isGameActive = false;
     clearInterval(gameInterval);
-    const xp = win ? Math.floor(memoryScore / 10) + 20 : Math.floor(memoryScore / 10);
-    if (window.gamification) window.gamification.addXp(xp, "(Memória)");
+    
+    const bonus = win ? 100 : 0;
+    const xpGained = Math.floor((memoryScore + bonus) / 10);
+    
+    if (window.gamification) {
+        window.gamification.addXp(xpGained, "(Combo Memória)");
+    }
 
     const canvas = document.getElementById('gameCanvas');
     canvas.innerHTML = `
         <div class="game-instructions">
-            <h2>${win ? 'Incrível!' : 'Tempo Esgotado!'}</h2>
-            <p>Você encontrou <strong>${matchedPairs}</strong> pares.</p>
-            <p>Ganhou <strong>${xp} XP</strong>!</p>
-            <button class="btn btn-primary" onclick="initMemoryGame()">Jogar Novamente</button>
+            <h2>${win ? 'Mestre da Natureza!' : 'O Tempo Voou!'}</h2>
+            <p>Você completou até o <strong>Nível ${memoryLevel}</strong>.</p>
+            <p>Pontuação Total: <strong>${memoryScore}</strong></p>
+            <p>Reciclou muitos itens mentais e ganhou <strong>${xpGained} XP</strong>!</p>
+            <button class="btn btn-primary" onclick="startMemoryGame()">Tentar de Novo</button>
         </div>
     `;
 }
