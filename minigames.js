@@ -89,11 +89,28 @@ function startCatchGame() {
     canvas.innerHTML = `
         <div id="gameInstructions" class="game-instructions">
             <h2>Coleta Seletiva</h2>
-            <p>É muito importante fazer a coleta seletiva na hora de jogar o lixo fora. Se você pôr o lixo errado na lixeira errada, talvez ele possa ir para um lugar onde ele possa dar vários problemas.</p>
-            <div class="bins-hint">
-                <span style="color:#ef4444">🔴 Plástico</span>
-                <span style="color:#3b82f6">🔵 Papel</span>
-                <span style="color:#22c55e">🟢 Vidro</span>
+            <ol class="game-tutorial-list">
+                <li>Itens de lixo aparecem na tela</li>
+                <li>Arraste cada item até a lixeira da cor certa</li>
+                <li>Colete tudo antes do tempo acabar!</li>
+            </ol>
+            <div class="bins-chip-row">
+                <div class="bin-chip" style="--chip-color:#ef4444">
+                    <span class="memory-icon">♻️</span>
+                    <span class="memory-label" style="font-size:0.6rem;text-align:center">Plástico</span>
+                </div>
+                <div class="bin-chip" style="--chip-color:#3b82f6">
+                    <span class="memory-icon">📄</span>
+                    <span class="memory-label" style="font-size:0.6rem;text-align:center">Papel</span>
+                </div>
+                <div class="bin-chip" style="--chip-color:#22c55e">
+                    <span class="memory-icon">🍷</span>
+                    <span class="memory-label" style="font-size:0.6rem;text-align:center">Vidro</span>
+                </div>
+                <div class="bin-chip" style="--chip-color:#eab308">
+                    <span class="memory-icon">🥫</span>
+                    <span class="memory-label" style="font-size:0.6rem;text-align:center">Metal</span>
+                </div>
             </div>
             <button class="btn btn-primary" onclick="initCatchGame()">Começar</button>
         </div>
@@ -109,7 +126,12 @@ function startMemoryGame() {
     canvas.innerHTML = `
         <div id="gameInstructions" class="game-instructions">
             <h2>Memória da Natureza</h2>
-            <p>Muitas pessoas sabem jogar certos tipos de lixo fora, mas não sabem de qual tipo esse lixo se trata, às vezes podendo causar confusões. Então aqui está uma atividade para decorarmos certos lixos comuns com seus respectivos tipos.</p>
+            <ol class="game-tutorial-list">
+                <li>Clique em qualquer carta para virá-la</li>
+                <li>Clique em uma segunda carta para tentar o par</li>
+                <li>Encontre todos os pares antes do tempo acabar</li>
+                <li>Acerte mais rápido para ganhar mais pontos!</li>
+            </ol>
             <button class="btn btn-primary" onclick="memoryLevel=1; initMemoryGame()">Começar</button>
         </div>
     `;
