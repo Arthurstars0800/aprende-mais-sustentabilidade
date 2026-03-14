@@ -25,22 +25,22 @@ const WASTE_TYPES = [
 ];
 
 const MEMORY_PAIRS = [
-    { id: 1, icon: '🍶', type: 'plastic', label: 'Garrafa PET' },
-    { id: 1, icon: '👕', type: 'plastic', label: 'Camiseta PET' },
-    { id: 2, icon: '📦', type: 'paper', label: 'Papelão' },
-    { id: 2, icon: '📚', type: 'paper', label: 'Livro Novo' },
-    { id: 3, icon: '🍷', type: 'glass', label: 'Vidro' },
-    { id: 3, icon: '🏺', type: 'glass', label: 'Vaso Novo' },
-    { id: 4, icon: '🥫', type: 'metal', label: 'Latinha' },
-    { id: 4, icon: '🚲', type: 'metal', label: 'Bicicleta' },
-    { id: 5, icon: '🍏', type: 'compost', label: 'Resto Orgânico' },
-    { id: 5, icon: '🌱', type: 'compost', label: 'Fertilizante' },
-    { id: 6, icon: '🔋', type: 'special', label: 'Pilha Velha' },
-    { id: 6, icon: '⚡', type: 'special', label: 'Energia' },
-    { id: 7, icon: '🥛', type: 'special', label: 'Tetra Pak' },
-    { id: 7, icon: '🏠', type: 'special', label: 'Telha' },
-    { id: 8, icon: '⭕', type: 'special', label: 'Pneu Velho' },
-    { id: 8, icon: '👟', type: 'special', label: 'Sapato' }
+    { id: 1, icon: '🗑️', type: 'seco', label: 'Lixo Seco' },
+    { id: 1, icon: '📦', type: 'seco', label: 'Papel/Papelão' },
+    { id: 2, icon: '🍷', type: 'glass', label: 'Vidro' },
+    { id: 2, icon: '🥃', type: 'glass', label: 'Taça/Tulipa' },
+    { id: 3, icon: '🍎', type: 'org', label: 'Orgânico' },
+    { id: 3, icon: '🍗', type: 'org', label: 'Resto Comida' },
+    { id: 4, icon: '🥫', type: 'metal', label: 'Metal' },
+    { id: 4, icon: '🍴', type: 'metal', label: 'Talher/Lata' },
+    { id: 5, icon: '🥤', type: 'plastic', label: 'Plástico' },
+    { id: 5, icon: '🧴', type: 'plastic', label: 'Embalagem' },
+    { id: 6, icon: '🔋', type: 'danger', label: 'Perigoso' },
+    { id: 6, icon: '💡', type: 'danger', label: 'Lâmpada/Pilha' },
+    { id: 7, icon: '🥛', type: 'special', label: 'Tetrapak' },
+    { id: 7, icon: '🧱', type: 'special', label: 'Telha Ecológ.' },
+    { id: 8, icon: '📻', type: 'eletron', label: 'Eletrônico' },
+    { id: 8, icon: '💻', type: 'eletron', label: 'Sucata TI' }
 ];
 
 const BINS = {
