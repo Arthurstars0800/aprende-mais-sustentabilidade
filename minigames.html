@@ -12,7 +12,7 @@
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
-<body>
+<body class="theme-game">
     <div class="menu-overlay"></div>
 
     <!-- Header / Navbar -->
@@ -78,7 +78,7 @@
         <section class="minigames-grid">
             <!-- Jogo 1: Coleta Seletiva Rápida -->
             <div class="game-card" data-aos="fade-up">
-                <div class="game-preview" style="background: linear-gradient(135deg, #4ade80, #22c55e);">
+                <div class="game-preview preview-collect">
                     <i class="fas fa-trash-arrow-up"></i>
                 </div>
                 <div class="game-info">
@@ -90,7 +90,7 @@
 
             <!-- Jogo 2: Memória Ecológica -->
             <div class="game-card" data_aos="fade-up" data-aos-delay="100">
-                <div class="game-preview" style="background: linear-gradient(135deg, #60a5fa, #3b82f6);">
+                <div class="game-preview preview-memory">
                     <i class="fas fa-clone"></i>
                 </div>
                 <div class="game-info">
@@ -117,9 +117,9 @@
                         <h2>Coleta Rápida</h2>
                         <p>Clique ou Arraste o lixo para a lixeira da cor certa!</p>
                         <div class="bins-hint">
-                            <span style="color: #ef4444;">🔴 Plástico</span>
-                            <span style="color: #3b82f6;">🔵 Papel</span>
-                            <span style="color: #22c55e;">🟢 Vidro</span>
+                            <span class="hint-plastic">🔴 Plástico</span>
+                            <span class="hint-paper">🔵 Papel</span>
+                            <span class="hint-glass">🟢 Vidro</span>
                         </div>
                         <button class="btn btn-primary" onclick="initCatchGame()">Começar</button>
                     </div>
