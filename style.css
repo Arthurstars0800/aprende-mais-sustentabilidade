@@ -4169,10 +4169,12 @@ body.theme-future.dark-mode {
 
 .minigames-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 30px;
-    margin-bottom: 80px;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 40px;
+    margin: 0 auto 80px;
+    max-width: 1100px;
 }
+
 
 .game-card {
     background: var(--game-card-bg);
@@ -4198,7 +4200,8 @@ body.theme-future .game-card {
 }
 
 .game-preview {
-    height: 180px;
+    height: 320px;
+
     display: flex;
     align-items: center;
     justify-content: center;
@@ -4353,7 +4356,14 @@ body.theme-future .game-waste-item {
     filter: drop-shadow(0 0 10px var(--neon-shadow));
 }
 
+@media (max-width: 900px) {
+    .minigames-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
 @media (max-width: 768px) {
+
     .game-window {
         height: 100%;
         max-width: none;

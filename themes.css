@@ -195,52 +195,46 @@ body.theme-future.theme-minigames {
     --neon-shadow: rgba(255, 0, 68, 0.2);
 }
 
-/* Custom Crimson Neon Cards for Minigames */
+/* Custom Crimson Neon Cards for Minigames - Toned Down Version */
 body.theme-future.theme-minigames .game-card {
-    background: rgba(30, 5, 10, 0.8) !important;
-    border: 1px solid var(--primary) !important;
-    box-shadow: 0 0 15px rgba(255, 0, 68, 0.1) !important;
+    background: rgba(13, 17, 23, 0.8) !important; /* Neutral Dark Slate */
+    border: 1px solid rgba(255, 0, 68, 0.2) !important; /* Very subtle red border */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4) !important;
     transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 body.theme-future.theme-minigames .game-card:hover {
-    box-shadow: 0 0 30px rgba(255, 0, 68, 0.3) !important;
-    transform: translateY(-10px) scale(1.02);
-    border-color: #ff4d7a !important;
+    box-shadow: 0 0 25px rgba(255, 0, 68, 0.15) !important;
+    transform: translateY(-8px);
+    border-color: rgba(255, 0, 68, 0.6) !important;
 }
 
 body.theme-future.theme-minigames .game-preview {
-    border-bottom: 1px solid rgba(255, 0, 68, 0.3);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    background: rgba(0, 0, 0, 0.2); /* Darker preview area */
     position: relative;
     overflow: hidden;
 }
 
 body.theme-future.theme-minigames .game-preview::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(180deg, transparent, rgba(255, 0, 68, 0.2));
+    display: none; /* Removed the red gradient */
 }
 
 body.theme-future.theme-minigames .game-preview i {
-    text-shadow: 0 0 15px var(--primary);
-    color: white;
+    text-shadow: 0 0 10px rgba(255, 0, 68, 0.3);
+    color: #f0f6fc;
 }
 
 body.theme-future.theme-minigames .game-info h3 {
-    color: var(--primary) !important;
-    text-shadow: 0 0 5px rgba(255, 0, 68, 0.5);
-    font-family: 'Outfit', sans-serif;
-    letter-spacing: 1px;
+    color: #f0f6fc !important;
+    text-shadow: none;
+    font-weight: 600;
 }
 
 body.theme-future.theme-minigames .btn-primary {
-    background: transparent !important;
-    border: 1px solid var(--primary) !important;
-    color: var(--primary) !important;
-    box-shadow: 0 0 10px rgba(255, 0, 68, 0.2);
-    text-transform: uppercase;
-    font-weight: 800;
+    background: rgba(255, 0, 68, 0.05) !important;
+    border: 1px solid rgba(255, 0, 68, 0.4) !important;
+    color: #ff4d7a !important;
 }
 
 body.theme-future.theme-minigames .btn-primary:hover {
