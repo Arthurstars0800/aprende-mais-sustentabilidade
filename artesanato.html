@@ -14,6 +14,7 @@
     <!-- Estilos movidos para style.css -->
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#2d5a27">
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 
 <body class="theme-craft">
@@ -31,6 +32,7 @@
                 <li><a href="reciclagem.html">Reciclagem</a></li>
                 <li><a href="artesanato.html" class="active">Oficina</a></li>
                 <li><a href="quizes.html">Quizes</a></li>
+                <li><a href="minigames.html">Minigames</a></li>
                 <li><a href="sobre.html">Sobre</a></li>
             </ul>
 
@@ -41,6 +43,12 @@
                 </div>
                 <span class="eco-xp-text" id="ecoXpText">...</span>
             </div>
+
+            <div id="authContainer" class="auth-container" style="display: flex; align-items: center; gap: 10px; margin-left: 10px;">
+                <div id="googleLoginBtn"></div>
+                <img id="userProfileImg" class="user-profile-img" style="display: none; width: 36px; height: 36px; border-radius: 50%; border: 2px solid var(--primary); cursor: pointer;" alt="User">
+            </div>
+
             <button class="dark-mode-toggle" id="darkModeToggle" aria-label="Toggle Dark Mode">
                 <i class="fas fa-moon"></i>
             </button>
@@ -64,6 +72,10 @@
         <a href="quizes.html" class="bottom-nav-item">
             <i class="fas fa-gamepad"></i>
             <span>Quizes</span>
+        </a>
+        <a href="minigames.html" class="bottom-nav-item">
+            <i class="fas fa-gamepad"></i>
+            <span>Games</span>
         </a>
         <a href="sobre.html" class="bottom-nav-item">
             <i class="fas fa-info-circle"></i>

@@ -69,7 +69,7 @@ function renderGoogleButton() {
         btnContainer.style.display = 'block';
         google.accounts.id.renderButton(
             btnContainer,
-            { theme: "outline", size: "large", type: "standard", shape: "pill", text: "signin_with", logo_alignment: "left" }
+            { theme: "outline", size: "large", type: "icon", shape: "circle" }
         );
         const img = document.getElementById('userProfileImg');
         if (img) img.style.display = 'none';

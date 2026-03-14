@@ -16,6 +16,34 @@ const BINS = {
     glass: { name: 'Vidro', color: '#22c55e' }
 };
 
+// --- Efeitos Sonoros (Procedural Pop) ---
+const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+function playPopSound() {
+    if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+    }
+
+    const oscillator = audioCtx.createOscillator();
+    const gainNode = audioCtx.createGain();
+
+    oscillator.type = 'sine';
+    
+    // Frequência de bolha: Começa agudo e desce rápido
+    oscillator.frequency.setValueAtTime(600, audioCtx.currentTime);
+    oscillator.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + 0.1);
+
+    // Envelope de volume: Ataque rápido e decay curto
+    gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
+    gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
+
+    oscillator.connect(gainNode);
+    gainNode.connect(audioCtx.destination);
+
+    oscillator.start();
+    oscillator.stop(audioCtx.currentTime + 0.1);
+}
+
 function startCatchGame() {
     document.getElementById('gameStage').style.display = 'flex';
     document.getElementById('gameStage').scrollIntoView({ behavior: 'smooth' });
@@ -88,6 +116,7 @@ function spawnWaste() {
         // Por enquanto, apenas clique no item para "coletar"
         score += 10;
         document.getElementById('gameScore').textContent = score;
+        playPopSound(); // Toca o som de bolha
         clearInterval(fall);
         waste.classList.add('collected');
         setTimeout(() => waste.remove(), 200);
