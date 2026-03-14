@@ -28,8 +28,99 @@ let userProfile = {
     },
     lastVisit: Date.now(),
     dailyStreak: 0,
-    audioMuted: true
+    audioMuted: true,
+    isLoggedIn: false,
+    googleUser: null // Armazena { name, email, picture }
 };
+
+// --- Google Auth Configuration ---
+const GOOGLE_CLIENT_ID = "331980862086-pbt7v86884pveas2at8sc0tqg6pkv2nt.apps.googleusercontent.com"; // Substitua pelo seu ID se necessário
+
+function initGoogleAuth() {
+    if (typeof google === 'undefined') {
+        console.warn("Google GSI script não carregado.");
+        return;
+    }
+
+    google.accounts.id.initialize({
+        client_id: GOOGLE_CLIENT_ID,
+        callback: handleGoogleLogin,
+        auto_select: false,
+        cancel_on_tap_outside: true
+    });
+
+    renderGoogleButton();
+}
+
+function renderGoogleButton() {
+    const btnContainer = document.getElementById('googleLoginBtn');
+    if (!btnContainer) return;
+
+    if (userProfile.isLoggedIn) {
+        btnContainer.style.display = 'none';
+        const img = document.getElementById('userProfileImg');
+        if (img) {
+            img.src = userProfile.googleUser.picture;
+            img.style.display = 'block';
+            img.title = `Logado como ${userProfile.googleUser.name} (${userProfile.googleUser.email})`;
+            img.onclick = logoutGoogle;
+        }
+    } else {
+        btnContainer.style.display = 'block';
+        google.accounts.id.renderButton(
+            btnContainer,
+            { theme: "outline", size: "large", type: "standard", shape: "pill", text: "signin_with", logo_alignment: "left" }
+        );
+        const img = document.getElementById('userProfileImg');
+        if (img) img.style.display = 'none';
+    }
+}
+
+function handleGoogleLogin(response) {
+    const payload = decodeJwt(response.credential);
+    console.log("Usuário logado:", payload);
+
+    userProfile.isLoggedIn = true;
+    userProfile.googleUser = {
+        name: payload.name,
+        email: payload.email,
+        picture: payload.picture
+    };
+
+    // Migra o XP local para o perfil do Google se for a primeira vez
+    // Ou carrega o XP específico desse e-mail se já existir
+    const accountProgressKey = `eco_progress_${userProfile.googleUser.email}`;
+    const savedAccountData = localStorage.getItem(accountProgressKey);
+
+    if (savedAccountData) {
+        const parsed = JSON.parse(savedAccountData);
+        // Mantém as informações do Google User atuais
+        userProfile = { ...userProfile, ...parsed, googleUser: userProfile.googleUser };
+    }
+
+    saveProgress();
+    renderGoogleButton();
+    showToast(`Bem-vindo, ${userProfile.googleUser.name}! 🌟`);
+    updateHud();
+}
+
+function logoutGoogle() {
+    if (confirm("Deseja sair da conta?")) {
+        userProfile.isLoggedIn = false;
+        userProfile.googleUser = null;
+        saveProgress();
+        window.location.reload();
+    }
+}
+
+function decodeJwt(token) {
+    const base64Url = token.split('.')[1];
+    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+    }).join(''));
+    return JSON.parse(jsonPayload);
+}
 
 // --- Audio Engine (High Quality Assets) ---
 let activeAudioElements = {};
@@ -196,6 +287,12 @@ function loadProgress() {
 
 function saveProgress() {
     localStorage.setItem('eco_progress', JSON.stringify(userProfile));
+    
+    // Se logado, também salva na chave específica do e-mail (Sincronização Local-Account)
+    if (userProfile.isLoggedIn && userProfile.googleUser) {
+        localStorage.setItem(`eco_progress_${userProfile.googleUser.email}`, JSON.stringify(userProfile));
+    }
+    
     updateHud();
 }
 
@@ -634,6 +731,9 @@ window.gamification = { addXp, markQuizComplete, updateTotalQuizzes, userProfile
 document.addEventListener('DOMContentLoaded', () => {
     loadProgress();
     applyEffects();
+    
+    // Inicializa o Google Auth com um pequeno delay para carregar o SDK
+    setTimeout(initGoogleAuth, 1000);
 
     const hud = document.getElementById('ecoHud');
     if (hud) {
