@@ -195,6 +195,61 @@ body.theme-future.theme-minigames {
     --neon-shadow: rgba(255, 0, 68, 0.2);
 }
 
+/* Custom Crimson Neon Cards for Minigames */
+body.theme-future.theme-minigames .game-card {
+    background: rgba(30, 5, 10, 0.8) !important;
+    border: 1px solid var(--primary) !important;
+    box-shadow: 0 0 15px rgba(255, 0, 68, 0.1) !important;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+body.theme-future.theme-minigames .game-card:hover {
+    box-shadow: 0 0 30px rgba(255, 0, 68, 0.3) !important;
+    transform: translateY(-10px) scale(1.02);
+    border-color: #ff4d7a !important;
+}
+
+body.theme-future.theme-minigames .game-preview {
+    border-bottom: 1px solid rgba(255, 0, 68, 0.3);
+    position: relative;
+    overflow: hidden;
+}
+
+body.theme-future.theme-minigames .game-preview::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, transparent, rgba(255, 0, 68, 0.2));
+}
+
+body.theme-future.theme-minigames .game-preview i {
+    text-shadow: 0 0 15px var(--primary);
+    color: white;
+}
+
+body.theme-future.theme-minigames .game-info h3 {
+    color: var(--primary) !important;
+    text-shadow: 0 0 5px rgba(255, 0, 68, 0.5);
+    font-family: 'Outfit', sans-serif;
+    letter-spacing: 1px;
+}
+
+body.theme-future.theme-minigames .btn-primary {
+    background: transparent !important;
+    border: 1px solid var(--primary) !important;
+    color: var(--primary) !important;
+    box-shadow: 0 0 10px rgba(255, 0, 68, 0.2);
+    text-transform: uppercase;
+    font-weight: 800;
+}
+
+body.theme-future.theme-minigames .btn-primary:hover {
+    background: var(--primary) !important;
+    color: white !important;
+    box-shadow: 0 0 25px var(--primary);
+}
+
+
 
 
 body.theme-future .page-header,
