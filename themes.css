@@ -93,6 +93,29 @@ body.theme-nature .nav-logo {
     filter: hue-rotate(20deg) brightness(1.1);
 }
 
+/* Tema: Minigames - Diferente dos Quizes, usando Magenta/Rosa energética */
+body.theme-minigames {
+    --primary: #d946ef; /* Magenta */
+    --primary-light: #f5d0fe;
+    --secondary: #8b5cf6;
+    --bg-light: #fdf4ff;
+    background-color: var(--bg-light);
+}
+
+body.theme-minigames .minigames-hero {
+    background: linear-gradient(135deg, #d946ef, #8b5cf6);
+}
+
+body.theme-minigames .nav-logo {
+    filter: hue-rotate(280deg) saturate(1.2);
+}
+
+/* Dark Mode - Minigames */
+body.dark-mode.theme-minigames {
+    background-color: #1a101a;
+    --bg-light: #1a101a;
+}
+
 /* --- CORREÇÕES GERAIS DE CONTRASTE NOS TEMAS --- */
 /* Garante que o badge dentro de headers coloridos fique visível */
 body[class*="theme-"] .page-header .badge,
@@ -164,6 +187,13 @@ body.theme-future.theme-nature {
     --primary-light: #aaffdd;
     --neon-shadow: rgba(0, 255, 136, 0.2);
 }
+
+body.theme-future.theme-minigames {
+    --primary: #ff00ff; /* Magenta Neon */
+    --primary-light: #ff80ff;
+    --neon-shadow: rgba(255, 0, 255, 0.2);
+}
+
 
 body.theme-future .page-header,
 body.theme-future .hero-mini,
