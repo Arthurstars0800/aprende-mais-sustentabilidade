@@ -82,21 +82,24 @@
                     <i class="fas fa-trash-arrow-up"></i>
                 </div>
                 <div class="game-info">
-                    <h3>Coleta Seletiva Rápida</h3>
+                    <div class="game-title">
+                        <i id="gameDisplayIcon" class="fas fa-recycle"></i>
+                        <h2 id="gameDisplayTitle">Coleta Seletiva Rápida</h2>
+                    </div>
                     <p>Arraste o lixo para a lixeira correta antes que o tempo acabe!</p>
                     <button class="btn btn-primary" onclick="startCatchGame()">Jogar Agora</button>
                 </div>
             </div>
 
             <!-- Jogo 2: Memória Ecológica -->
-            <div class="game-card" data_aos="fade-up" data-aos-delay="100">
+            <div class="game-card" data-aos="fade-up" data-aos-delay="100">
                 <div class="game-preview preview-memory">
                     <i class="fas fa-clone"></i>
                 </div>
                 <div class="game-info">
                     <h3>Memória da Natureza</h3>
                     <p>Encontre os pares de materiais recicláveis e seus subprodutos.</p>
-                    <button class="btn btn-primary disabled">Em breve</button>
+                    <button class="btn btn-primary" onclick="startMemoryGame()">Jogar Agora</button>
                 </div>
             </div>
         </section>
