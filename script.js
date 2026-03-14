@@ -18,12 +18,6 @@ document.addEventListener('DOMContentLoaded', () => {
             const y = e.clientY - rect.top;
 
             const before = window.getComputedStyle(card, '::before');
-            // Como não podemos modificar pseudo-elementos diretamente via JS de forma fácil p/ posição dinâmica,
-            // vamos usar CSS Variables no style do elemento pai para controlar o gradiente.
-
-            // Mas a abordagem CSS pura acima já faz um efeito legal de "enter".
-            // Para fazer o brilho SEGUIR o mouse, precisamos mudar a estratégia:
-            // Criar um elemento real de "brilho".
         });
     });
 
@@ -317,9 +311,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // The ecoHud listener has been removed from here to prevent duplicate menus.
-    // gamification.js now fully handles the ecoHud click event.
-
     if (searchInput) {
         searchInput.addEventListener('input', (e) => {
             displayResults(e.target.value);
@@ -381,16 +372,12 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // --- Mobile Menu Logic ---
-    // (Menu removido em favor da Bottom Navigation Bar)
-
     // --- Filtros da Oficina de Artesanato ---
     const filterButtons = document.querySelectorAll('.filter-btn');
     const craftCards = document.querySelectorAll('.craft-card');
 
     filterButtons.forEach(btn => {
         btn.addEventListener('click', () => {
-            // Atualiza botões
             filterButtons.forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
 
@@ -425,5 +412,32 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+});
 
+// --- G.A.I.A. Core: Matrix/Bits Animation for Heroes ---
+function initFutureHeroEffects() {
+    const heroes = document.querySelectorAll('.minigames-hero, .hero-mini');
+    
+    heroes.forEach(hero => {
+        if (!document.body.classList.contains('theme-future')) return;
+
+        setInterval(() => {
+            if (!document.body.classList.contains('theme-future')) return;
+            
+            const bit = document.createElement('div');
+            bit.innerText = Math.round(Math.random());
+            bit.className = 'eco-data-bit matrix-style';
+            bit.style.left = Math.random() * 100 + '%';
+            bit.style.fontSize = (Math.random() * 1.5 + 0.5) + 'rem';
+            bit.style.opacity = Math.random() * 0.5 + 0.2;
+            bit.style.animationDuration = (Math.random() * 3 + 2) + 's';
+
+            hero.appendChild(bit);
+            setTimeout(() => bit.remove(), 5000);
+        }, 300);
+    });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    setTimeout(initFutureHeroEffects, 1000);
 });

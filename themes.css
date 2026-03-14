@@ -219,12 +219,53 @@ body.theme-future .quiz-card,
 body.theme-future .cta-card,
 body.theme-future .intro-card,
 body.theme-future .gaia-card,
-body.theme-future .result-card-big {
+body.theme-future .result-card-big,
+body.theme-future .game-card {
     background: rgba(22, 27, 34, 0.7) !important;
     border: 1px solid rgba(0, 243, 255, 0.2) !important;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3) !important;
     backdrop-filter: blur(12px);
     color: #c9d1d9 !important;
+}
+
+/* --- Future Hero Style (Matrix/Grid) --- */
+body.theme-future .minigames-hero,
+body.theme-future .hero-mini {
+    background: #05010a !important;
+    position: relative;
+    overflow: hidden;
+    border-bottom: 2px solid var(--primary) !important;
+    box-shadow: 0 10px 30px var(--neon-shadow);
+}
+
+body.theme-future .hero-mini::before,
+body.theme-future .minigames-hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: 
+        linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+    background-size: 40px 40px;
+    background-position: center center;
+    pointer-events: none;
+    z-index: 1;
+}
+
+body.theme-future .minigames-hero .container,
+body.theme-future .hero-mini .container {
+    position: relative;
+    z-index: 10;
+}
+
+body.theme-future .badge {
+    background: #2d3748 !important;
+    color: white !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    padding: 5px 20px;
+    border-radius: 50px;
 }
 
 body.theme-future.dark-mode .card,
