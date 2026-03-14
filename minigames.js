@@ -88,8 +88,8 @@ function startCatchGame() {
     const canvas = document.getElementById('gameCanvas');
     canvas.innerHTML = `
         <div id="gameInstructions" class="game-instructions">
-            <h2>Coleta Rápida</h2>
-            <p>Arraste o lixo para a lixeira da cor certa!</p>
+            <h2>Coleta Seletiva</h2>
+            <p>É muito importante fazer a coleta seletiva na hora de jogar o lixo fora. Se você pôr o lixo errado na lixeira errada, talvez ele possa ir para um lugar onde ele possa dar vários problemas.</p>
             <div class="bins-hint">
                 <span style="color:#ef4444">🔴 Plástico</span>
                 <span style="color:#3b82f6">🔵 Papel</span>
@@ -109,7 +109,7 @@ function startMemoryGame() {
     canvas.innerHTML = `
         <div id="gameInstructions" class="game-instructions">
             <h2>Memória da Natureza</h2>
-            <p>Encontre o par de cada material e sua transformação!</p>
+            <p>Muitas pessoas sabem jogar certos tipos de lixo fora, mas não sabem de qual tipo esse lixo se trata, às vezes podendo causar confusões. Então aqui está uma atividade para decorarmos certos lixos comuns com seus respectivos tipos.</p>
             <button class="btn btn-primary" onclick="memoryLevel=1; initMemoryGame()">Começar</button>
         </div>
     `;
