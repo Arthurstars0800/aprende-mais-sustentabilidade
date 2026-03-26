@@ -34,7 +34,7 @@ let userProfile = {
 };
 
 // --- Google Auth Configuration ---
-const GOOGLE_CLIENT_ID = "331980862086-pbt7v86884pveas2at8sc0tqg6pkv2nt.apps.googleusercontent.com"; // Substitua pelo seu ID se necessário
+const GOOGLE_CLIENT_ID = "230988263001-3qm1suf4lq2mohdqig6tuq48bbtglsm7.apps.googleusercontent.com"; // Substitua pelo seu ID se necessário
 
 function initGoogleAuth() {
     if (typeof google === 'undefined') {
