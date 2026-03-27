@@ -4597,3 +4597,5 @@ body.theme-future .hint-glass { color: #39ff14; text-shadow: 0 0 5px rgba(57,255
 .user-profile-img:hover { transform: scale(1.1); box-shadow: 0 0 15px var(--primary-light); }
 
 @media (max-width: 900px) { .navbar { height: 65px !important; } .eco-hud { padding: 4px 8px !important; gap: 6px !important; } .eco-bar-container { width: 35px !important; } .eco-xp-text { display: none !important; } .auth-container { gap: 6px !important; } #googleLoginBtn { min-width: 140px !important; } }
+
+@media (max-width: 768px) { .minigames-grid { gap: 20px !important; padding: 0 10px !important; } .game-card { border-radius: 20px !important; } .game-preview { height: 180px !important; font-size: 3.5rem !important; } .game-info { padding: 15px !important; } .game-info h3 { font-size: 1.3rem !important; margin-bottom: 8px !important; } .game-tutorial-list { font-size: 0.8rem !important; margin-bottom: 12px !important; } }
