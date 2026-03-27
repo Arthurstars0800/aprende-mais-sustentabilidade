@@ -193,7 +193,7 @@ body.dark-mode .navbar {
 .nav-links {
     display: flex;
     list-style: none;
-    gap: 30px;
+    gap: 20px;
     align-items: center;
     margin: 0;
     padding: 0;
@@ -208,7 +208,7 @@ body.dark-mode .navbar {
     text-decoration: none;
     color: var(--text-dark);
     font-weight: 500;
-    font-size: 1rem;
+    font-size: 0.95rem;
     padding: 10px 0;
     border-radius: 0;
     background: transparent !important;
