@@ -4595,3 +4595,5 @@ body.theme-future .hint-glass { color: #39ff14; text-shadow: 0 0 5px rgba(57,255
 #googleLoginBtn { min-width: 200px; }
 .user-profile-img { width: 40px; height: 40px; border-radius: 50%; border: 3px solid var(--primary); cursor: pointer; transition: transform 0.3s ease, box-shadow 0.3s ease; object-fit: cover; }
 .user-profile-img:hover { transform: scale(1.1); box-shadow: 0 0 15px var(--primary-light); }
+
+@media (max-width: 900px) { .navbar { height: 65px !important; } .eco-hud { padding: 4px 8px !important; gap: 6px !important; } .eco-bar-container { width: 35px !important; } .eco-xp-text { display: none !important; } .auth-container { gap: 6px !important; } #googleLoginBtn { min-width: 140px !important; } }
