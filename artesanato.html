@@ -104,6 +104,15 @@
             </div>
         </div>
 
+        <!-- Dica Divertida -->
+        <div class="safety-tip" data-aos="fade-left" style="background: linear-gradient(135deg, rgba(139,92,246,0.15), rgba(236,72,153,0.1)); border-left: 4px solid #8b5cf6; margin-top: 15px;">
+            <i class="fas fa-child" style="color: #8b5cf6;"></i>
+            <div>
+                <h4 style="color: #8b5cf6;">Dica Divertida 🎉</h4>
+                <p>Se for um adulto, chame uma criança! Artesanato é sempre mais legal com companhia.</p>
+            </div>
+        </div>
+
         <!-- Filtros de Categoria -->
         <div class="craft-filters" data-aos="fade-up">
             <button class="filter-btn active" data-filter="all">Todos</button>
@@ -113,89 +122,56 @@
             <button class="filter-btn" data-filter="vidro">Vidro</button>
         </div>
 
-        <div class="craft-grid">
+        <div class="craft-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px;">
 
             <!-- Tutorial 1: PET -->
-            <div class="craft-card" data-aos="fade-up" data-category="plastico">
-                <div class="craft-badge plastico">Plástico</div>
-                <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" target="_blank" class="thumbnail-container">
-                    <img src="https://img.youtube.com/vi/dQw4w9WgXcQ/maxresdefault.jpg" alt="Vaso Autoirrigável">
-                    <div class="thumbnail-overlay">
-                        <i class="fas fa-play"></i>
-                    </div>
-                </a>
-                <div class="craft-content">
-                    <h3>Vaso Autoirrigável</h3>
-                    <p>Crie um sistema que rega suas plantas sozinho usando apenas garrafas PET.</p>
-                    <div class="material-list">
-                        <ul>
-                            <li><i class="fas fa-check"></i> Garrafa PET 2L</li>
-                            <li><i class="fas fa-check"></i> Barbante de algodão</li>
-                        </ul>
-                    </div>
-                    <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" target="_blank" class="btn yt-btn">
-                        <i class="fab fa-youtube"></i> Ver Tutorial
-                    </a>
+            <a href="tutorial.html?id=vaso" class="craft-card" data-aos="fade-up" data-category="plastico" style="text-decoration: none; color: inherit; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px 20px; background: var(--card-bg); border-radius: 20px; transition: transform 0.3s, box-shadow 0.3s; cursor: pointer; text-align: center;">
+                <div style="font-size: 4rem; color: #10b981; margin-bottom: 20px;"><i class="fas fa-seedling"></i></div>
+                <h3 style="margin-bottom: 15px; font-size: 1.5rem;">Vaso Autoirrigável</h3>
+                <div style="display: flex; justify-content: center; gap: 8px; flex-wrap: wrap;">
+                    <span style="background: #10b981; color: white; padding: 5px 10px; border-radius: 99px; font-size: 0.8rem; font-weight: bold;">Sem Desperdício</span>
                 </div>
-            </div>
+            </a>
 
             <!-- Tutorial 2: Metal -->
-            <div class="craft-card" data-aos="fade-up" data-aos-delay="100" data-category="metal">
-                <div class="craft-badge metal">Metal</div>
-                <div class="thumbnail-placeholder" style="background: linear-gradient(45deg, #718096, #2d3748);">
-                    <i class="fas fa-hammer"></i>
+            <a href="tutorial.html?id=portalapis" class="craft-card" data-aos="fade-up" data-aos-delay="100" data-category="papel" style="text-decoration: none; color: inherit; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px 20px; background: var(--card-bg); border-radius: 20px; transition: transform 0.3s, box-shadow 0.3s; cursor: pointer; text-align: center;">
+                <div style="font-size: 4rem; color: #f59e0b; margin-bottom: 20px;"><i class="fas fa-pencil-alt"></i></div>
+                <h3 style="margin-bottom: 15px; font-size: 1.5rem;">Porta-lápis de Rolo</h3>
+                <div style="display: flex; justify-content: center; gap: 8px; flex-wrap: wrap;">
+                    <span style="background: #f59e0b; color: white; padding: 5px 10px; border-radius: 99px; font-size: 0.8rem; font-weight: bold;">Super Fácil</span>
+                    <span style="background: #8b5cf6; color: white; padding: 5px 10px; border-radius: 99px; font-size: 0.8rem; font-weight: bold;">Zero Custo</span>
                 </div>
-                <div class="craft-content">
-                    <h3>Organizador de Latas</h3>
-                    <p>Transforme latas de conserva em organizadores de mesa modernos e industriais.</p>
-                    <div class="material-list">
-                        <ul>
-                            <li><i class="fas fa-check"></i> Latas (Alumínio/Aço)</li>
-                            <li><i class="fas fa-check"></i> Tinta spray ou tecido</li>
-                        </ul>
-                    </div>
-                    <button class="btn btn-outline" onclick="alert('Tutorial completo em breve!')">Ler Passo a
-                        Passo</button>
-                </div>
-            </div>
+            </a>
 
             <!-- Tutorial 3: Papel -->
-            <div class="craft-card" data-aos="fade-up" data-aos-delay="200" data-category="papel">
-                <div class="craft-badge papel">Papelão</div>
-                <div class="thumbnail-placeholder" style="background: linear-gradient(45deg, #b58900, #856404);">
-                    <i class="fas fa-car"></i>
+            <a href="tutorial.html?id=carrinho" class="craft-card" data-aos="fade-up" data-aos-delay="200" data-category="papel" style="text-decoration: none; color: inherit; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px 20px; background: var(--card-bg); border-radius: 20px; transition: transform 0.3s, box-shadow 0.3s; cursor: pointer; text-align: center;">
+                <div style="font-size: 4rem; color: #ef4444; margin-bottom: 20px;"><i class="fas fa-car"></i></div>
+                <h3 style="margin-bottom: 15px; font-size: 1.5rem;">Carrinho Movido a Elástico</h3>
+                <div style="display: flex; justify-content: center; gap: 8px; flex-wrap: wrap;">
+                    <span style="background: #ef4444; color: white; padding: 5px 10px; border-radius: 99px; font-size: 0.8rem; font-weight: bold;">Divertido</span>
+                    <span style="background: #f59e0b; color: white; padding: 5px 10px; border-radius: 99px; font-size: 0.8rem; font-weight: bold;">Para Crianças</span>
                 </div>
-                <div class="craft-content">
-                    <h3>Carrinho de Controle... Humano!</h3>
-                    <p>Um brinquedo clássico feito inteiramente de caixas de sapato e tampinhas.</p>
-                    <div class="material-list">
-                        <ul>
-                            <li><i class="fas fa-check"></i> Caixa de papelão</li>
-                            <li><i class="fas fa-check"></i> 4 Tampinhas de PET</li>
-                        </ul>
-                    </div>
-                    <button class="btn btn-outline">Ver Esquema</button>
-                </div>
-            </div>
+            </a>
 
             <!-- Tutorial 4: Vidro -->
-            <div class="craft-card" data-aos="fade-up" data-aos-delay="300" data-category="vidro">
-                <div class="craft-badge vidro">Vidro</div>
-                <div class="thumbnail-placeholder" style="background: linear-gradient(45deg, #4fd1c5, #285e61);">
-                    <i class="fas fa-lightbulb"></i>
+            <a href="tutorial.html?id=luminaria" class="craft-card" data-aos="fade-up" data-aos-delay="300" data-category="vidro" style="text-decoration: none; color: inherit; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px 20px; background: var(--card-bg); border-radius: 20px; transition: transform 0.3s, box-shadow 0.3s; cursor: pointer; text-align: center;">
+                <div style="font-size: 4rem; color: #06b6d4; margin-bottom: 20px;"><i class="fas fa-lightbulb"></i></div>
+                <h3 style="margin-bottom: 15px; font-size: 1.5rem;">Luminária de Pote</h3>
+                <div style="display: flex; justify-content: center; gap: 8px; flex-wrap: wrap;">
+                    <span style="background: #06b6d4; color: white; padding: 5px 10px; border-radius: 99px; font-size: 0.8rem; font-weight: bold;">Decoração</span>
+                    <span style="background: #3b82f6; color: white; padding: 5px 10px; border-radius: 99px; font-size: 0.8rem; font-weight: bold;">Upcycling</span>
                 </div>
-                <div class="craft-content">
-                    <h3>Luminária de Pote</h3>
-                    <p>Dê um clima aconchegante ao seu quarto com potes de conserva e luzes LED.</p>
-                    <div class="material-list">
-                        <ul>
-                            <li><i class="fas fa-check"></i> Pote de vidro limpo</li>
-                            <li><i class="fas fa-check"></i> Fio de fada (LED)</li>
-                        </ul>
-                    </div>
-                    <button class="btn btn-outline">Acessar Guia</button>
+            </a>
+
+            <!-- Tutorial 5: Papelão - Robô -->
+            <a href="tutorial.html?id=robo" class="craft-card" data-aos="fade-up" data-aos-delay="400" data-category="papel" style="text-decoration: none; color: inherit; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px 20px; background: var(--card-bg); border-radius: 20px; transition: transform 0.3s, box-shadow 0.3s; cursor: pointer; text-align: center;">
+                <div style="font-size: 4rem; color: #8b5cf6; margin-bottom: 20px;"><i class="fas fa-robot"></i></div>
+                <h3 style="margin-bottom: 15px; font-size: 1.5rem;">Robô G.A.I.A.</h3>
+                <div style="display: flex; justify-content: center; gap: 8px; flex-wrap: wrap;">
+                    <span style="background: #8b5cf6; color: white; padding: 5px 10px; border-radius: 99px; font-size: 0.8rem; font-weight: bold;">Criativo</span>
+                    <span style="background: #ef4444; color: white; padding: 5px 10px; border-radius: 99px; font-size: 0.8rem; font-weight: bold;">Para Crianças</span>
                 </div>
-            </div>
+            </a>
 
         </div>
 
