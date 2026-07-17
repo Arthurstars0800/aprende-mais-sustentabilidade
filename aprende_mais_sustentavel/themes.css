@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+
 /* --- EXPERIMENTO DE TEMAS VISUAIS --- */
 
 /* Tema: Oficina (Artesanato) - Quente, criativo, papel/craft */
@@ -93,6 +95,30 @@ body.theme-nature .nav-logo {
     filter: hue-rotate(20deg) brightness(1.1);
 }
 
+/* Tema: Minigames - Vermelho Carmesim Energético (Diferente do Roxo dos Quizes) */
+body.theme-minigames {
+    --primary: #e11d48; /* Crimson */
+    --primary-light: #fff1f2;
+    --secondary: #f43f5e;
+    --bg-light: #fff5f6;
+    background-color: var(--bg-light);
+}
+
+body.theme-minigames .minigames-hero {
+    background: linear-gradient(135deg, #e11d48, #f43f5e);
+}
+
+body.theme-minigames .nav-logo {
+    filter: hue-rotate(330deg) saturate(1.5);
+}
+
+/* Dark Mode - Minigames */
+body.dark-mode.theme-minigames {
+    background-color: #1a0a0c;
+    --bg-light: #1a0a0c;
+}
+
+
 /* --- CORREÇÕES GERAIS DE CONTRASTE NOS TEMAS --- */
 /* Garante que o badge dentro de headers coloridos fique visível */
 body[class*="theme-"] .page-header .badge,
@@ -107,20 +133,33 @@ body[class*="theme-"] .hero-mini .badge {
 
 /* --- TEMA SECRETO: FUTURISTA (Cyberpunk / G.A.I.A. Core) --- */
 body.theme-future {
+    /* G.A.I.A. Core - "Dark-Tech" Light Mode (Ainda escuro, mas tons de ardósia/azul) */
     --primary: #00f3ff;
-    /* Ciano Neon Padrão */
     --primary-light: #70ffff;
+    --bg-light: #0d1117;
+    /* Slate escuro ao invés de preto puro */
+    --text-dark: #c9d1d9;
+    --white: #161b22;
+    --neon-shadow: rgba(0, 243, 255, 0.2);
+
+    background-color: #0d1117;
+    background-image:
+        linear-gradient(rgba(0, 243, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 243, 255, 0.03) 1px, transparent 1px);
+    background-size: 50px 50px;
+    color: var(--text-dark);
+}
+
+/* Versão Dark do G.A.I.A. Core (Blackest Night / Cyberpunk Real) */
+body.theme-future.dark-mode {
     --bg-light: #05010a;
-    --text-dark: #e0e0fb;
-    --white: #100520;
-    --neon-shadow: rgba(0, 243, 255, 0.3);
+    --white: #0a0515;
+    --neon-shadow: rgba(0, 243, 255, 0.4);
 
     background-color: #05010a;
-    /* Grid de fundo muito sutil para não poluir */
     background-image:
-        linear-gradient(rgba(0, 243, 255, 0.05) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0, 243, 255, 0.05) 1px, transparent 1px);
-    background-size: 80px 80px;
+        linear-gradient(rgba(0, 243, 255, 0.07) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 243, 255, 0.07) 1px, transparent 1px);
 }
 
 /* Overrides de Cores por Aba no Tema Futurista */
@@ -152,12 +191,75 @@ body.theme-future.theme-nature {
     --neon-shadow: rgba(0, 255, 136, 0.2);
 }
 
+body.theme-future.theme-minigames {
+    --primary: #ff0044; /* Red Neon */
+    --primary-light: #ff6688;
+    --neon-shadow: rgba(255, 0, 68, 0.2);
+}
+
+/* Custom Crimson Neon Cards for Minigames - Toned Down Version */
+body.theme-future.theme-minigames .game-card {
+    background: rgba(13, 17, 23, 0.8) !important; /* Neutral Dark Slate */
+    border: 1px solid rgba(255, 0, 68, 0.2) !important; /* Very subtle red border */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4) !important;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+body.theme-future.theme-minigames .game-card:hover {
+    box-shadow: 0 0 25px rgba(255, 0, 68, 0.15) !important;
+    transform: translateY(-8px);
+    border-color: rgba(255, 0, 68, 0.6) !important;
+}
+
+body.theme-future.theme-minigames .game-preview {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    background: rgba(0, 0, 0, 0.2); /* Darker preview area */
+    position: relative;
+    overflow: hidden;
+}
+
+body.theme-future.theme-minigames .game-preview::after {
+    display: none; /* Removed the red gradient */
+}
+
+body.theme-future.theme-minigames .game-preview i {
+    text-shadow: 0 0 10px rgba(255, 0, 68, 0.3);
+    color: #f0f6fc;
+}
+
+body.theme-future.theme-minigames .game-info h3 {
+    color: #f0f6fc !important;
+    text-shadow: none;
+    font-weight: 600;
+}
+
+body.theme-future.theme-minigames .btn-primary {
+    background: rgba(255, 0, 68, 0.05) !important;
+    border: 1px solid rgba(255, 0, 68, 0.4) !important;
+    color: #ff4d7a !important;
+}
+
+body.theme-future.theme-minigames .btn-primary:hover {
+    background: var(--primary) !important;
+    color: white !important;
+    box-shadow: 0 0 25px var(--primary);
+}
+
+
+
+
 body.theme-future .page-header,
 body.theme-future .hero-mini,
 body.theme-future .navbar {
-    background: linear-gradient(135deg, #100520, #05010a) !important;
+    background: linear-gradient(135deg, #161b22, #0d1117) !important;
     border-bottom: 2px solid var(--primary) !important;
     box-shadow: 0 5px 25px var(--neon-shadow) !important;
+}
+
+body.theme-future.dark-mode .page-header,
+body.theme-future.dark-mode .hero-mini,
+body.theme-future.dark-mode .navbar {
+    background: linear-gradient(135deg, #0a0515, #05010a) !important;
 }
 
 body.theme-future .card,
@@ -167,15 +269,76 @@ body.theme-future .craft-card,
 body.theme-future .quiz-card,
 body.theme-future .cta-card,
 body.theme-future .intro-card,
-body.theme-future .gaia-card {
-    background: rgba(16, 5, 32, 0.8) !important;
-    border: 1px solid var(--primary) !important;
-    border-color: rgba(var(--primary-rgb, 0, 243, 255), 0.3) !important;
-    /* Nota: como não definimos RGB individualmente, vamos usar opacidade sutil no CSS fixo ou var */
-    border: 1px solid var(--primary) !important;
-    box-shadow: 0 0 20px var(--neon-shadow) !important;
+body.theme-future .gaia-card,
+body.theme-future .result-card-big,
+body.theme-future .game-card {
+    background: rgba(22, 27, 34, 0.7) !important;
+    border: 1px solid rgba(0, 243, 255, 0.2) !important;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3) !important;
     backdrop-filter: blur(12px);
-    color: #e0e0fb !important;
+    color: #c9d1d9 !important;
+}
+
+/* --- Future Hero Style (Matrix/Grid) --- */
+body.theme-future .minigames-hero,
+body.theme-future .hero-mini {
+    background: #05010a !important;
+    position: relative;
+    overflow: hidden;
+    border-bottom: 2px solid var(--primary) !important;
+    box-shadow: 0 10px 30px var(--neon-shadow);
+}
+
+body.theme-future .hero-mini::before,
+body.theme-future .minigames-hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: 
+        linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+    background-size: 40px 40px;
+    background-position: center center;
+    pointer-events: none;
+    z-index: 1;
+}
+
+body.theme-future .minigames-hero .container,
+body.theme-future .hero-mini .container {
+    position: relative;
+    z-index: 10;
+}
+
+body.theme-future .badge {
+    background: #2d3748 !important;
+    color: white !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    padding: 5px 20px;
+    border-radius: 50px;
+}
+
+body.theme-future.dark-mode .card,
+body.theme-future.dark-mode .waste-card,
+body.theme-future.dark-mode .info-card,
+body.theme-future.dark-mode .craft-card,
+body.theme-future.dark-mode .quiz-card,
+body.theme-future.dark-mode .cta-card,
+body.theme-future.dark-mode .intro-card,
+body.theme-future.dark-mode .gaia-card,
+body.theme-future.dark-mode .result-card-big {
+    background: rgba(10, 5, 21, 0.8) !important;
+    border-color: var(--primary) !important;
+    box-shadow: 0 0 25px var(--neon-shadow) !important;
+    color: #00f3ff !important;
+}
+
+body.theme-future h1,
+body.theme-future h2,
+body.theme-future h3,
+body.theme-future p {
+    color: #c9d1d9 !important;
 }
 
 /* Forçar cores de destaque no tema futuro */
@@ -211,6 +374,21 @@ body.theme-future .quiz-btn:hover {
 
 body.theme-future .nav-logo {
     filter: drop-shadow(0 0 8px var(--primary)) brightness(1.2);
+}
+
+body.theme-future .result-visual-side {
+    background: linear-gradient(135deg, var(--primary), var(--primary-light)) !important;
+    color: white !important;
+    border-right: none !important;
+}
+
+body.theme-future .guide-box-big {
+    background: rgba(0, 0, 0, 0.03) !important;
+    border-color: var(--primary) !important;
+}
+
+body.theme-future.dark-mode .guide-box-big {
+    background: rgba(255, 255, 255, 0.05) !important;
 }
 
 /* Corrigir ícones e tags */
@@ -428,3 +606,4 @@ body.theme-future .result-gaia-box {
 }
 
 /* Scanline removido por causar poluição visual e cansaço ocular */
+

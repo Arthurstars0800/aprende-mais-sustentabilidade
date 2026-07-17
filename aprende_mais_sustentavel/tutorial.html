@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tutorial - Aprende Mais</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#2d5a27">
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+</head>
+
+<body class="theme-craft">
+    <div class="menu-overlay"></div>
+
+    <nav class="navbar">
+        <div class="container">
+            <div class="logo">
+                <img src="logo.png" alt="Logo" class="nav-logo">
+                <span>APRENDE MAIS</span>
+            </div>
+
+            <ul class="nav-links" id="navLinks">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="reciclagem.html">Reciclagem</a></li>
+                <li><a href="artesanato.html" class="active">Oficina</a></li>
+                <li><a href="quizes.html">Quizes</a></li>
+                <li><a href="minigames.html">Minigames</a></li>
+                <li><a href="sobre.html">Sobre</a></li>
+            </ul>
+
+            <div class="eco-hud" id="ecoHud">
+                <span class="eco-level-icon">🌱</span>
+                <div class="eco-bar-container">
+                    <div class="eco-bar-fill" id="ecoBarFill" style="width: 0%"></div>
+                </div>
+                <span class="eco-xp-text" id="ecoXpText">...</span>
+            </div>
+
+            <button class="dark-mode-toggle" id="darkModeToggle" aria-label="Toggle Dark Mode">
+                <i class="fas fa-moon"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Bottom Navigation (Mobile Only) -->
+    <nav class="bottom-nav">
+        <a href="index.html" class="bottom-nav-item">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </a>
+        <a href="reciclagem.html" class="bottom-nav-item">
+            <i class="fas fa-recycle"></i>
+            <span>Guia</span>
+        </a>
+        <a href="artesanato.html" class="bottom-nav-item active">
+            <i class="fas fa-tools"></i>
+            <span>Oficina</span>
+        </a>
+        <a href="quizes.html" class="bottom-nav-item">
+            <i class="fas fa-gamepad"></i>
+            <span>Quizes</span>
+        </a>
+        <a href="minigames.html" class="bottom-nav-item">
+            <i class="fas fa-rocket"></i>
+            <span>Games</span>
+        </a>
+        <a href="sobre.html" class="bottom-nav-item">
+            <i class="fas fa-info-circle"></i>
+            <span>Sobre</span>
+        </a>
+    </nav>
+
+    <header class="page-header" style="padding-top: 100px; padding-bottom: 40px;">
+        <div class="container" data-aos="fade-down">
+            <a href="artesanato.html" style="color: white; text-decoration: none; margin-bottom: 20px; display: inline-block; background: rgba(0,0,0,0.3); padding: 8px 16px; border-radius: 99px;">
+                <i class="fas fa-arrow-left"></i> Voltar para Oficina
+            </a>
+            <h1 id="pageTitle">Carregando...</h1>
+        </div>
+    </header>
+
+    <main class="container" style="margin-top: 40px; margin-bottom: 60px; min-height: 50vh;">
+        
+        <div id="tutorialContent" style="display: none; background: var(--card-bg); padding: 40px; border-radius: 20px; box-shadow: var(--shadow);">
+            
+            <div style="text-align: center; margin-bottom: 40px;">
+                <div id="pageIcon" style="font-size: 5rem; margin-bottom: 20px;"></div>
+                <h2 style="font-size: 2rem; margin-bottom: 20px; color: var(--text-color);">O Porquê Fazer?</h2>
+                <p id="pageWhy" style="font-size: 1.2rem; line-height: 1.6; color: var(--text-color); max-width: 800px; margin: 0 auto;"></p>
+            </div>
+
+            <hr style="border-color: rgba(128,128,128,0.2); margin: 40px 0;">
+
+            <div id="videoContainer" style="display: none;">
+                <!-- Videos will be injected here -->
+            </div>
+
+            <div id="textSection" style="display: none;">
+                <h2 style="font-size: 1.8rem; margin-bottom: 20px; color: var(--text-color); text-align: center;">Passo a Passo</h2>
+                <div id="textTutorial" style="font-size: 1.1rem; line-height: 1.8; color: var(--text-color);">
+                </div>
+            </div>
+
+        </div>
+
+        <div id="errorMsg" style="display: none; text-align: center; padding: 50px;">
+            <h2>Objeto não encontrado.</h2>
+            <p>Não encontramos o tutorial que você está procurando.</p>
+        </div>
+
+    </main>
+
+    <footer class="main-footer">
+        <div class="container">
+            <p>&copy; 2026 Aprende Mais: Sustentabilidade.</p>
+        </div>
+    </footer>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="gamification.js"></script>
+    <script src="script.js"></script>
+    <script>
+        const tutorialsData = {
+            'vaso': {
+                title: 'Vaso Autoirrigável',
+                icon: '<i class="fas fa-seedling" style="color: #10b981;"></i>',
+                why: 'Fazer um vaso autoirrigável com garrafa PET é a maneira perfeita de unir o útil ao sustentável. Você evita que uma garrafa plástica demore centenas de anos para se decompor na natureza e, de quebra, cria um sistema super inteligente que mantém suas plantas hidratadas sem você precisar lembrar de regar todo dia! É menos lixo no mundo e mais verde na sua casa.',
+                videos: [
+                    { id: 'mOWMhHuehdE', credit: 'De Apê Novo - Lu e Ale' },
+                    { id: 'WzyPztAnMx4', credit: 'Manual do Mundo' }
+                ]
+            },
+            'portalapis': {
+                title: 'Porta-lápis de Rolo de Papelão',
+                icon: '<i class="fas fa-pencil-alt" style="color: #f59e0b;"></i>',
+                why: 'Rolos de papel higiênico e de papel toalha são descartados em enorme quantidade todos os dias. Transformá-los num porta-lápis bonito e funcional é uma das formas mais simples de praticar a reutilização no dia a dia. Sem cola quente, sem tinta cara — qualquer pessoa pode fazer, do jeitinho que quiser!',
+                text: `
+                <div style="display: flex; flex-direction: column; gap: 15px;">
+                    <h3>📦 Materiais Necessários</h3>
+                    <ul>
+                        <li>3 a 5 rolos de papel higiênico (ou 1 rolo de papel toalha)</li>
+                        <li>1 pedaço de papelão (caixa de cereal serve)</li>
+                        <li>Cola ou fita adesiva</li>
+                        <li>Tesoura</li>
+                        <li>(Opcional) Tinta, tecido ou papel para decorar</li>
+                    </ul>
+                    <h3>✂️ Passo a Passo</h3>
+                    <ol>
+                        <li>Corte o papelão no formato de retângulo para servir de base.</li>
+                        <li>Cole os rolos em pé sobre a base, um do lado do outro. Use cola ou fita por dentro.</li>
+                        <li>Espere secar.</li>
+                        <li>Decore como quiser: pode pintar, cobrir com retalho de tecido, papel kraft ou papel de presente.</li>
+                        <li>Coloque seus lápis, canetas, tesouras e réguas. Pronto! 🎨</li>
+                    </ol>
+                </div>`
+            },
+            'carrinho': {
+                title: 'Carrinho Movido a Elástico',
+                icon: '<i class="fas fa-car" style="color: #ef4444;"></i>',
+                why: 'Em vez de comprar brinquedos de plástico feitos em fábricas que poluem, você pode criar seu próprio carrinho com materiais de casa! Além de ser superjogo e divertido de fazer, você aprende na prática como a energia pode ser armazenada e liberada — a mesma lógica usada em motores reais. Ciência e sustentabilidade ao mesmo tempo!',
+                videos: [
+                    { id: 'e3XWZgI_G8k', credit: 'QUE IDEIA!' }
+                ]
+            },
+            'luminaria': {
+                title: 'Luminária de Pote',
+                icon: '<i class="fas fa-lightbulb" style="color: #06b6d4;"></i>',
+                why: 'Vidro é um material 100% reciclável, mas reaproveitá-lo diretamente (upcycling) é ainda melhor, pois gasta ZERO energia industrial! Ao transformar um pote de geleia ou palmito numa luminária, você cria uma peça de decoração incrível, aconchegante e que ajuda a reduzir a pegada de carbono.',
+                videos: [
+                    { id: 'wZuRg_rYyMY', credit: 'Zappeando' }
+                ]
+            },
+            'robo': {
+                title: 'Robô G.A.I.A.',
+                icon: '<i class="fas fa-robot" style="color: #8b5cf6;"></i>',
+                why: 'Papelão é um dos materiais mais desperdiçados nas casas brasileiras. Caixas de sapato, de cereal, de encomenda — tudo vai para o lixo. Mas com criatividade e um pouco de cola, você transforma esse descarte num robozinho incrível! É um projeto que estimula raciocínio, criatividade e ensina, de forma prática, que o lixo de um pode ser o brinquedo de outro.',
+                text: `
+                <div style="display: flex; flex-direction: column; gap: 20px; line-height: 1.8;">
+                    <div>
+                        <h3>📦 Lista de Materiais</h3>
+                        <ul>
+                            <li><strong>Papelão plano:</strong> Abas de caixas de sapato ou de encomendas (use as partes sem dobras naturais).</li>
+                            <li><strong>Ferramentas:</strong> Régua, tesoura (ou estilete) e uma caneta ou canetinha preta.</li>
+                            <li><strong>Fixação:</strong> Fita adesiva (crepe ou transparente) ou cola branca de secagem rápida.</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3>🔧 Passo a Passo</h3>
+
+                        <h4>Passo 1: O Corpo (Cubo Maior)</h4>
+                        <p>Vamos construir um bloco sólido de papelão para o tronco.</p>
+                        <ol>
+                            <li>Com a régua e a caneta, desenhe uma linha vertical de 20 cm no papelão.</li>
+                            <li>Faça marcações a cada 5 cm para dividir em 4 quadrados iguais (5 × 5 cm cada).</li>
+                            <li>No segundo quadrado, desenhe mais um quadrado de 5 × 5 cm na esquerda e outro na direita — o desenho final vai parecer uma <strong>cruz</strong>.</li>
+                            <li>Recorte toda a borda externa da cruz.</li>
+                            <li>Use a régua como apoio para dobrar todas as linhas internas para dentro.</li>
+                            <li>Feche o cubo unindo as bordas com fita ou cola. Agora você tem o tronco do robô!</li>
+                        </ol>
+
+                        <h4>Passo 2: A Cabeça (Cubo Menor)</h4>
+                        <p>A cabeça segue a mesma lógica do corpo, com tamanho menor.</p>
+                        <ol>
+                            <li>Desenhe outra cruz usando quadrados de 3 × 3 cm (fileira vertical de 12 cm).</li>
+                            <li>Recorte, dobre e feche o cubinho com fita ou cola.</li>
+                        </ol>
+
+                        <h4>Passo 3: Junção Direta (Sem Pescoço)</h4>
+                        <ol>
+                            <li>Escolha qual lado do cubinho será o rosto.</li>
+                            <li>Passe bastante cola (ou fita dupla face) na face inferior da cabeça.</li>
+                            <li>Pressione a cabeça <strong>diretamente no topo</strong> do corpo, bem centralizada.</li>
+                            <li>Segure por alguns segundos até firmar.</li>
+                        </ol>
+
+                        <h4>Passo 4: As Pernas</h4>
+                        <p>Tiras dobradas em ângulo reto para que o robô fique em pé.</p>
+                        <ol>
+                            <li>Recorte duas tiras de papelão de 2 × 6 cm.</li>
+                            <li>Dobre cada tira ao meio (na marca dos 3 cm), formando um "L" de 90°.</li>
+                            <li>Cole a metade superior do "L" na base do corpo. A outra metade fica espalmada na mesa como pé.</li>
+                        </ol>
+
+                        <h4>Passo 5: Os Braços</h4>
+                        <ol>
+                            <li>Recorte duas tiras de 2 × 5 cm.</li>
+                            <li>Dobre ao meio (na marca de 2,5 cm), formando mais dois "Ls".</li>
+                            <li>Cole uma metade na lateral superior do corpo do robô.</li>
+                            <li>A outra metade fica apontando para fora, simulando os braços.</li>
+                        </ol>
+
+                        <h4>Passo 6: Decoração!</h4>
+                        <p>Use a canetinha para desenhar olhos, boca, parafusos, botões e medidores no corpo. E então, <strong>pinte da maneira que quiser</strong> — tinta guache, tinta spray, lápis de cor... solte a criatividade! 🤖🎨</p>
+                    </div>
+                </div>`
+            }
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const params = new URLSearchParams(window.location.search);
+            const itemId = params.get('id');
+            const data = tutorialsData[itemId];
+
+            if (data) {
+                document.getElementById('tutorialContent').style.display = 'block';
+                document.getElementById('pageTitle').textContent = data.title;
+                document.getElementById('pageIcon').innerHTML = data.icon;
+                document.getElementById('pageWhy').textContent = data.why;
+
+                if (data.videos && data.videos.length > 0) {
+                    const videoContainer = document.getElementById('videoContainer');
+                    videoContainer.style.display = 'block';
+                    
+                    let html = `<h2 style="font-size: 1.8rem; margin-bottom: 30px; color: var(--text-color); text-align: center;">Tutoriais em Vídeo</h2>`;
+                    html += `<div style="display: flex; flex-direction: column; gap: 50px; align-items: center;">`;
+                    
+                    data.videos.forEach((v, index) => {
+                        const ytLink = `https://youtu.be/${v.id}`;
+                        const thumbSrc = `https://img.youtube.com/vi/${v.id}/hqdefault.jpg`;
+                        
+                        html += `
+                        <div style="text-align: center; width: 100%; max-width: 600px;">
+                            <h3 style="margin-bottom: 15px; color: var(--text-color);">Opção ${index + 1}</h3>
+                            <a href="${ytLink}" target="_blank" style="display: inline-block; position: relative; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 25px rgba(0,0,0,0.2); transition: transform 0.3s; width: 100%;">
+                                <img src="${thumbSrc}" alt="Thumbnail ${index + 1}" style="display: block; width: 100%; height: auto;">
+                                <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.3); display: flex; align-items: center; justify-content: center; transition: background 0.3s;" onmouseover="this.style.background='rgba(0,0,0,0.1)'" onmouseout="this.style.background='rgba(0,0,0,0.3)'">
+                                    <i class="fas fa-play-circle" style="font-size: 5rem; color: white; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.5));"></i>
+                                </div>
+                            </a>
+                            <div style="margin-top: 20px;">
+                                <a href="${ytLink}" target="_blank" class="btn" style="background: #ef4444; color: white; padding: 12px 30px; font-size: 1.1rem; border-radius: 99px; text-decoration: none; display: inline-block; font-weight: bold;">
+                                    <i class="fab fa-youtube"></i> Assistir no YouTube
+                                </a>
+                            </div>
+                            <p style="margin-top: 15px; color: var(--text-muted); font-size: 1rem; font-weight: bold;">
+                                Créditos: <span>${v.credit}</span>
+                            </p>
+                        </div>
+                        `;
+                    });
+                    
+                    html += `</div>`;
+                    videoContainer.innerHTML = html;
+                    
+                } else if (data.text) {
+                    document.getElementById('textSection').style.display = 'block';
+                    document.getElementById('textTutorial').innerHTML = data.text;
+                }
+            } else {
+                document.getElementById('pageTitle').textContent = 'Erro';
+                document.getElementById('errorMsg').style.display = 'block';
+            }
+        });
+    </script>
+</body>
+</html>

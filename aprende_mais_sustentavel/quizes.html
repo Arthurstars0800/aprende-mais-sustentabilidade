@@ -13,9 +13,11 @@
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#2d5a27">
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 
 <body class="theme-game">
+    <div class="menu-overlay"></div>
 
     <nav class="navbar">
         <div class="container">
@@ -23,13 +25,16 @@
                 <img src="logo.png" alt="Logo" class="nav-logo">
                 <span>APRENDE MAIS</span>
             </div>
+
             <ul class="nav-links" id="navLinks">
                 <li><a href="index.html">Home</a></li>
-                <li><a href="reciclagem.html">Guia de Reciclagem</a></li>
+                <li><a href="reciclagem.html">Reciclagem</a></li>
                 <li><a href="artesanato.html">Oficina</a></li>
                 <li><a href="quizes.html" class="active">Quizes</a></li>
-                <li><a href="sobre.html">Quem Somos</a></li>
+                <li><a href="minigames.html">Minigames</a></li>
+                <li><a href="sobre.html">Sobre</a></li>
             </ul>
+
             <div class="eco-hud" id="ecoHud" title="Carregando perfil...">
                 <span class="eco-level-icon">🌱</span>
                 <div class="eco-bar-container">
@@ -37,13 +42,44 @@
                 </div>
                 <span class="eco-xp-text" id="ecoXpText">...</span>
             </div>
+
+            <div id="authContainer" class="auth-container" style="display: flex; align-items: center; gap: 10px; margin-left: 10px;">
+                <div id="googleLoginBtn"></div>
+                <img id="userProfileImg" class="user-profile-img" style="display: none; width: 36px; height: 36px; border-radius: 50%; border: 2px solid var(--primary); cursor: pointer;" alt="User">
+            </div>
+
             <button class="dark-mode-toggle" id="darkModeToggle" aria-label="Toggle Dark Mode">
                 <i class="fas fa-moon"></i>
             </button>
-            <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle Menu">
-                <i class="fas fa-bars"></i>
-            </button>
         </div>
+    </nav>
+
+    <!-- Bottom Navigation (Mobile Only) -->
+    <nav class="bottom-nav">
+        <a href="index.html" class="bottom-nav-item">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </a>
+        <a href="reciclagem.html" class="bottom-nav-item">
+            <i class="fas fa-recycle"></i>
+            <span>Guia</span>
+        </a>
+        <a href="artesanato.html" class="bottom-nav-item">
+            <i class="fas fa-tools"></i>
+            <span>Oficina</span>
+        </a>
+        <a href="quizes.html" class="bottom-nav-item active">
+            <i class="fas fa-gamepad"></i>
+            <span>Quizes</span>
+        </a>
+        <a href="minigames.html" class="bottom-nav-item">
+            <i class="fas fa-rocket"></i>
+            <span>Games</span>
+        </a>
+        <a href="sobre.html" class="bottom-nav-item">
+            <i class="fas fa-info-circle"></i>
+            <span>Sobre</span>
+        </a>
     </nav>
 
     <header class="hero-mini">

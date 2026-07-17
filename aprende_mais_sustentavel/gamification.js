@@ -28,759 +28,156 @@ let userProfile = {
     },
     lastVisit: Date.now(),
     dailyStreak: 0,
-    audioMuted: true
+    audioMuted: true,
+    isLoggedIn: false,
+    googleUser: null // Armazena { name, email, picture }
 };
 
-// --- Audio Engine (Procedural Web Audio API) ---
-let audioCtx = null;
-let masterGain = null;
-let activeAudioNodes = [];
-let currentAmbienceType = null;
+// --- Google Auth Configuration ---
+const GOOGLE_CLIENT_ID = "230988263001-3qm1suf4lq2mohdqig6tuq48bbtglsm7.apps.googleusercontent.com"; // Substitua pelo seu ID se necessário
 
-function getAudioCtx() {
-    if (!audioCtx || audioCtx.state === 'closed') {
-        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        masterGain = audioCtx.createGain();
-        masterGain.gain.value = 0.35;
-        masterGain.connect(audioCtx.destination);
+function initGoogleAuth() {
+    if (typeof google === 'undefined') {
+        console.warn("Google GSI script não carregado.");
+        return;
     }
-    if (audioCtx.state === 'suspended') {
-        audioCtx.resume();
-    }
-    return audioCtx;
+
+    google.accounts.id.initialize({
+        client_id: GOOGLE_CLIENT_ID,
+        callback: handleGoogleLogin,
+        auto_select: false,
+        cancel_on_tap_outside: true
+    });
+
+    renderGoogleButton();
 }
 
-function stopAllAudioNodes() {
-    activeAudioNodes.forEach(node => {
-        try {
-            if (node.stop) node.stop();
-            if (node.disconnect) node.disconnect();
-        } catch (e) { }
+function renderGoogleButton() {
+    const btnContainer = document.getElementById('googleLoginBtn');
+    if (!btnContainer) return;
+
+    if (userProfile.isLoggedIn) {
+        btnContainer.style.display = 'none';
+        const img = document.getElementById('userProfileImg');
+        if (img) {
+            img.src = userProfile.googleUser.picture;
+            img.style.display = 'block';
+            img.title = `Logado como ${userProfile.googleUser.name} (${userProfile.googleUser.email})`;
+            img.onclick = logoutGoogle;
+        }
+    } else {
+        btnContainer.style.display = 'block';
+        google.accounts.id.renderButton(
+            btnContainer,
+            { 
+                theme: "filled_blue", 
+                size: "large", 
+                type: "standard", 
+                shape: "rectangular",
+                text: "signin_with",
+                logo_alignment: "left",
+                width: 200
+            }
+        );
+        const img = document.getElementById('userProfileImg');
+        if (img) img.style.display = 'none';
+    }
+}
+
+function handleGoogleLogin(response) {
+    const payload = decodeJwt(response.credential);
+    console.log("Usuário logado:", payload);
+
+    userProfile.isLoggedIn = true;
+    userProfile.googleUser = {
+        name: payload.name,
+        email: payload.email,
+        picture: payload.picture
+    };
+
+    // Migra o XP local para o perfil do Google se for a primeira vez
+    // Ou carrega o XP específico desse e-mail se já existir
+    const accountProgressKey = `eco_progress_${userProfile.googleUser.email}`;
+    const savedAccountData = localStorage.getItem(accountProgressKey);
+
+    if (savedAccountData) {
+        const parsed = JSON.parse(savedAccountData);
+        // Mantém as informações do Google User atuais
+        userProfile = { ...userProfile, ...parsed, googleUser: userProfile.googleUser };
+    }
+
+    saveProgress();
+    renderGoogleButton();
+    showToast(`Bem-vindo, ${userProfile.googleUser.name}! 🌟`);
+    updateHud();
+}
+
+function logoutGoogle() {
+    if (confirm("Deseja sair da conta?")) {
+        userProfile.isLoggedIn = false;
+        userProfile.googleUser = null;
+        saveProgress();
+        window.location.reload();
+    }
+}
+
+function decodeJwt(token) {
+    const base64Url = token.split('.')[1];
+    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+    }).join(''));
+    return JSON.parse(jsonPayload);
+}
+
+// --- Audio Engine (High Quality Assets) ---
+let activeAudioElements = {};
+let currentAmbienceType = null;
+
+function stopAllAudio() {
+    Object.values(activeAudioElements).forEach(audio => {
+        audio.pause();
+        audio.currentTime = 0;
     });
-    activeAudioNodes = [];
     if (window._ambienceTimers) {
         window._ambienceTimers.forEach(t => clearTimeout(t));
         window._ambienceTimers = [];
     }
 }
 
-// Creates filtered noise (wind, rain, etc.)
-function createNoise(ctx, type = 'brown', duration = Infinity) {
-    const bufferSize = ctx.sampleRate * 2;
-    const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
-    const data = buffer.getChannelData(0);
-
-    if (type === 'white') {
-        for (let i = 0; i < bufferSize; i++) data[i] = Math.random() * 2 - 1;
-    } else if (type === 'pink') {
-        let b0 = 0, b1 = 0, b2 = 0, b3 = 0, b4 = 0, b5 = 0, b6 = 0;
-        for (let i = 0; i < bufferSize; i++) {
-            const white = Math.random() * 2 - 1;
-            b0 = 0.99886 * b0 + white * 0.0555179;
-            b1 = 0.99332 * b1 + white * 0.0750759;
-            b2 = 0.96900 * b2 + white * 0.1538520;
-            b3 = 0.86650 * b3 + white * 0.3104856;
-            b4 = 0.55000 * b4 + white * 0.5329522;
-            b5 = -0.7616 * b5 - white * 0.0168980;
-            data[i] = (b0 + b1 + b2 + b3 + b4 + b5 + b6 + white * 0.5362) * 0.11;
-            b6 = white * 0.115926;
-        }
-    } else { // brown
-        let lastOut = 0;
-        for (let i = 0; i < bufferSize; i++) {
-            const white = Math.random() * 2 - 1;
-            data[i] = (lastOut + (0.02 * white)) / 1.02;
-            lastOut = data[i];
-            data[i] *= 3.5;
-        }
+function getAudioElement(id, src, loop = true) {
+    if (!activeAudioElements[id]) {
+        const audio = new Audio(src);
+        audio.loop = loop;
+        audio.volume = 0.4;
+        activeAudioElements[id] = audio;
     }
-
-    const source = ctx.createBufferSource();
-    source.buffer = buffer;
-    source.loop = true;
-    return source;
+    return activeAudioElements[id];
 }
 
-// --- Soundscape Generators ---
+function playAmbience(type) {
+    if (userProfile.audioMuted) return;
 
-function playForestAmbience() {
-    const ctx = getAudioCtx();
+    const sounds = {
+        'forest': 'assets/sounds/floresta.mp3',
+        'wind': 'assets/sounds/floresta.mp3', // Usando floresta como base para vento também
+        'rain': 'assets/sounds/chuva.mp3',
+        'storm': 'assets/sounds/tempestade.mp3',
+        'crickets': 'assets/sounds/grilo.mp3',
+        'digital': 'assets/sounds/matrix.mp3',
+        'matrix': 'assets/sounds/matrix.mp3',
+        'scifi': 'assets/sounds/matrix.mp3'
+    };
 
-    // Soft brown noise = gentle breeze through trees
-    const wind = createNoise(ctx, 'brown');
-    const windFilter = ctx.createBiquadFilter();
-    windFilter.type = 'lowpass';
-    windFilter.frequency.value = 220;
-    const windGain = ctx.createGain();
-    windGain.gain.value = 0.15;
-    wind.connect(windFilter);
-    windFilter.connect(windGain);
-    windGain.connect(masterGain);
-    wind.start();
-    activeAudioNodes.push(wind, windFilter, windGain);
+    const src = sounds[type];
+    if (!src) return;
 
-    // Gentle wind modulation (soft breathing)
-    const windLFO = ctx.createOscillator();
-    const windLFOGain = ctx.createGain();
-    windLFO.frequency.value = 0.08;
-    windLFOGain.gain.value = 0.05;
-    windLFO.connect(windLFOGain);
-    windLFOGain.connect(windGain.gain);
-    windLFO.start();
-    activeAudioNodes.push(windLFO, windLFOGain);
-
-    // Bird chirps - random sine tone bursts
-    window._ambienceTimers = [];
-    function scheduleBird() {
-        if (userProfile.audioMuted || currentAmbienceType !== 'forest') return;
-        const osc = ctx.createOscillator();
-        const birdGain = ctx.createGain();
-        const freq = 1800 + Math.random() * 2500;
-        osc.type = 'sine';
-        osc.frequency.value = freq;
-
-        // Quick chirp pattern
-        const now = ctx.currentTime;
-        const chirpDur = 0.05 + Math.random() * 0.08;
-        const numChirps = 2 + Math.floor(Math.random() * 4);
-
-        birdGain.gain.value = 0;
-        for (let i = 0; i < numChirps; i++) {
-            const t = now + i * (chirpDur + 0.03);
-            birdGain.gain.setValueAtTime(0, t);
-            birdGain.gain.linearRampToValueAtTime(0.08 + Math.random() * 0.06, t + chirpDur * 0.3);
-            osc.frequency.setValueAtTime(freq + Math.random() * 400, t);
-            osc.frequency.linearRampToValueAtTime(freq - 200 + Math.random() * 600, t + chirpDur);
-            birdGain.gain.linearRampToValueAtTime(0, t + chirpDur);
-        }
-
-        osc.connect(birdGain);
-        birdGain.connect(masterGain);
-        osc.start(now);
-        osc.stop(now + numChirps * (chirpDur + 0.03) + 0.1);
-
-        const tid = setTimeout(scheduleBird, 2000 + Math.random() * 5000);
-        window._ambienceTimers.push(tid);
-    }
-    scheduleBird();
-    // Start a second bird with offset
-    const tid2 = setTimeout(scheduleBird, 1000 + Math.random() * 3000);
-    window._ambienceTimers.push(tid2);
+    stopAllAudio();
+    const audio = getAudioElement(type, src);
+    audio.play().catch(err => console.warn("Interação do usuário necessária para áudio:", err));
 }
 
-function playWindAmbience() {
-    const ctx = getAudioCtx();
-
-    // Soft layered wind
-    const wind1 = createNoise(ctx, 'brown');
-    const filter1 = ctx.createBiquadFilter();
-    filter1.type = 'bandpass';
-    filter1.frequency.value = 200;
-    filter1.Q.value = 0.3;
-    const gain1 = ctx.createGain();
-    gain1.gain.value = 0.18;
-    wind1.connect(filter1);
-    filter1.connect(gain1);
-    gain1.connect(masterGain);
-    wind1.start();
-
-    const wind2 = createNoise(ctx, 'pink');
-    const filter2 = ctx.createBiquadFilter();
-    filter2.type = 'lowpass';
-    filter2.frequency.value = 300;
-    const gain2 = ctx.createGain();
-    gain2.gain.value = 0.08;
-    wind2.connect(filter2);
-    filter2.connect(gain2);
-    gain2.connect(masterGain);
-    wind2.start();
-
-    // Slow modulation for gentle gusts
-    const lfo = ctx.createOscillator();
-    const lfoGain = ctx.createGain();
-    lfo.frequency.value = 0.06;
-    lfoGain.gain.value = 0.08;
-    lfo.connect(lfoGain);
-    lfoGain.connect(gain1.gain);
-    lfo.start();
-
-    activeAudioNodes.push(wind1, filter1, gain1, wind2, filter2, gain2, lfo, lfoGain);
-}
-
-function playRainAmbience(isStorm = false) {
-    const ctx = getAudioCtx();
-
-    // Base rain = filtered white noise
-    const rain = createNoise(ctx, 'white');
-    const rainFilter = ctx.createBiquadFilter();
-    rainFilter.type = 'bandpass';
-    rainFilter.frequency.value = isStorm ? 2500 : 3000;
-    rainFilter.Q.value = 0.3;
-    const rainGain = ctx.createGain();
-    rainGain.gain.value = isStorm ? 0.5 : 0.35;
-    rain.connect(rainFilter);
-    rainFilter.connect(rainGain);
-    rainGain.connect(masterGain);
-    rain.start();
-
-    // Low rumble (like distant thunder for storm, or distant water for rain)
-    const rumble = createNoise(ctx, 'brown');
-    const rumbleFilter = ctx.createBiquadFilter();
-    rumbleFilter.type = 'lowpass';
-    rumbleFilter.frequency.value = isStorm ? 150 : 80;
-    const rumbleGain = ctx.createGain();
-    rumbleGain.gain.value = isStorm ? 0.4 : 0.15;
-    rumble.connect(rumbleFilter);
-    rumbleFilter.connect(rumbleGain);
-    rumbleGain.connect(masterGain);
-    rumble.start();
-
-    activeAudioNodes.push(rain, rainFilter, rainGain, rumble, rumbleFilter, rumbleGain);
-
-    // Storm: periodic thunder rumbles
-    if (isStorm) {
-        window._ambienceTimers = window._ambienceTimers || [];
-        function thunder() {
-            if (userProfile.audioMuted || currentAmbienceType !== 'storm') return;
-            const thunderOsc = createNoise(ctx, 'brown');
-            const tFilter = ctx.createBiquadFilter();
-            tFilter.type = 'lowpass';
-            tFilter.frequency.value = 100;
-            const tGain = ctx.createGain();
-            const now = ctx.currentTime;
-            tGain.gain.setValueAtTime(0, now);
-            tGain.gain.linearRampToValueAtTime(0.6 + Math.random() * 0.3, now + 0.1);
-            tGain.gain.exponentialRampToValueAtTime(0.01, now + 1.5 + Math.random());
-            thunderOsc.connect(tFilter);
-            tFilter.connect(tGain);
-            tGain.connect(masterGain);
-            thunderOsc.start(now);
-            thunderOsc.stop(now + 2.5);
-            const tid = setTimeout(thunder, 6000 + Math.random() * 12000);
-            window._ambienceTimers.push(tid);
-        }
-        const tid = setTimeout(thunder, 3000 + Math.random() * 5000);
-        window._ambienceTimers.push(tid);
-    }
-}
-
-function playCricketAmbience() {
-    const ctx = getAudioCtx();
-
-    // Rich nighttime atmosphere - layered
-    const nightBrown = createNoise(ctx, 'brown');
-    const nightBrownFilter = ctx.createBiquadFilter();
-    nightBrownFilter.type = 'lowpass';
-    nightBrownFilter.frequency.value = 200;
-    const nightBrownGain = ctx.createGain();
-    nightBrownGain.gain.value = 0.25;
-    nightBrown.connect(nightBrownFilter);
-    nightBrownFilter.connect(nightBrownGain);
-    nightBrownGain.connect(masterGain);
-    nightBrown.start();
-
-    // Soft high-frequency bed (like distant insects hum)
-    const nightPink = createNoise(ctx, 'pink');
-    const nightPinkFilter = ctx.createBiquadFilter();
-    nightPinkFilter.type = 'bandpass';
-    nightPinkFilter.frequency.value = 3000;
-    nightPinkFilter.Q.value = 0.3;
-    const nightPinkGain = ctx.createGain();
-    nightPinkGain.gain.value = 0.015;
-    nightPink.connect(nightPinkFilter);
-    nightPinkFilter.connect(nightPinkGain);
-    nightPinkGain.connect(masterGain);
-    nightPink.start();
-
-    // Gentle wind
-    const wind = createNoise(ctx, 'brown');
-    const windFilter = ctx.createBiquadFilter();
-    windFilter.type = 'bandpass';
-    windFilter.frequency.value = 200;
-    windFilter.Q.value = 0.3;
-    const windGain = ctx.createGain();
-    windGain.gain.value = 0.06;
-    wind.connect(windFilter);
-    windFilter.connect(windGain);
-    windGain.connect(masterGain);
-    wind.start();
-    // Wind breathing
-    const windLFO = ctx.createOscillator();
-    const windLFOGain = ctx.createGain();
-    windLFO.frequency.value = 0.07;
-    windLFOGain.gain.value = 0.03;
-    windLFO.connect(windLFOGain);
-    windLFOGain.connect(windGain.gain);
-    windLFO.start();
-
-    activeAudioNodes.push(nightBrown, nightBrownFilter, nightBrownGain,
-        nightPink, nightPinkFilter, nightPinkGain,
-        wind, windFilter, windGain, windLFO, windLFOGain);
-
-    // Natural cricket chirps - each "voice" has its own character
-    window._ambienceTimers = window._ambienceTimers || [];
-
-    function makeChirp(baseFreq, volume) {
-        if (userProfile.audioMuted || currentAmbienceType !== 'crickets') return;
-
-        const numPulses = 3 + Math.floor(Math.random() * 6);
-        const pulseGap = 0.025 + Math.random() * 0.02;
-        const pulseDur = 0.015 + Math.random() * 0.015;
-        const totalDur = numPulses * (pulseDur + pulseGap) + 0.15;
-
-        // Main tone + slight harmonic for richness
-        const osc1 = ctx.createOscillator();
-        osc1.type = 'sine';
-        osc1.frequency.value = baseFreq;
-
-        const osc2 = ctx.createOscillator();
-        osc2.type = 'sine';
-        osc2.frequency.value = baseFreq * 2.01; // slight detune on harmonic
-
-        // Bandpass to soften
-        const filter = ctx.createBiquadFilter();
-        filter.type = 'bandpass';
-        filter.frequency.value = baseFreq;
-        filter.Q.value = 2;
-
-        const chirpGain = ctx.createGain();
-        chirpGain.gain.value = 0;
-
-        const harmGain = ctx.createGain();
-        harmGain.gain.value = 0;
-
-        const now = ctx.currentTime;
-        const vol = volume * (0.7 + Math.random() * 0.3);
-
-        // Natural trill: each pulse fades in and out smoothly
-        for (let i = 0; i < numPulses; i++) {
-            const t = now + i * (pulseDur + pulseGap);
-            const peakVol = vol * (0.6 + Math.random() * 0.4);
-            // Gentle fade in
-            chirpGain.gain.setValueAtTime(0, t);
-            chirpGain.gain.linearRampToValueAtTime(peakVol, t + pulseDur * 0.4);
-            // Gentle fade out
-            chirpGain.gain.linearRampToValueAtTime(0, t + pulseDur);
-            // Harmonic follows but quieter
-            harmGain.gain.setValueAtTime(0, t);
-            harmGain.gain.linearRampToValueAtTime(peakVol * 0.15, t + pulseDur * 0.4);
-            harmGain.gain.linearRampToValueAtTime(0, t + pulseDur);
-
-            // Subtle frequency wobble for organic feel
-            osc1.frequency.setValueAtTime(baseFreq + Math.random() * 80 - 40, t);
-        }
-
-        osc1.connect(filter);
-        osc2.connect(filter);
-        filter.connect(chirpGain);
-        chirpGain.connect(masterGain);
-
-        // Parallel harmonic path
-        const harmFilter = ctx.createBiquadFilter();
-        harmFilter.type = 'bandpass';
-        harmFilter.frequency.value = baseFreq * 2;
-        harmFilter.Q.value = 3;
-        osc2.connect(harmFilter);
-        harmFilter.connect(harmGain);
-        harmGain.connect(masterGain);
-
-        osc1.start(now);
-        osc2.start(now);
-        osc1.stop(now + totalDur);
-        osc2.stop(now + totalDur);
-    }
-
-    // Cricket voice 1 - higher pitch, frequent
-    function voice1() {
-        if (userProfile.audioMuted || currentAmbienceType !== 'crickets') return;
-        makeChirp(4200 + Math.random() * 600, 0.04);
-        const tid = setTimeout(voice1, 1500 + Math.random() * 3000);
-        window._ambienceTimers.push(tid);
-    }
-
-    // Cricket voice 2 - lower pitch, less frequent
-    function voice2() {
-        if (userProfile.audioMuted || currentAmbienceType !== 'crickets') return;
-        makeChirp(3200 + Math.random() * 400, 0.035);
-        const tid = setTimeout(voice2, 2500 + Math.random() * 4000);
-        window._ambienceTimers.push(tid);
-    }
-
-    // Cricket voice 3 - medium, sporadic
-    function voice3() {
-        if (userProfile.audioMuted || currentAmbienceType !== 'crickets') return;
-        makeChirp(3800 + Math.random() * 500, 0.03);
-        const tid = setTimeout(voice3, 3000 + Math.random() * 6000);
-        window._ambienceTimers.push(tid);
-    }
-
-    // Stagger the starts for natural feel
-    voice1();
-    const t1 = setTimeout(voice2, 800 + Math.random() * 1200);
-    const t2 = setTimeout(voice3, 1500 + Math.random() * 2000);
-    window._ambienceTimers.push(t1, t2);
-}
-
-// --- NES Chiptune Note Frequencies ---
-const NES_NOTES = {
-    C3: 130.81, D3: 146.83, E3: 164.81, F3: 174.61, G3: 196.00, A3: 220.00, B3: 246.94,
-    C4: 261.63, D4: 293.66, E4: 329.63, F4: 349.23, G4: 392.00, A4: 440.00, B4: 493.88,
-    C5: 523.25, D5: 587.33, E5: 659.25, F5: 698.46, G5: 783.99, A5: 880.00, B5: 987.77,
-    C6: 1046.50, R: 0  // R = rest
-};
-
-// Melody phrases inspired by classic NES platformer tunes
-const CHIPTUNE_MELODIES = [
-    // Upbeat adventure phrase 1
-    [
-        { n: 'E5', d: 0.12 }, { n: 'E5', d: 0.12 }, { n: 'R', d: 0.12 }, { n: 'E5', d: 0.12 },
-        { n: 'R', d: 0.12 }, { n: 'C5', d: 0.12 }, { n: 'E5', d: 0.18 },
-        { n: 'G5', d: 0.3 }, { n: 'R', d: 0.15 }, { n: 'G4', d: 0.3 }
-    ],
-    // Bouncy phrase 2
-    [
-        { n: 'C5', d: 0.15 }, { n: 'G4', d: 0.15 }, { n: 'R', d: 0.15 }, { n: 'E4', d: 0.15 },
-        { n: 'A4', d: 0.15 }, { n: 'B4', d: 0.12 }, { n: 'A4', d: 0.18 },
-        { n: 'G4', d: 0.12 }, { n: 'E5', d: 0.12 }, { n: 'G5', d: 0.15 }, { n: 'A5', d: 0.18 },
-        { n: 'F5', d: 0.12 }, { n: 'G5', d: 0.15 }
-    ],
-    // Underground/mystery phrase
-    [
-        { n: 'C4', d: 0.1 }, { n: 'C5', d: 0.1 }, { n: 'A4', d: 0.1 }, { n: 'A3', d: 0.1 },
-        { n: 'B3', d: 0.1 }, { n: 'B4', d: 0.1 }, { n: 'R', d: 0.2 },
-        { n: 'C4', d: 0.1 }, { n: 'C5', d: 0.1 }, { n: 'A4', d: 0.1 }, { n: 'A3', d: 0.1 },
-        { n: 'B3', d: 0.1 }, { n: 'B4', d: 0.1 }
-    ],
-    // Coin/star power phrase
-    [
-        { n: 'B4', d: 0.08 }, { n: 'E5', d: 0.08 }, { n: 'G5', d: 0.08 }, { n: 'B5', d: 0.08 },
-        { n: 'A5', d: 0.08 }, { n: 'E5', d: 0.08 }, { n: 'G5', d: 0.08 }, { n: 'A5', d: 0.15 },
-        { n: 'R', d: 0.1 },
-        { n: 'A4', d: 0.08 }, { n: 'D5', d: 0.08 }, { n: 'F5', d: 0.08 }, { n: 'A5', d: 0.08 },
-        { n: 'G5', d: 0.08 }, { n: 'D5', d: 0.08 }, { n: 'F5', d: 0.08 }, { n: 'G5', d: 0.15 }
-    ],
-    // Victory fanfare
-    [
-        { n: 'G4', d: 0.1 }, { n: 'C5', d: 0.1 }, { n: 'E5', d: 0.1 }, { n: 'G5', d: 0.15 },
-        { n: 'E5', d: 0.1 }, { n: 'G5', d: 0.3 },
-        { n: 'R', d: 0.15 },
-        { n: 'A4', d: 0.1 }, { n: 'D5', d: 0.1 }, { n: 'F5', d: 0.1 }, { n: 'A5', d: 0.15 },
-        { n: 'F5', d: 0.1 }, { n: 'A5', d: 0.3 }
-    ],
-    // Fast running phrase
-    [
-        { n: 'E5', d: 0.08 }, { n: 'D5', d: 0.08 }, { n: 'C5', d: 0.08 }, { n: 'D5', d: 0.08 },
-        { n: 'E5', d: 0.08 }, { n: 'E5', d: 0.08 }, { n: 'E5', d: 0.15 }, { n: 'R', d: 0.08 },
-        { n: 'D5', d: 0.08 }, { n: 'D5', d: 0.08 }, { n: 'D5', d: 0.15 }, { n: 'R', d: 0.08 },
-        { n: 'E5', d: 0.08 }, { n: 'G5', d: 0.08 }, { n: 'G5', d: 0.15 }
-    ]
-];
-
-// Bass patterns
-const CHIPTUNE_BASS = [
-    [{ n: 'C3', d: 0.15 }, { n: 'G3', d: 0.15 }, { n: 'C3', d: 0.15 }, { n: 'G3', d: 0.15 }, { n: 'E3', d: 0.15 }, { n: 'G3', d: 0.15 }, { n: 'E3', d: 0.15 }, { n: 'G3', d: 0.15 }],
-    [{ n: 'C3', d: 0.12 }, { n: 'R', d: 0.06 }, { n: 'C3', d: 0.12 }, { n: 'R', d: 0.06 }, { n: 'G3', d: 0.12 }, { n: 'R', d: 0.06 }, { n: 'G3', d: 0.12 }, { n: 'R', d: 0.06 }, { n: 'A3', d: 0.12 }, { n: 'R', d: 0.06 }, { n: 'A3', d: 0.12 }],
-    [{ n: 'F3', d: 0.15 }, { n: 'R', d: 0.08 }, { n: 'F3', d: 0.1 }, { n: 'A3', d: 0.15 }, { n: 'R', d: 0.08 }, { n: 'C3', d: 0.15 }, { n: 'R', d: 0.08 }, { n: 'C3', d: 0.1 }, { n: 'E3', d: 0.15 }]
-];
-
-function playChiptuneMelody(ctx, targetNode, melody, volume, waveType = 'square') {
-    const now = ctx.currentTime;
-    let time = now;
-
-    melody.forEach(note => {
-        const freq = NES_NOTES[note.n];
-        if (freq > 0) {
-            const osc = ctx.createOscillator();
-            osc.type = waveType;
-            osc.frequency.value = freq;
-
-            const noteGain = ctx.createGain();
-            // NES-style sharp attack, slight decay
-            noteGain.gain.setValueAtTime(0, time);
-            noteGain.gain.linearRampToValueAtTime(volume, time + 0.005);
-            noteGain.gain.setValueAtTime(volume * 0.8, time + 0.01);
-            noteGain.gain.setValueAtTime(volume * 0.7, time + note.d * 0.7);
-            noteGain.gain.linearRampToValueAtTime(0, time + note.d);
-
-            osc.connect(noteGain);
-            noteGain.connect(targetNode);
-            osc.start(time);
-            osc.stop(time + note.d + 0.01);
-        }
-        time += note.d;
-    });
-
-    return time - now; // total duration
-}
-
-function playDigitalAmbience(isMatrix = false) {
-    const ctx = getAudioCtx();
-
-    // Low digital drone (quieter to let the melody shine)
-    const osc1 = ctx.createOscillator();
-    osc1.type = 'sawtooth';
-    osc1.frequency.value = isMatrix ? 55 : 80;
-    const droneFilter = ctx.createBiquadFilter();
-    droneFilter.type = 'lowpass';
-    droneFilter.frequency.value = isMatrix ? 200 : 300;
-    const droneGain = ctx.createGain();
-    droneGain.gain.value = isMatrix ? 0.06 : 0.05;
-    osc1.connect(droneFilter);
-    droneFilter.connect(droneGain);
-    droneGain.connect(masterGain);
-    osc1.start();
-
-    // Soft shimmer
-    const shimmer = createNoise(ctx, 'white');
-    const shimmerFilter = ctx.createBiquadFilter();
-    shimmerFilter.type = 'bandpass';
-    shimmerFilter.frequency.value = isMatrix ? 6000 : 4000;
-    shimmerFilter.Q.value = 5;
-    const shimmerGain = ctx.createGain();
-    shimmerGain.gain.value = isMatrix ? 0.02 : 0.01;
-    shimmer.connect(shimmerFilter);
-    shimmerFilter.connect(shimmerGain);
-    shimmerGain.connect(masterGain);
-    shimmer.start();
-
-    // Pulsing modulation
-    const lfo = ctx.createOscillator();
-    const lfoGain = ctx.createGain();
-    lfo.frequency.value = isMatrix ? 0.5 : 0.3;
-    lfoGain.gain.value = 0.02;
-    lfo.connect(lfoGain);
-    lfoGain.connect(droneGain.gain);
-    lfo.start();
-
-    activeAudioNodes.push(osc1, droneFilter, droneGain, shimmer, shimmerFilter, shimmerGain, lfo, lfoGain);
-
-    // === 8-BIT CHIPTUNE MUSIC LOOP ===
-    window._ambienceTimers = window._ambienceTimers || [];
-    const ambiType = isMatrix ? 'matrix' : 'digital';
-
-    function playMelodyLoop() {
-        if (userProfile.audioMuted || currentAmbienceType !== ambiType) return;
-
-        // Pick random melody and bass
-        const melody = CHIPTUNE_MELODIES[Math.floor(Math.random() * CHIPTUNE_MELODIES.length)];
-        const bass = CHIPTUNE_BASS[Math.floor(Math.random() * CHIPTUNE_BASS.length)];
-
-        // Lead melody (square wave — classic NES pulse 1)
-        const melodyVol = isMatrix ? 0.045 : 0.035;
-        const melodyDur = playChiptuneMelody(ctx, masterGain, melody, melodyVol, 'square');
-
-        // Bass line (triangle-ish — NES triangle channel)
-        const bassVol = isMatrix ? 0.03 : 0.025;
-        playChiptuneMelody(ctx, masterGain, bass, bassVol, 'triangle');
-
-        // Arpeggio harmony on some loops (50% chance)
-        if (Math.random() > 0.5) {
-            // Simple arpeggio based on first note of melody
-            const rootFreq = NES_NOTES[melody[0].n] || 523.25;
-            const arpNotes = [
-                { n: melody[0].n, d: 0.08 },
-                { n: Object.keys(NES_NOTES).find(k => Math.abs(NES_NOTES[k] - rootFreq * 1.25) < 20) || melody[0].n, d: 0.08 },
-                { n: Object.keys(NES_NOTES).find(k => Math.abs(NES_NOTES[k] - rootFreq * 1.5) < 20) || melody[0].n, d: 0.08 }
-            ];
-            // Repeat arpeggio pattern
-            const arpPattern = [];
-            for (let i = 0; i < 6; i++) {
-                arpPattern.push(arpNotes[i % 3]);
-            }
-            playChiptuneMelody(ctx, masterGain, arpPattern, melodyVol * 0.4, 'square');
-        }
-
-        // Gap between phrases + schedule next
-        const gap = 0.8 + Math.random() * 2.0;
-        const tid = setTimeout(playMelodyLoop, (melodyDur + gap) * 1000);
-        window._ambienceTimers.push(tid);
-    }
-
-    // Start the music after a short delay
-    const startTid = setTimeout(playMelodyLoop, 500);
-    window._ambienceTimers.push(startTid);
-}
-
-function playSciFiAmbience() {
-    const ctx = getAudioCtx();
-
-    // === RADIO BUS — everything goes through this for the "Alastor" effect ===
-
-    // 1. Bandpass filter = the classic "tinny radio" sound (300Hz - 3500Hz)
-    const radioLowCut = ctx.createBiquadFilter();
-    radioLowCut.type = 'highpass';
-    radioLowCut.frequency.value = 300;
-    radioLowCut.Q.value = 0.7;
-
-    const radioHighCut = ctx.createBiquadFilter();
-    radioHighCut.type = 'lowpass';
-    radioHighCut.frequency.value = 3500;
-    radioHighCut.Q.value = 0.7;
-
-    // 2. Mid-range resonance peak (makes it sound "boxy" like a small speaker)
-    const radioResonance = ctx.createBiquadFilter();
-    radioResonance.type = 'peaking';
-    radioResonance.frequency.value = 1200;
-    radioResonance.Q.value = 1.5;
-    radioResonance.gain.value = 6;
-
-    // 3. Distortion/saturation (warm tube-like overdrive)
-    const distortion = ctx.createWaveShaper();
-    function makeDistortionCurve(amount) {
-        const samples = 44100;
-        const curve = new Float32Array(samples);
-        for (let i = 0; i < samples; i++) {
-            const x = (i * 2) / samples - 1;
-            curve[i] = (Math.PI + amount) * x / (Math.PI + amount * Math.abs(x));
-        }
-        return curve;
-    }
-    distortion.curve = makeDistortionCurve(8);
-    distortion.oversample = '2x';
-
-    // Radio bus gain
-    const radioBusGain = ctx.createGain();
-    radioBusGain.gain.value = 0.7;
-
-    // Chain: source → lowcut → highcut → resonance → distortion → busGain → master
-    radioLowCut.connect(radioHighCut);
-    radioHighCut.connect(radioResonance);
-    radioResonance.connect(distortion);
-    distortion.connect(radioBusGain);
-    radioBusGain.connect(masterGain);
-
-    // === SOUND SOURCES (all routed into the radio bus) ===
-
-    // Deep humming drone (like old radio electronics)
-    const osc = ctx.createOscillator();
-    osc.type = 'sawtooth';
-    osc.frequency.value = 110;
-    const oscGain = ctx.createGain();
-    oscGain.gain.value = 0.12;
-    osc.connect(oscGain);
-    oscGain.connect(radioLowCut);
-    osc.start();
-
-    // 60Hz mains hum (classic radio interference)
-    const hum = ctx.createOscillator();
-    hum.type = 'sine';
-    hum.frequency.value = 60;
-    const humGain = ctx.createGain();
-    humGain.gain.value = 0.08;
-    hum.connect(humGain);
-    humGain.connect(radioLowCut);
-    hum.start();
-
-    // Second harmonic of hum
-    const hum2 = ctx.createOscillator();
-    hum2.type = 'sine';
-    hum2.frequency.value = 120;
-    const humGain2 = ctx.createGain();
-    humGain2.gain.value = 0.04;
-    hum2.connect(humGain2);
-    humGain2.connect(radioLowCut);
-    hum2.start();
-
-    // Eerie ambient tone (mysterious radio broadcast feel)
-    const eerieOsc = ctx.createOscillator();
-    eerieOsc.type = 'sine';
-    eerieOsc.frequency.value = 440;
-    const eerieGain = ctx.createGain();
-    eerieGain.gain.value = 0.03;
-    eerieOsc.connect(eerieGain);
-    eerieGain.connect(radioLowCut);
-    eerieOsc.start();
-    // Slow vibrato on the eerie tone
-    const eerieLFO = ctx.createOscillator();
-    const eerieLFOGain = ctx.createGain();
-    eerieLFO.frequency.value = 0.3;
-    eerieLFOGain.gain.value = 15;
-    eerieLFO.connect(eerieLFOGain);
-    eerieLFOGain.connect(eerieOsc.frequency);
-    eerieLFO.start();
-
-    // === RADIO STATIC & CRACKLE (directly to master, not through distortion) ===
-
-    // Continuous light static
-    const staticNoise = createNoise(ctx, 'white');
-    const staticFilter = ctx.createBiquadFilter();
-    staticFilter.type = 'bandpass';
-    staticFilter.frequency.value = 2000;
-    staticFilter.Q.value = 0.5;
-    const staticGain = ctx.createGain();
-    staticGain.gain.value = 0.04;
-    staticNoise.connect(staticFilter);
-    staticFilter.connect(staticGain);
-    staticGain.connect(masterGain);
-    staticNoise.start();
-
-    // Static volume flutter (radio signal wavering)
-    const staticLFO = ctx.createOscillator();
-    const staticLFOGain = ctx.createGain();
-    staticLFO.frequency.value = 0.4;
-    staticLFOGain.gain.value = 0.02;
-    staticLFO.connect(staticLFOGain);
-    staticLFOGain.connect(staticGain.gain);
-    staticLFO.start();
-
-    activeAudioNodes.push(
-        radioLowCut, radioHighCut, radioResonance, distortion, radioBusGain,
-        osc, oscGain, hum, humGain, hum2, humGain2,
-        eerieOsc, eerieGain, eerieLFO, eerieLFOGain,
-        staticNoise, staticFilter, staticGain, staticLFO, staticLFOGain
-    );
-
-    // === RANDOM CRACKLE POPS & RADIO TUNING ===
-    window._ambienceTimers = window._ambienceTimers || [];
-
-    // Random crackle/pops (like old vinyl or radio interference)
-    function crackle() {
-        if (userProfile.audioMuted || currentAmbienceType !== 'scifi') return;
-        const numPops = 1 + Math.floor(Math.random() * 4);
-        const now = ctx.currentTime;
-
-        for (let i = 0; i < numPops; i++) {
-            const popNoise = createNoise(ctx, 'white');
-            const popFilter = ctx.createBiquadFilter();
-            popFilter.type = 'highpass';
-            popFilter.frequency.value = 1000 + Math.random() * 3000;
-            const popGain = ctx.createGain();
-            const t = now + i * (0.02 + Math.random() * 0.05);
-            const popVol = 0.05 + Math.random() * 0.08;
-            popGain.gain.setValueAtTime(0, t);
-            popGain.gain.linearRampToValueAtTime(popVol, t + 0.003);
-            popGain.gain.exponentialRampToValueAtTime(0.001, t + 0.02 + Math.random() * 0.03);
-            popNoise.connect(popFilter);
-            popFilter.connect(popGain);
-            popGain.connect(masterGain);
-            popNoise.start(t);
-            popNoise.stop(t + 0.08);
-        }
-
-        const tid = setTimeout(crackle, 500 + Math.random() * 2500);
-        window._ambienceTimers.push(tid);
-    }
-
-    // 8-bit chiptune melody through the radio filter (Mario on vintage radio!)
-    function radioMelody() {
-        if (userProfile.audioMuted || currentAmbienceType !== 'scifi') return;
-
-        const melody = CHIPTUNE_MELODIES[Math.floor(Math.random() * CHIPTUNE_MELODIES.length)];
-        const bass = CHIPTUNE_BASS[Math.floor(Math.random() * CHIPTUNE_BASS.length)];
-
-        // Lead melody goes through the radio bus for that Alastor crunch
-        const melodyDur = playChiptuneMelody(ctx, radioLowCut, melody, 0.06, 'square');
-        playChiptuneMelody(ctx, radioLowCut, bass, 0.04, 'triangle');
-
-        const gap = 1.5 + Math.random() * 3.0;
-        const tid = setTimeout(radioMelody, (melodyDur + gap) * 1000);
-        window._ambienceTimers.push(tid);
-    }
-
-    crackle();
-    const t1 = setTimeout(radioMelody, 1000 + Math.random() * 2000);
-    window._ambienceTimers.push(t1);
-}
+// Funções de ambiente removidas em favor da playAmbience geral para assets.
 
 function getAmbienceType() {
     const effect = userProfile.equipped.effect;
@@ -801,7 +198,7 @@ function getAmbienceType() {
 
 function updateAmbience() {
     if (userProfile.audioMuted) {
-        stopAllAudioNodes();
+        stopAllAudio();
         currentAmbienceType = null;
         return;
     }
@@ -811,21 +208,12 @@ function updateAmbience() {
     // Don't restart if already playing the right ambience
     if (targetType === currentAmbienceType) return;
 
-    stopAllAudioNodes();
+    stopAllAudio();
     currentAmbienceType = targetType;
     window._ambienceTimers = [];
 
     try {
-        switch (targetType) {
-            case 'forest': playForestAmbience(); break;
-            case 'wind': playWindAmbience(); break;
-            case 'rain': playRainAmbience(false); break;
-            case 'storm': playRainAmbience(true); break;
-            case 'crickets': playCricketAmbience(); break;
-            case 'digital': playDigitalAmbience(false); break;
-            case 'matrix': playDigitalAmbience(true); break;
-            case 'scifi': playSciFiAmbience(); break;
-        }
+        playAmbience(targetType);
         console.log(`🎵 Ambience: ${targetType}`);
     } catch (err) {
         console.warn("Erro ao iniciar áudio:", err);
@@ -865,11 +253,10 @@ function toggleMute() {
     saveProgress();
     updateAudioUI();
     if (!userProfile.audioMuted) {
-        // Resume AudioContext in user gesture context (required by browsers)
-        try { getAudioCtx().resume(); } catch (e) { }
+        // Agora usando Audio elements, não precisamos mais de resume explicito do actx
         updateAmbience();
     } else {
-        stopAllAudioNodes();
+        stopAllAudio();
         currentAmbienceType = null;
     }
     showToast(userProfile.audioMuted ? "Rádio Silenciada 🔇" : "Rádio Ligada 📻");
@@ -908,6 +295,12 @@ function loadProgress() {
 
 function saveProgress() {
     localStorage.setItem('eco_progress', JSON.stringify(userProfile));
+    
+    // Se logado, também salva na chave específica do e-mail (Sincronização Local-Account)
+    if (userProfile.isLoggedIn && userProfile.googleUser) {
+        localStorage.setItem(`eco_progress_${userProfile.googleUser.email}`, JSON.stringify(userProfile));
+    }
+    
     updateHud();
 }
 
@@ -990,7 +383,17 @@ function updateHud() {
     let currentLevelData = LEVELS.find(l => l.level === userProfile.level) || LEVELS[0];
     let nextLevelData = LEVELS.find(l => l.level === userProfile.level + 1);
 
-    if (icon) icon.textContent = currentLevelData.icon;
+    if (icon) {
+        const equippedAvatarId = userProfile.equipped.avatar || 'avatar_seed';
+        const equippedAvatar = SHOP_ITEMS.avatars.find(a => a.id === equippedAvatarId);
+        icon.textContent = equippedAvatar ? equippedAvatar.icon : currentLevelData.icon;
+        
+        if (userProfile.isLoggedIn) {
+            icon.classList.add('google-active');
+        } else {
+            icon.classList.remove('google-active');
+        }
+    }
 
     let percentage = 100;
     if (nextLevelData) {
@@ -1009,10 +412,20 @@ function updateHud() {
 
 const SHOP_ITEMS = {
     avatars: [
-        { id: 'avatar_seed', name: 'Semente', icon: '🌱', reqLevel: 1 },
+        { id: 'avatar_seed', name: 'Semente Curiosa', icon: '🌱', reqLevel: 1 },
+        { id: 'avatar_sprout', name: 'Brotinho Verde', icon: '🌿', reqLevel: 2 },
+        { id: 'avatar_young_tree', name: 'Árvore Jovem', icon: '🌳', reqLevel: 3 },
+        { id: 'avatar_live_forest', name: 'Floresta Viva', icon: '🌲', reqLevel: 4 },
+        { id: 'avatar_gaia_guardian', name: 'Guardião Gaia', icon: '🌍', reqLevel: 5 },
+        { id: 'avatar_water_defender', name: 'Defensor das Águas', icon: '💧', reqLevel: 6 },
+        { id: 'avatar_recycling_master', name: 'Mestre da Reciclagem', icon: '♻️', reqLevel: 7 },
+        { id: 'avatar_fauna_protector', name: 'Protetor da Fauna', icon: '🦊', reqLevel: 8 },
+        { id: 'avatar_solar_ally', name: 'Aliado Solar', icon: '☀️', reqLevel: 9 },
+        { id: 'avatar_eco_hero', name: 'Herói Sustentável', icon: '🦸', reqLevel: 10 },
+        { id: 'avatar_eco_legend', name: 'Lenda Ecológica', icon: '🏆', reqLevel: 15 },
+        { id: 'avatar_capy_supreme', name: 'Capivara Suprema', icon: '👑', reqLevel: 20 },
         { id: 'avatar_cat', name: 'Gatinho Reciclador', icon: '🐱', reqLevel: 5 },
-        { id: 'avatar_robot', name: 'Robô G.A.I.A.', icon: '🤖', reqLevel: 10 },
-        { id: 'avatar_capy', name: 'Capivara Suprema', icon: '👑', reqLevel: 20 }
+        { id: 'avatar_robot', name: 'Robô G.A.I.A.', icon: '🤖', reqLevel: 10 }
     ],
     effects: [
         { id: 'effect_none', name: 'Nenhum', icon: '🚫', reqLevel: 1 },
@@ -1042,6 +455,19 @@ function openProfile() {
     modal.id = 'ecoProfileModal';
     const currentLevel = LEVELS.find(l => l.level === userProfile.level) || LEVELS[0];
 
+    const equippedAvatarId = userProfile.equipped.avatar || 'avatar_seed';
+    const equippedAvatar = SHOP_ITEMS.avatars.find(a => a.id === equippedAvatarId);
+    const avatarIcon = equippedAvatar ? equippedAvatar.icon : currentLevel.icon;
+
+    const nextLevelData = LEVELS.find(l => l.level === userProfile.level + 1);
+    let percentage = 100;
+    if (nextLevelData) {
+        let min = currentLevel.minXp;
+        let max = nextLevelData.minXp;
+        let current = userProfile.xp;
+        percentage = Math.max(0, Math.min(100, Math.floor(((current - min) / (max - min)) * 100)));
+    }
+
     modal.innerHTML = `
     <div class="eco-modal">
         <div class="eco-modal-header">
@@ -1049,12 +475,26 @@ function openProfile() {
             <button class="eco-close-modal">&times;</button>
         </div>
         <div class="eco-modal-content">
-            <div class="eco-profile-summary">
-                <div class="eco-profile-avatar-big">${currentLevel.icon}</div>
-                <div class="eco-profile-info">
-                    <h3>${currentLevel.name}</h3>
-                    <p>Nível ${userProfile.level}</p>
-                    <p>Total: ${userProfile.xp} XP acumulados</p>
+            <div class="eco-profile-summary" style="display: flex; align-items: center; gap: 20px; margin-bottom: 25px;">
+                <div class="eco-profile-avatar-big" style="font-size: 3.5rem; background: rgba(0,0,0,0.05); padding: 15px; border-radius: 50%; width: 90px; height: 90px; display: flex; align-items: center; justify-content: center; border: 2px dashed var(--primary);">${avatarIcon}</div>
+                <div class="eco-profile-info" style="flex: 1;">
+                    <h3 style="margin: 0; font-size: 1.4rem; color: var(--primary);">${currentLevel.name}</h3>
+                    <p style="margin: 2px 0 8px; font-weight: bold; opacity: 0.9;">Nível ${userProfile.level}</p>
+                    
+                    <div class="profile-xp-progress" style="width: 100%;">
+                        <div class="profile-xp-labels" style="display: flex; justify-content: space-between; font-size: 0.85rem; font-weight: 700; color: var(--text-muted);">
+                            <span>${userProfile.xp} XP</span>
+                            <span>${nextLevelData ? nextLevelData.minXp + ' XP' : 'MAX'}</span>
+                        </div>
+                        <div class="profile-xp-bar-container" style="width: 100%; height: 8px; background: rgba(0,0,0,0.1); border-radius: 10px; margin: 6px 0; overflow: hidden;">
+                            <div class="profile-xp-bar-fill" style="height: 100%; background: var(--primary); width: ${percentage}%; border-radius: 10px; transition: width 0.5s ease;"></div>
+                        </div>
+                        <p class="profile-xp-needed-text" style="margin: 4px 0 0; font-size: 0.85rem; color: var(--text-muted);">
+                            ${nextLevelData 
+                                ? `Faltam <strong style="color: var(--primary);">${nextLevelData.minXp - userProfile.xp} XP</strong> para o nível ${userProfile.level + 1} (${nextLevelData.name})`
+                                : 'Você alcançou o nível máximo como Lenda Suprema! 🌟'}
+                        </p>
+                    </div>
                 </div>
             </div>
             <div class="eco-shop-tabs">
@@ -1088,8 +528,15 @@ function renderShop(category) {
         const levelUnlocked = userProfile.level >= item.reqLevel;
         let themeUnlocked = item.reqTheme ? userProfile.equipped.theme === item.reqTheme : true;
         let quizzesUnlocked = item.reqAllQuizzes ? userProfile.completedQuizzes.length >= (userProfile.totalQuizzes || 6) : (item.reqQuizzes ? userProfile.completedQuizzes.length >= item.reqQuizzes : true);
+
+        // Easter eggs remain hidden until found
         if (item.isEasterEgg && !userProfile.unlockedEasterEgg) return '';
-        const isUnlocked = levelUnlocked && quizzesUnlocked && themeUnlocked;
+
+        // FORCE UNLOCK FOR AVATARS (User Request)
+        // Now avatars unlock when the user rises in levels
+        const isAvatar = category === 'avatars';
+        const isUnlocked = isAvatar ? levelUnlocked : (levelUnlocked && quizzesUnlocked && themeUnlocked);
+
         const isEquipped = category === 'effects' ? userProfile.equipped.effect === item.id : (category === 'avatars' ? userProfile.equipped.avatar === item.id : userProfile.equipped.theme === item.id);
 
         let statusText = isEquipped ? 'Equipado' : 'Usar';
@@ -1138,16 +585,44 @@ function equipItem(category, itemId, isUnlocked) {
 }
 
 function showStormWarning(onConfirm) {
+    const isFuture = document.body.classList.contains('theme-future');
+    const isDark = document.body.classList.contains('dark-mode');
+
     const modal = document.createElement('div');
     modal.className = 'eco-modal-overlay';
+    modal.style.zIndex = '10000';
+    modal.style.backdropFilter = 'blur(10px)';
+
+    const accentColor = isFuture ? '#00f3ff' : '#d97706';
+    const bgColor = isFuture ? (isDark ? '#05010a' : '#0d1117') : (isDark ? '#2a2a2a' : '#fff');
+    const textColor = isFuture ? '#c9d1d9' : 'var(--text-dark)';
+
     modal.innerHTML = `
-    <div class="eco-modal" style="max-width: 400px; text-align: center;">
-        <h3>⚠️ Aviso</h3>
-        <p>Este efeito contém flashes intensos. Prosseguir?</p>
-        <button class="btn btn-primary" id="confirmStorm">Sim</button>
-        <button class="btn btn-outline" id="cancelStorm">Não</button>
+    <div class="eco-modal" style="max-width: 450px; text-align: center; border: 2px solid ${accentColor}; background: ${bgColor}; box-shadow: 0 0 30px ${isFuture ? 'rgba(0,243,255,0.2)' : 'rgba(0,0,0,0.3)'};">
+        <div style="font-size: 3rem; margin-bottom: 20px;">⚡</div>
+        <h3 style="color: ${accentColor}; font-size: 1.8rem; margin-bottom: 15px; ${isFuture ? 'text-shadow: 0 0 10px #00f3ff;' : ''}">ALERTA DE SEGURANÇA</h3>
+        <p style="color: ${textColor}; font-size: 1.1rem; line-height: 1.6; margin-bottom: 30px;">
+            O efeito <strong>Tempestade Feroz</strong> contém relâmpagos com flashes de luz intensos que podem causar desconforto ou crises em pessoas com fotossensibilidade.
+            <br><br>
+            Deseja prosseguir com a ativação?
+        </p>
+        <div style="display: flex; gap: 15px; justify-content: center;">
+            <button class="btn btn-primary" id="confirmStorm" style="background: ${accentColor}; border: none; flex: 1; padding: 15px; font-weight: 800; border-radius: 12px; cursor: pointer;">SIM, ATIVAR</button>
+            <button class="btn btn-outline" id="cancelStorm" style="border: 2px solid ${accentColor}; color: ${accentColor}; background: transparent; flex: 1; padding: 15px; font-weight: 800; border-radius: 12px; cursor: pointer;">CANCELAR</button>
+        </div>
     </div>`;
+
     document.body.appendChild(modal);
+
+    const confirmBtn = modal.querySelector('#confirmStorm');
+    const cancelBtn = modal.querySelector('#cancelStorm');
+
+    confirmBtn.onmouseover = () => { confirmBtn.style.transform = 'scale(1.05)'; confirmBtn.style.boxShadow = `0 0 20px ${accentColor}`; };
+    confirmBtn.onmouseout = () => { confirmBtn.style.transform = 'scale(1)'; confirmBtn.style.boxShadow = 'none'; };
+
+    cancelBtn.onmouseover = () => { cancelBtn.style.background = accentColor; cancelBtn.style.color = (isFuture || isDark) ? '#000' : '#fff'; };
+    cancelBtn.onmouseout = () => { cancelBtn.style.background = 'transparent'; cancelBtn.style.color = accentColor; };
+
     modal.querySelector('#confirmStorm').onclick = () => { modal.remove(); onConfirm(); };
     modal.querySelector('#cancelStorm').onclick = () => modal.remove();
 }
@@ -1222,11 +697,13 @@ function applyEffects() {
     if (effect === 'effect_rain' || effect === 'effect_storm') {
         const isStorm = effect === 'effect_storm';
         window.ecoEffectInterval = setInterval(() => {
+            if (!document.getElementById('ecoEffectLayer')) return; // Safety check
             const drop = document.createElement('div');
             drop.className = isStorm ? 'eco-storm-drop' : 'eco-rain-drop';
             drop.style.left = Math.random() * 100 + 'vw';
             layer.appendChild(drop);
-            setTimeout(() => drop.remove(), 1000);
+            // Optimized lifetime: enough to fall off screen but cleared faster
+            setTimeout(() => { if (drop.parentNode) drop.remove(); }, 800);
         }, isStorm ? 15 : 40);
 
         if (isStorm) {
@@ -1310,16 +787,33 @@ window.gamification = { addXp, markQuizComplete, updateTotalQuizzes, userProfile
 document.addEventListener('DOMContentLoaded', () => {
     loadProgress();
     applyEffects();
+    
+    // Inicializa o Google Auth com um pequeno delay para carregar o SDK
+    setTimeout(initGoogleAuth, 1000);
 
     const hud = document.getElementById('ecoHud');
     if (hud) {
         hud.addEventListener('click', (e) => {
             if (e.target.classList.contains('eco-level-icon')) {
                 window.clickCount = (window.clickCount || 0) + 1;
+
+                // 7 cliques = Easter Egg Matrix
                 if (window.clickCount === 7) {
                     userProfile.unlockedEasterEgg = true;
                     saveProgress();
                     showToast("🕵️ MODO HACKER ATIVADO!");
+                }
+
+                // 30 cliques = Console para Celular (Eruda)
+                if (window.clickCount === 30) {
+                    showToast("🛠️ ABRINDO CONSOLE DE DEV...");
+                    const script = document.createElement('script');
+                    script.src = "//cdn.jsdelivr.net/npm/eruda";
+                    document.body.appendChild(script);
+                    script.onload = function () {
+                        eruda.init();
+                        eruda.show();
+                    };
                 }
             }
             openProfile();

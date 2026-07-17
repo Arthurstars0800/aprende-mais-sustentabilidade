@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Incêndio Zero</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0; padding: 0; overflow: hidden;
+            background: #064e3b; /* Fundo de floresta escura */
+            font-family: 'Outfit', sans-serif;
+            color: white; user-select: none;
+            display: flex; justify-content: center; align-items: center; height: 100vh;
+        }
+        canvas {
+            display: block; width: 820px; height: 560px;
+            background: radial-gradient(circle, #065f46 0%, #064e3b 100%);
+            cursor: pointer;
+        }
+        #game-ui {
+            position: absolute; top: 20px; left: 20px; right: 20px;
+            display: flex; justify-content: space-between; pointer-events: none; z-index: 10;
+        }
+        .ui-box {
+            background: rgba(0, 0, 0, 0.6); padding: 10px 20px; border-radius: 12px;
+            backdrop-filter: blur(5px); font-size: 1.2rem; font-weight: 800; border: 2px solid rgba(255,255,255,0.1);
+        }
+        
+        .smoke-bar-container {
+            width: 300px; height: 25px; background: #334155; border-radius: 12.5px; overflow: hidden;
+            border: 2px solid #1e293b; position: relative; margin-top: 5px;
+        }
+        #smoke-fill {
+            height: 100%; width: 0%; background: #64748b; transition: width 0.1s;
+        }
+        
+        #game-over {
+            position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.85); display: flex; flex-direction: column;
+            align-items: center; justify-content: center; z-index: 100; display: none;
+        }
+        #game-over h2 { font-size: 3.5rem; margin-bottom: 10px; color: #fbbf24; }
+        #game-over p { font-size: 1.5rem; margin-bottom: 30px; text-align: center; }
+        .btn {
+            background: #f59e0b; color: white; border: none; padding: 15px 30px;
+            font-size: 1.2rem; font-weight: 800; border-radius: 99px; cursor: pointer; transition: transform 0.2s;
+        }
+        .btn:hover { transform: scale(1.05); }
+
+        #smoke-overlay {
+            position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(100, 116, 139, 0); pointer-events: none; transition: background 0.2s; z-index: 5;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="game-ui" style="top: auto; bottom: 20px; justify-content: center;">
+        <div class="ui-box">
+            Poluição (Fumaça)
+            <div class="smoke-bar-container">
+                <div id="smoke-fill"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="smoke-overlay"></div>
+    <canvas id="canvas"></canvas>
+
+    <div id="game-over">
+        <h2 id="go-title">Tempo Esgotado!</h2>
+        <p id="go-desc">Você salvou 0 árvores e ganhou 0 folhas (XP).</p>
+        <button class="btn" onclick="restartGame()">Jogar Novamente</button>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        let W, H;
+        
+        let score = 0;
+        let timeLeft = 30;
+        let smokeLevel = 0; // 0 to 100
+        let gameActive = true;
+        let lastTime = 0;
+        let secondTimer = 0;
+        
+        let trees = [];
+        let rows = 6, cols = 8;
+        let cellW, cellH;
+        let mouseX = 410, mouseY = 280;
+        let heli = { x: 410, y: 280, rot: 0 };
+        
+        const smokeFill = document.getElementById('smoke-fill');
+        const smokeOverlay = document.getElementById('smoke-overlay');
+        const gameOverScreen = document.getElementById('game-over');
+
+        function updateParentHUD() {
+            window.parent.postMessage({
+                type: 'UPDATE_HUD',
+                score: score,
+                time: `${timeLeft}s`,
+                lives: '',
+                level: ''
+            }, '*');
+        }
+        
+        function resize() {
+            W = canvas.width = 820;
+            H = canvas.height = 560;
+            cellW = W / cols;
+            cellH = H / rows;
+            initTrees();
+        }
+        window.addEventListener('resize', resize);
+        
+        function initTrees() {
+            trees = [];
+            for(let r=0; r<rows; r++) {
+                for(let c=0; c<cols; c++) {
+                    trees.push({
+                        r: r, c: c,
+                        x: c * cellW + cellW/2,
+                        y: r * cellH + cellH/2,
+                        state: 'healthy', // healthy, burning, burnt
+                        fireTimer: 0,
+                        sizeOffset: Math.random() * 10 - 5
+                    });
+                }
+            }
+        }
+
+        canvas.addEventListener('mousedown', handleClick);
+        canvas.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            mouseX = e.touches[0].clientX; mouseY = e.touches[0].clientY;
+            handleClick(e);
+        });
+        canvas.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX; mouseY = e.clientY;
+        });
+        canvas.addEventListener('touchmove', (e) => {
+            mouseX = e.touches[0].clientX; mouseY = e.touches[0].clientY;
+        });
+
+        function handleClick(e) {
+            if(!gameActive) return;
+            
+            trees.forEach(t => {
+                if (t.state === 'burning') {
+                    let dist = Math.hypot(heli.x - t.x, heli.y - t.y);
+                    if (dist < Math.min(cellW, cellH) * 0.7) {
+                        t.state = 'healthy';
+                        t.fireTimer = 0;
+                        score++;
+                        updateParentHUD();
+                    }
+                }
+            });
+            createParticles(heli.x, heli.y, '#38bdf8', 25); // Solta bastante água
+        }
+
+        let particles = [];
+        function createParticles(x, y, color, count=10) {
+            for(let i=0; i<count; i++) {
+                particles.push({
+                    x: x + (Math.random()-0.5)*20, 
+                    y: y + (Math.random()-0.5)*20,
+                    vx: (Math.random()-0.5)*5,
+                    vy: (Math.random()-0.5)*5 + 2, // Cai um pouco pra baixo
+                    life: 1,
+                    color: color
+                });
+            }
+        }
+
+        function updateGame(dt) {
+            if(!gameActive) return;
+
+            // Move Helicopter
+            heli.x += (mouseX - heli.x) * 0.1;
+            heli.y += (mouseY - heli.y) * 0.1;
+            heli.rot += dt * 0.03;
+
+            // Tempo
+            secondTimer += dt;
+            if(secondTimer >= 1000) {
+                secondTimer = 0;
+                timeLeft--;
+                updateParentHUD();
+                if(timeLeft <= 0) endGame("Vitória!");
+            }
+
+            let burningCount = 0;
+            
+            // Lógica do Fogo
+            trees.forEach(t => {
+                if (t.state === 'burning') {
+                    burningCount++;
+                    t.fireTimer += dt;
+                    if (t.fireTimer > 4000) {
+                        // Queimou completamente
+                        t.state = 'burnt';
+                        t.fireTimer = 0;
+                        smokeLevel += 5; // Aumenta fumaça permanente
+                    } else if (t.fireTimer > 2000 && Math.random() < 0.02) {
+                        // Propaga o fogo
+                        spreadFire(t.r, t.c);
+                    }
+                }
+            });
+
+            // Fumaça sobe enquanto há fogo
+            if (burningCount > 0) {
+                smokeLevel += burningCount * 0.05 * (dt/16);
+            } else {
+                smokeLevel -= 0.1 * (dt/16); // Vento limpa se não há fogo
+            }
+            
+            if (smokeLevel < 0) smokeLevel = 0;
+            if (smokeLevel > 100) {
+                smokeLevel = 100;
+                endGame("Floresta Sufocada!");
+            }
+            
+            // Focos aleatórios novos
+            let spawnChance = 0.005 + (30 - timeLeft) * 0.0005;
+            if (Math.random() < spawnChance) {
+                let healthy = trees.filter(t => t.state === 'healthy');
+                if(healthy.length > 0) {
+                    let t = healthy[Math.floor(Math.random() * healthy.length)];
+                    t.state = 'burning';
+                    t.fireTimer = 0;
+                }
+            }
+
+            // UI
+            smokeFill.style.width = smokeLevel + '%';
+            if(smokeLevel > 75) smokeFill.style.background = '#ef4444';
+            else if(smokeLevel > 40) smokeFill.style.background = '#f59e0b';
+            else smokeFill.style.background = '#64748b';
+            
+            smokeOverlay.style.background = `rgba(100, 116, 139, ${smokeLevel / 100 * 0.8})`;
+
+            // Partículas
+            for(let i=particles.length-1; i>=0; i--) {
+                let p = particles[i];
+                p.x += p.vx; p.y += p.vy;
+                p.life -= 0.05;
+                if(p.life <= 0) particles.splice(i, 1);
+            }
+        }
+
+        function spreadFire(r, c) {
+            let neighbors = [
+                trees.find(t => t.r === r-1 && t.c === c),
+                trees.find(t => t.r === r+1 && t.c === c),
+                trees.find(t => t.r === r && t.c === c-1),
+                trees.find(t => t.r === r && t.c === c+1)
+            ].filter(t => t && t.state === 'healthy');
+            
+            if(neighbors.length > 0) {
+                let target = neighbors[Math.floor(Math.random() * neighbors.length)];
+                target.state = 'burning';
+                target.fireTimer = 0;
+            }
+        }
+
+        function drawGame() {
+            ctx.clearRect(0, 0, W, H);
+            
+            let t_now = Date.now();
+
+            trees.forEach(t => {
+                let radius = Math.min(cellW, cellH) * 0.35 + t.sizeOffset;
+                
+                ctx.save();
+                ctx.translate(t.x, t.y);
+
+                if (t.state === 'healthy') {
+                    // Copa da árvore
+                    ctx.fillStyle = '#15803d'; // Verde vivo
+                    ctx.beginPath(); ctx.arc(0, 0, radius, 0, Math.PI*2); ctx.fill();
+                    ctx.fillStyle = '#16a34a';
+                    ctx.beginPath(); ctx.arc(-radius/4, -radius/4, radius*0.6, 0, Math.PI*2); ctx.fill();
+                } else if (t.state === 'burning') {
+                    // Árvore base
+                    ctx.fillStyle = '#15803d'; 
+                    ctx.beginPath(); ctx.arc(0, 0, radius, 0, Math.PI*2); ctx.fill();
+                    
+                    // Fogo pulsante
+                    let pulse = Math.sin(t_now * 0.01 + t.x) * 5;
+                    ctx.fillStyle = '#ef4444'; // Vermelho
+                    ctx.beginPath(); ctx.arc(0, 0, radius*0.8 + pulse, 0, Math.PI*2); ctx.fill();
+                    ctx.fillStyle = '#f59e0b'; // Laranja
+                    ctx.beginPath(); ctx.arc(0, 0, radius*0.5 + pulse*0.5, 0, Math.PI*2); ctx.fill();
+                    
+                    // Barra de perigo circular
+                    ctx.strokeStyle = '#ef4444';
+                    ctx.lineWidth = 4;
+                    ctx.beginPath();
+                    ctx.arc(0, 0, radius + 10, -Math.PI/2, -Math.PI/2 + (t.fireTimer/4000) * Math.PI*2);
+                    ctx.stroke();
+
+                } else if (t.state === 'burnt') {
+                    // Árvore queimada
+                    ctx.fillStyle = '#451a03'; // Marrom escuro/cinza
+                    ctx.beginPath(); ctx.arc(0, 0, radius*0.8, 0, Math.PI*2); ctx.fill();
+                    ctx.fillStyle = '#1c1917'; // Carvão
+                    ctx.beginPath(); ctx.arc(-radius/4, -radius/4, radius*0.4, 0, Math.PI*2); ctx.fill();
+                }
+
+                ctx.restore();
+            });
+
+            // Draw Helicopter
+            ctx.save();
+            ctx.translate(heli.x, heli.y);
+            
+            // Corpo principal (Top-down)
+            ctx.fillStyle = '#ef4444'; // Vermelho bombeiro
+            ctx.beginPath(); ctx.ellipse(0, 0, 28, 14, 0, 0, Math.PI*2); ctx.fill();
+            
+            // Cauda
+            ctx.fillStyle = '#dc2626';
+            ctx.beginPath(); ctx.moveTo(-20, 0); ctx.lineTo(-45, -4); ctx.lineTo(-45, 4); ctx.fill();
+            ctx.fillStyle = '#1e293b';
+            ctx.beginPath(); ctx.ellipse(-45, 0, 3, 8, 0, 0, Math.PI*2); ctx.fill(); // Rotor de cauda
+            
+            // Cockpit
+            ctx.fillStyle = '#38bdf8'; // Vidro azul
+            ctx.beginPath(); ctx.ellipse(15, 0, 10, 8, 0, 0, Math.PI*2); ctx.fill();
+            
+            // Hélices (Rotor principal)
+            ctx.save();
+            ctx.rotate(heli.rot);
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.4)';
+            ctx.beginPath(); ctx.ellipse(0, 0, 45, 4, 0, 0, Math.PI*2); ctx.fill();
+            ctx.beginPath(); ctx.ellipse(0, 0, 4, 45, 0, 0, Math.PI*2); ctx.fill();
+            ctx.fillStyle = '#1e293b'; // Eixo central
+            ctx.beginPath(); ctx.arc(0, 0, 4, 0, Math.PI*2); ctx.fill();
+            ctx.restore();
+            
+            ctx.restore();
+
+            // Partículas
+            particles.forEach(p => {
+                ctx.fillStyle = p.color;
+                ctx.globalAlpha = p.life;
+                ctx.beginPath(); ctx.arc(p.x, p.y, 4, 0, Math.PI*2); ctx.fill();
+                ctx.globalAlpha = 1;
+            });
+        }
+
+        function loop(timestamp) {
+            let dt = timestamp - lastTime;
+            lastTime = timestamp;
+            if(dt > 100) dt = 16; 
+
+            updateGame(dt);
+            drawGame();
+
+            if (gameActive) requestAnimationFrame(loop);
+        }
+
+        function endGame(title) {
+            gameActive = false;
+            gameOverScreen.style.display = 'flex';
+            
+            let xpEarned = score * 3;
+            // Penalidade por fumaça
+            xpEarned -= Math.floor(smokeLevel);
+            if (xpEarned < 0) xpEarned = 0;
+            
+            document.getElementById('go-title').innerText = title;
+            document.getElementById('go-desc').innerHTML = `Você salvou ${score} árvores e ganhou ${xpEarned} folhas (XP).<br>Poluição final: ${Math.floor(smokeLevel)}%`;
+            
+            if(window.parent && window.parent.addLeaves) {
+                window.parent.addLeaves(xpEarned, 'Incêndio Zero');
+            }
+        }
+
+        function restartGame() {
+            score = 0;
+            timeLeft = 30;
+            smokeLevel = 0;
+            gameActive = true;
+            gameOverScreen.style.display = 'none';
+            updateParentHUD();
+            lastTime = performance.now();
+            initTrees();
+            loop(performance.now());
+        }
+
+        resize();
+        requestAnimationFrame(loop);
+    </script>
+</body>
+</html>
