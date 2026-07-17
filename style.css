@@ -5945,3 +5945,107 @@ body.dark-mode .game-stat-badge {
 .secret-knife-emoji-render:hover {
     transform: scale(1.2) rotate(15deg);
 }
+
+/* ===================================================
+   MOBILE OVERHAUL (GLOBAL RESET FOR APRENDE MAIS)
+   =================================================== */
+@media (max-width: 768px) {
+    /* Safe Area para a Bottom Nav (evita que o contedo seja coberto) */
+    body {
+        padding-bottom: 90px !important; 
+    }
+
+    /* Ajuste de Grids para 1 Coluna */
+    .minigames-grid, .craft-grid, .quiz-grid, .waste-grid, .features {
+        grid-template-columns: 1fr !important;
+        gap: 20px !important;
+        padding: 10px !important;
+    }
+
+    /* Hero Sections & Textos Grandes */
+    .hero {
+        padding: 120px 20px 60px !important;
+    }
+    .hero h1, .hero-mini h1 {
+        font-size: 2.2rem !important;
+        line-height: 1.2 !important;
+    }
+    .hero p, .hero-mini p {
+        font-size: 1.1rem !important;
+    }
+
+    /* Container de Resultados (ex: Guia de Reciclagem) */
+    .results-container-big {
+        grid-template-columns: 1fr !important;
+        padding: 10px !important;
+    }
+    .result-card-big {
+        flex-direction: column !important;
+        text-align: center;
+    }
+    .result-visual-side {
+        width: 100% !important;
+        padding: 30px 15px !important;
+    }
+
+    /* Barra de Navegao Superior e Eco-Hud */
+    .navbar {
+        padding: 10px 15px !important;
+        height: 70px !important;
+    }
+    .eco-hud {
+        padding: 5px 10px !important;
+    }
+    .eco-level-icon {
+        font-size: 1.5rem !important;
+    }
+    
+    /* Modais e Iframes (Vdeos) */
+    .modal-content, .craft-modal-content {
+        width: 95% !important;
+        margin: 10px auto !important;
+        padding: 20px !important;
+    }
+    iframe {
+        width: 100% !important;
+        height: 250px !important;
+    }
+
+    /* Ajustes especficos do Quiz e Minigames */
+    .quiz-card, .game-card, .craft-card {
+        margin: 0 !important;
+        width: 100% !important;
+    }
+    .game-stats-container {
+        justify-content: center !important;
+    }
+
+    /* Search Bar do Guia de Reciclagem */
+    .search-container {
+        width: 90% !important;
+        margin: 20px auto !important;
+    }
+    .search-input {
+        font-size: 1rem !important;
+        padding: 15px 20px 15px 50px !important;
+    }
+    .search-icon {
+        left: 15px !important;
+        font-size: 1.2rem !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero h1, .hero-mini h1 {
+        font-size: 1.8rem !important;
+    }
+    .eco-xp-text {
+        display: none !important; /* Esconde texto de XP em telas muito pequenas */
+    }
+    .bottom-nav-item span {
+        font-size: 0.65rem !important;
+    }
+    .bottom-nav-item i {
+        font-size: 1.2rem !important;
+    }
+}
