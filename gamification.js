@@ -384,11 +384,13 @@ function updateHud() {
     let nextLevelData = LEVELS.find(l => l.level === userProfile.level + 1);
 
     if (icon) {
+        const equippedAvatarId = userProfile.equipped.avatar || 'avatar_seed';
+        const equippedAvatar = SHOP_ITEMS.avatars.find(a => a.id === equippedAvatarId);
+        icon.textContent = equippedAvatar ? equippedAvatar.icon : currentLevelData.icon;
+        
         if (userProfile.isLoggedIn) {
-            icon.innerHTML = '<i class="fab fa-google"></i>';
             icon.classList.add('google-active');
         } else {
-            icon.textContent = currentLevelData.icon;
             icon.classList.remove('google-active');
         }
     }
@@ -410,10 +412,20 @@ function updateHud() {
 
 const SHOP_ITEMS = {
     avatars: [
-        { id: 'avatar_seed', name: 'Semente', icon: '🌱', reqLevel: 1 },
+        { id: 'avatar_seed', name: 'Semente Curiosa', icon: '🌱', reqLevel: 1 },
+        { id: 'avatar_sprout', name: 'Brotinho Verde', icon: '🌿', reqLevel: 2 },
+        { id: 'avatar_young_tree', name: 'Árvore Jovem', icon: '🌳', reqLevel: 3 },
+        { id: 'avatar_live_forest', name: 'Floresta Viva', icon: '🌲', reqLevel: 4 },
+        { id: 'avatar_gaia_guardian', name: 'Guardião Gaia', icon: '🌍', reqLevel: 5 },
+        { id: 'avatar_water_defender', name: 'Defensor das Águas', icon: '💧', reqLevel: 6 },
+        { id: 'avatar_recycling_master', name: 'Mestre da Reciclagem', icon: '♻️', reqLevel: 7 },
+        { id: 'avatar_fauna_protector', name: 'Protetor da Fauna', icon: '🦊', reqLevel: 8 },
+        { id: 'avatar_solar_ally', name: 'Aliado Solar', icon: '☀️', reqLevel: 9 },
+        { id: 'avatar_eco_hero', name: 'Herói Sustentável', icon: '🦸', reqLevel: 10 },
+        { id: 'avatar_eco_legend', name: 'Lenda Ecológica', icon: '🏆', reqLevel: 15 },
+        { id: 'avatar_capy_supreme', name: 'Capivara Suprema', icon: '👑', reqLevel: 20 },
         { id: 'avatar_cat', name: 'Gatinho Reciclador', icon: '🐱', reqLevel: 5 },
-        { id: 'avatar_robot', name: 'Robô G.A.I.A.', icon: '🤖', reqLevel: 10 },
-        { id: 'avatar_capy', name: 'Capivara Suprema', icon: '👑', reqLevel: 20 }
+        { id: 'avatar_robot', name: 'Robô G.A.I.A.', icon: '🤖', reqLevel: 10 }
     ],
     effects: [
         { id: 'effect_none', name: 'Nenhum', icon: '🚫', reqLevel: 1 },
@@ -443,6 +455,19 @@ function openProfile() {
     modal.id = 'ecoProfileModal';
     const currentLevel = LEVELS.find(l => l.level === userProfile.level) || LEVELS[0];
 
+    const equippedAvatarId = userProfile.equipped.avatar || 'avatar_seed';
+    const equippedAvatar = SHOP_ITEMS.avatars.find(a => a.id === equippedAvatarId);
+    const avatarIcon = equippedAvatar ? equippedAvatar.icon : currentLevel.icon;
+
+    const nextLevelData = LEVELS.find(l => l.level === userProfile.level + 1);
+    let percentage = 100;
+    if (nextLevelData) {
+        let min = currentLevel.minXp;
+        let max = nextLevelData.minXp;
+        let current = userProfile.xp;
+        percentage = Math.max(0, Math.min(100, Math.floor(((current - min) / (max - min)) * 100)));
+    }
+
     modal.innerHTML = `
     <div class="eco-modal">
         <div class="eco-modal-header">
@@ -450,12 +475,26 @@ function openProfile() {
             <button class="eco-close-modal">&times;</button>
         </div>
         <div class="eco-modal-content">
-            <div class="eco-profile-summary">
-                <div class="eco-profile-avatar-big">${currentLevel.icon}</div>
-                <div class="eco-profile-info">
-                    <h3>${currentLevel.name}</h3>
-                    <p>Nível ${userProfile.level}</p>
-                    <p>Total: ${userProfile.xp} XP acumulados</p>
+            <div class="eco-profile-summary" style="display: flex; align-items: center; gap: 20px; margin-bottom: 25px;">
+                <div class="eco-profile-avatar-big" style="font-size: 3.5rem; background: rgba(0,0,0,0.05); padding: 15px; border-radius: 50%; width: 90px; height: 90px; display: flex; align-items: center; justify-content: center; border: 2px dashed var(--primary);">${avatarIcon}</div>
+                <div class="eco-profile-info" style="flex: 1;">
+                    <h3 style="margin: 0; font-size: 1.4rem; color: var(--primary);">${currentLevel.name}</h3>
+                    <p style="margin: 2px 0 8px; font-weight: bold; opacity: 0.9;">Nível ${userProfile.level}</p>
+                    
+                    <div class="profile-xp-progress" style="width: 100%;">
+                        <div class="profile-xp-labels" style="display: flex; justify-content: space-between; font-size: 0.85rem; font-weight: 700; color: var(--text-muted);">
+                            <span>${userProfile.xp} XP</span>
+                            <span>${nextLevelData ? nextLevelData.minXp + ' XP' : 'MAX'}</span>
+                        </div>
+                        <div class="profile-xp-bar-container" style="width: 100%; height: 8px; background: rgba(0,0,0,0.1); border-radius: 10px; margin: 6px 0; overflow: hidden;">
+                            <div class="profile-xp-bar-fill" style="height: 100%; background: var(--primary); width: ${percentage}%; border-radius: 10px; transition: width 0.5s ease;"></div>
+                        </div>
+                        <p class="profile-xp-needed-text" style="margin: 4px 0 0; font-size: 0.85rem; color: var(--text-muted);">
+                            ${nextLevelData 
+                                ? `Faltam <strong style="color: var(--primary);">${nextLevelData.minXp - userProfile.xp} XP</strong> para o nível ${userProfile.level + 1} (${nextLevelData.name})`
+                                : 'Você alcançou o nível máximo como Lenda Suprema! 🌟'}
+                        </p>
+                    </div>
                 </div>
             </div>
             <div class="eco-shop-tabs">
@@ -494,8 +533,9 @@ function renderShop(category) {
         if (item.isEasterEgg && !userProfile.unlockedEasterEgg) return '';
 
         // FORCE UNLOCK FOR AVATARS (User Request)
+        // Now avatars unlock when the user rises in levels
         const isAvatar = category === 'avatars';
-        const isUnlocked = isAvatar || (levelUnlocked && quizzesUnlocked && themeUnlocked);
+        const isUnlocked = isAvatar ? levelUnlocked : (levelUnlocked && quizzesUnlocked && themeUnlocked);
 
         const isEquipped = category === 'effects' ? userProfile.equipped.effect === item.id : (category === 'avatars' ? userProfile.equipped.avatar === item.id : userProfile.equipped.theme === item.id);
 

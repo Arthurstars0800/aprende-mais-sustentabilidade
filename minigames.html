@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
@@ -89,29 +89,27 @@
     <main class="container">
         <section class="minigames-grid">
             <!-- Jogo 1: Coleta Seletiva Rápida -->
-            <div class="game-card" data-aos="fade-up">
-                <div class="game-preview preview-collect">
+            <div class="game-card theme-collect" data-aos="fade-up">
+                <span class="game-badge badge-residuos">Resíduos</span>
+                <div class="game-preview">
                     <i class="fas fa-trash-arrow-up"></i>
                 </div>
                 <div class="game-info">
-                    <div class="game-title">
-                        <i id="gameDisplayIcon" class="fas fa-recycle"></i>
-                        <h2 id="gameDisplayTitle">Coleta Seletiva</h2>
-                    </div>
+                    <h3>Coleta Seletiva</h3>
                     <ol class="game-tutorial-list">
                         <li>Itens de lixo aparecem na tela</li>
                         <li>Arraste cada item até a lixeira da cor certa</li>
-                        <li>🔴 Plástico &nbsp;🔵 Papel &nbsp;🟢 Vidro &nbsp;🟡 Metal</li>
                         <li>Colete tudo antes do tempo acabar!</li>
                     </ol>
-                    <button class="btn btn-primary" onclick="startCatchGame()">Jogar Agora</button>
+                    <button class="btn btn-primary btn-large-center" onclick="startCatchGame()">Jogar agora</button>
                 </div>
             </div>
 
             <!-- Jogo 2: Memória Ecológica -->
-            <div class="game-card" data-aos="fade-up" data-aos-delay="100">
-                <div class="game-preview preview-memory">
-                    <i class="fas fa-clone"></i>
+            <div class="game-card theme-memoria" data-aos="fade-up" data-aos-delay="100">
+                <span class="game-badge badge-biodiv">Biodiversidade</span>
+                <div class="game-preview">
+                    <i class="fas fa-leaf"></i>
                 </div>
                 <div class="game-info">
                     <h3>Memória da Natureza</h3>
@@ -121,7 +119,128 @@
                         <li>Encontre todos os pares antes do tempo acabar</li>
                         <li>Acerte mais rápido para ganhar mais pontos!</li>
                     </ol>
-                    <button class="btn btn-primary" onclick="startMemoryGame()">Jogar Agora</button>
+                    <button class="btn btn-primary" onclick="startMemoryGame()">Jogar agora</button>
+                </div>
+            </div>
+
+            <!-- Jogo 3: Pescador Ecológico -->
+            <div class="game-card theme-pescador" data-aos="fade-up" data-aos-delay="200">
+                <span class="game-badge badge-agua">Água</span>
+                <div class="game-preview">
+                    <i class="fas fa-fish"></i>
+                </div>
+                <div class="game-info">
+                    <h3>Pescador Ecológico</h3>
+                    <ol class="game-tutorial-list">
+                        <li>Mova o mouse para posicionar o barco</li>
+                        <li>Clique para lançar o anzol</li>
+                        <li>Pesque o lixo do fundo do mar</li>
+                        <li>Cuidado para não fisgar os peixes!</li>
+                    </ol>
+                    <button class="btn btn-primary" onclick="startPescadorGame()">Jogar agora</button>
+                </div>
+            </div>
+
+            <!-- Jogo 4: Gari Aquático -->
+            <div class="game-card theme-gari" data-aos="fade-up" data-aos-delay="300">
+                <span class="game-badge badge-agua">Água</span>
+                <div class="game-preview">
+                    <i class="fas fa-swimmer"></i>
+                </div>
+                <div class="game-info">
+                    <h3>Gari Aquático</h3>
+                    <ol class="game-tutorial-list">
+                        <li>Nade usando as setas ou WASD</li>
+                        <li>Colete todo o lixo do fundo do mar</li>
+                        <li>Desvie dos peixes pelo caminho</li>
+                        <li>Fuja do tubarão faminto!</li>
+                    </ol>
+                    <button class="btn btn-primary" onclick="startGariGame()">Jogar agora</button>
+                </div>
+            </div>
+
+            <!-- Jogo 5: Caça ao Vazamento -->
+            <div class="game-card theme-vazamento" data-aos="fade-up" data-aos-delay="400">
+                <span class="game-badge badge-agua">Água</span>
+                <div class="game-preview">
+                    <i class="fas fa-wrench"></i>
+                </div>
+                <div class="game-info">
+                    <h3>Caça ao Vazamento</h3>
+                    <ol class="game-tutorial-list">
+                        <li>Encontre canos vazando na cena</li>
+                        <li>Colete a água com um balde</li>
+                        <li>Conserte os vazamentos rápido</li>
+                    </ol>
+                    <button class="btn btn-primary" onclick="startVazamentoGame()">Jogar agora</button>
+                </div>
+            </div>
+
+            <!-- Jogo 6: Irrigação Inteligente -->
+            <div class="game-card theme-irrigacao" data-aos="fade-up" data-aos-delay="500">
+                <span class="game-badge badge-agua">Água</span>
+                <div class="game-preview">
+                    <i class="fas fa-seedling"></i>
+                </div>
+                <div class="game-info">
+                    <h3>Irrigação Inteligente</h3>
+                    <ol class="game-tutorial-list">
+                        <li>Monitore o nível de umidade do solo</li>
+                        <li>Irrigue quando o solo secar</li>
+                        <li>Não deixe a planta encharcar</li>
+                    </ol>
+                    <button class="btn btn-primary" onclick="startIrrigacaoGame()">Jogar agora</button>
+                </div>
+            </div>
+
+            <!-- Jogo 7: Incêndio Zero -->
+            <div class="game-card theme-incendio" data-aos="fade-up" data-aos-delay="600">
+                <span class="game-badge badge-florestas">Florestas</span>
+                <div class="game-preview">
+                    <i class="fas fa-fire"></i>
+                </div>
+                <div class="game-info">
+                    <h3>Incêndio Zero</h3>
+                    <ol class="game-tutorial-list">
+                        <li>Apague focos de incêndio rapidamente</li>
+                        <li>Proteja as árvores vizinhas</li>
+                        <li>Monitore a fumaça no céu</li>
+                    </ol>
+                    <button class="btn btn-primary" onclick="startIncendioGame()">Jogar agora</button>
+                </div>
+            </div>
+
+            <!-- Jogo 8: Supermercado Consciente -->
+            <div class="game-card theme-supermercado" data-aos="fade-up" data-aos-delay="700">
+                <span class="game-badge badge-consumo">Consumo</span>
+                <div class="game-preview">
+                    <i class="fas fa-shopping-cart"></i>
+                </div>
+                <div class="game-info">
+                    <h3>Supermercado Consciente</h3>
+                    <ol class="game-tutorial-list">
+                        <li>Avalie produtos do supermercado</li>
+                        <li>Decida se é Essencial ou Desejo</li>
+                        <li>Gerencie seu orçamento!</li>
+                    </ol>
+                    <button class="btn btn-primary" onclick="startSupermercadoGame()">Jogar agora</button>
+                </div>
+            </div>
+
+            <!-- Jogo 9: Pegada Ecológica -->
+            <div class="game-card theme-pegada" data-aos="fade-up" data-aos-delay="800">
+                <span class="game-badge badge-clima">Clima</span>
+                <div class="game-preview">
+                    <i class="fas fa-shoe-prints"></i>
+                </div>
+                <div class="game-info">
+                    <h3>Pegada Ecológica</h3>
+                    <ol class="game-tutorial-list">
+                        <li>Viva um dia cheio de escolhas</li>
+                        <li>Gerencie suas emissões de CO₂</li>
+                        <li>Ao fim do dia, veja seu impacto</li>
+                    </ol>
+                    <button class="btn btn-primary" onclick="startPegadaGame()">Jogar agora</button>
                 </div>
             </div>
         </section>
@@ -130,10 +249,23 @@
         <section id="gameStage" class="game-stage" style="display: none;">
             <div class="game-window glass">
                 <div class="game-header">
-                    <div class="game-stats">
-                        <span>Score: <strong id="gameScore">0</strong></span>
-                        <span>Vidas: <span id="gameLives" class="game-lives">🍃🍃🍃</span></span>
-                        <span>Tempo: <strong id="gameTime">30</strong>s</span>
+                    <div class="game-stats-container">
+                        <div class="game-stat-badge level">
+                            <i class="fas fa-star icon-star-spin"></i>
+                            <span>Nível <strong id="gameLevel">1</strong></span>
+                        </div>
+                        <div class="game-stat-badge score">
+                            <i class="fas fa-award"></i>
+                            <span>Score: <strong id="gameScore">0</strong></span>
+                        </div>
+                        <div class="game-stat-badge lives" id="livesBadge">
+                            <i class="fas fa-heart"></i>
+                            <span>Vidas: <span id="gameLives" class="game-lives">🍃🍃🍃</span></span>
+                        </div>
+                        <div class="game-stat-badge time" id="timeBadge">
+                            <i class="fas fa-stopwatch"></i>
+                            <span>Tempo: <strong id="gameTime">30</strong>s</span>
+                        </div>
                     </div>
                     <button class="game-close" onclick="closeGame()">&times;</button>
                 </div>
@@ -142,12 +274,12 @@
                     <div id="gameInstructions" class="game-instructions">
                         <h2>Coleta Seletiva</h2>
                         <p>Clique ou Arraste o lixo para a lixeira da cor certa!</p>
-                        <div class="bins-hint">
-                            <span class="hint-plastic">🔴 Plástico</span>
-                            <span class="hint-paper">🔵 Papel</span>
-                            <span class="hint-glass">🟢 Vidro</span>
-                        </div>
-                        <button class="btn btn-primary" onclick="initCatchGame()">Começar</button>
+                        <li class="trash-bins-grid">
+                            <div class="bin-item"><span class="text-plastic">Plástico</span></div>
+                            <div class="bin-item"><span class="text-paper">Papel</span></div>
+                            <div class="bin-item"><span class="text-glass">Vidro</span></div>
+                            <div class="bin-item"><span class="text-metal">Metal</span></div>
+                        </li>                        <button class="btn btn-primary" onclick="initCatchGame()">Começar</button>
                     </div>
                 </div>
             </div>
@@ -157,6 +289,7 @@
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script src="gamification.js"></script>
     <script src="minigames.js"></script>
+    <script src="games_extra.js"></script>
     <script src="script.js"></script>
 </body>
 </html>

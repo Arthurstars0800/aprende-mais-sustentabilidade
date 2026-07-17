@@ -133,7 +133,11 @@
                 if (clickCount === 5) {
                     // Gamification Integration
                     if (window.gamification) {
-                        gamification.addXp(500, "(Hacker do Bem!)");
+                        const hasFoundEasterEgg = localStorage.getItem('sobre_easter_egg_found');
+                        if (!hasFoundEasterEgg) {
+                            gamification.addXp(500, "(Hacker do Bem!)");
+                            localStorage.setItem('sobre_easter_egg_found', 'true');
+                        }
                     }
 
                     // Check theme for colors

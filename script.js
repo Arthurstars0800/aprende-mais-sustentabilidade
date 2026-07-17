@@ -266,11 +266,20 @@ document.addEventListener('DOMContentLoaded', () => {
             icon: "fas fa-lines-leaning",
             info: "Madeira natural de reflorestamento.",
             guide: "Ideia: Ideais para construir maquetes, suporte para pequenas plantas ou podem ir para a composteira."
+        },
+        {
+            name: "Objetos Cortantes",
+            type: "special",
+            icon: "fas fa-scissors",
+            info: "Facas, agulhas, lâminas e cacos de vidro.",
+            guide: "Ideia: Lave-os e proteja as lâminas com papelão grosso ou fita adesiva antes de descartar no lixo especial."
         }
     ];
 
     const searchInput = document.getElementById('waste-search');
     const resultsGrid = document.getElementById('search-results');
+
+
 
     function displayResults(filter = "") {
         resultsGrid.innerHTML = "";
@@ -290,6 +299,7 @@ document.addEventListener('DOMContentLoaded', () => {
         filtered.forEach(item => {
             const card = document.createElement('div');
             card.className = 'result-card-big';
+            
             card.innerHTML = `
                 <div class="result-visual-side">
                     <i class="${item.icon}"></i>
@@ -310,6 +320,8 @@ document.addEventListener('DOMContentLoaded', () => {
             resultsGrid.appendChild(card);
         });
     }
+
+
 
     if (searchInput) {
         searchInput.addEventListener('input', (e) => {
@@ -440,4 +452,10 @@ function initFutureHeroEffects() {
 
 document.addEventListener('DOMContentLoaded', () => {
     setTimeout(initFutureHeroEffects, 1000);
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+    window.addEventListener('scroll', () => {
+        // Reservado para outros efeitos se necessário
+    });
 });

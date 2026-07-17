@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Caça ao Vazamento</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;800;900&display=swap" rel="stylesheet">
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{
+      background:#0f172a;display:flex;align-items:center;justify-content:center;
+      min-height:100vh;font-family:'Nunito',sans-serif;overflow:hidden;
+    }
+    #wrapper{position:relative;user-select:none}
+    canvas{border-radius:18px;box-shadow:0 0 80px rgba(56,189,248,.3);display:block}
+    #overlay{
+      position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+      background:rgba(15,23,42,.8);backdrop-filter:blur(8px);border-radius:18px;z-index:20;
+    }
+    #overlay.hidden{display:none}
+    .obox{text-align:center;color:white;padding:2rem;max-width:400px}
+    .obox .emoji{font-size:4rem;margin-bottom:1rem}
+    .obox h2{font-size:2.2rem;font-weight:900;margin-bottom:1rem;color:#38bdf8}
+    .obox p{color:#cbd5e1;margin-bottom:2rem;font-size:1.1rem;line-height:1.5}
+    .obox strong{color:white}
+    .pbtn{
+      background:linear-gradient(135deg,#0ea5e9,#0284c7);color:white;border:none;
+      padding:1rem 2rem;border-radius:99px;font-size:1.1rem;font-weight:800;
+      cursor:pointer;transition:transform .2s;box-shadow:0 8px 24px rgba(2,132,199,.4);
+    }
+    .pbtn:hover{transform:scale(1.05)}
+    
+    /* mobile d-pad */
+    #dpad{
+      position:absolute;bottom:12px;left:14px;
+      display:grid;grid-template-columns:repeat(3,44px);grid-template-rows:repeat(2,44px);gap:4px;
+      opacity:.55;z-index:25;
+    }
+    .dp{
+      width:44px;height:44px;background:rgba(255,255,255,.2);
+      border:1px solid rgba(255,255,255,.35);border-radius:10px;
+      display:flex;align-items:center;justify-content:center;
+      color:white;font-size:1.1rem;cursor:pointer;touch-action:none;
+      -webkit-tap-highlight-color:transparent;
+    }
+    .dp:active{background:rgba(255,255,255,.4)}
+    .dp.empty{background:transparent;border:none}
+  </style>
+</head>
+<body>
+<div id="wrapper">
+  <canvas id="c" width="820" height="560"></canvas>
+  <div id="overlay">
+    <div class="obox">
+      <div class="emoji">🪴</div>
+      <h2>Caça ao Vazamento</h2>
+      <p>Use <strong>WASD</strong>, <strong>Setas</strong> ou toque na tela para mover o vaso.<br>
+         Pegue as gotas e leve até a planta!<br>
+         Não deixe muitas gotas caírem no chão!</p>
+      <button class="pbtn" id="startBtn">Começar!</button>
+    </div>
+  </div>
+  <!-- D-pad for mobile -->
+  <div id="dpad">
+    <div class="dp empty"></div><div class="dp empty"></div><div class="dp empty"></div>
+    <div class="dp" id="dpL">◀</div><div class="dp empty"></div><div class="dp" id="dpR">▶</div>
+  </div>
+</div>
+
+<script>
+const canvas = document.getElementById('c');
+const ctx = canvas.getContext('2d');
+const overlay = document.getElementById('overlay');
+const W = canvas.width, H = canvas.height;
+
+let state = 'intro';
+let gameTime = 0, lastTs = 0;
+let score = 0, missed = 0, MAX_MISSES = 15;
+let particles = [], floats = [];
+
+let bucket = { x: W/2, y: H-55, w: 60, h: 50, spd: 7.5, water: 0, maxWater: 5 };
+let drops = [];
+let pipes = [120, 260, 400, 540];
+let plant = { x: W - 90, y: H - 60, w: 80, h: 100, growth: 0, maxGrowth: 25 };
+let dropTimer = 0, dropInterval = 1500, dropSpeedBase = 3.5, dropsCaught = 0, lastPipeIdx = 1;
+
+const keys = {};
+document.addEventListener('keydown', e => { keys[e.code]=true; });
+document.addEventListener('keyup', e => { keys[e.code]=false; });
+
+function dpHold(code,down){keys[code]=down;}
+['dpL','dpR'].forEach((id,i)=>{
+  const codes=['ArrowLeft','ArrowRight'];
+  const el=document.getElementById(id);
+  ['touchstart','mousedown'].forEach(ev=>el.addEventListener(ev,e=>{e.preventDefault();dpHold(codes[i],true);}));
+  ['touchend','mouseup','mouseleave'].forEach(ev=>el.addEventListener(ev,e=>{dpHold(codes[i],false);}));
+});
+
+// Mouse/Touch control
+canvas.addEventListener('mousemove', e => {
+  if (state !== 'playing') return;
+  let r = canvas.getBoundingClientRect();
+  bucket.x = (e.clientX - r.left) * (W/r.width);
+});
+canvas.addEventListener('touchmove', e => {
+  if (state !== 'playing') return;
+  e.preventDefault();
+  let r = canvas.getBoundingClientRect();
+  bucket.x = (e.touches[0].clientX - r.left) * (W/r.width);
+});
+
+function initGame() {
+  score = 0; missed = 0; gameTime = 0;
+  drops = []; particles = []; floats = [];
+  bucket.x = W/2; bucket.water = 0;
+  plant.growth = 0;
+  dropTimer = 0; dropInterval = 1500; dropSpeedBase = 3.5; dropsCaught = 0; lastPipeIdx = 1;
+  state = 'playing';
+  updateParentHUD(true);
+}
+
+function spawnDrop(x) {
+  drops.push({ x: x + (Math.random()*10-5), y: 40, spd: dropSpeedBase });
+}
+
+function spawnParticles(x, y, col) {
+  for(let i=0; i<8; i++){
+    let a=Math.random()*Math.PI*2, s=Math.random()*3+1;
+    particles.push({x, y, vx:Math.cos(a)*s, vy:Math.sin(a)*s-2, col, a:1, r:Math.random()*4+2});
+  }
+}
+function spawnFloat(x, y, txt, col) { floats.push({x, y, txt, col, a:1}); }
+
+function showOverlay(html){ overlay.innerHTML=html; overlay.classList.remove('hidden'); }
+function hideOverlay(){ overlay.classList.add('hidden'); }
+
+function doEnd() {
+  state = 'gameOver';
+  showOverlay(`<div class="obox">
+    <div class="emoji">💦</div>
+    <h2>Game Over!</h2>
+    <p>O chão ficou muito molhado!<br>Pontuação: <strong>${score}</strong><br>Crescimento: <strong>${Math.floor((plant.growth/plant.maxGrowth)*100)}%</strong></p>
+    <button class="pbtn" id="rb">Tentar Novamente</button>
+  </div>`);
+  document.getElementById('rb').onclick = () => { hideOverlay(); initGame(); };
+  updateParentHUD(true);
+}
+
+function doWin() {
+  state = 'win';
+  showOverlay(`<div class="obox">
+    <div class="emoji">🌻</div>
+    <h2>Planta Cresceu!</h2>
+    <p>Excelente trabalho!<br>Você salvou a água e cultivou vida.<br>Pontuação Final: <strong>${score}</strong></p>
+    <button class="pbtn" id="rb">Jogar Novamente</button>
+  </div>`);
+  document.getElementById('rb').onclick = () => { hideOverlay(); initGame(); };
+  updateParentHUD(true);
+}
+
+let lastElapsed = -1;
+function updateParentHUD(force=false) {
+  if (state !== 'playing' && !force) return;
+  let elapsed = Math.floor(gameTime/1000);
+  if (elapsed !== lastElapsed || force) {
+    lastElapsed = elapsed;
+    let mm = Math.floor(elapsed/60).toString().padStart(2,'0');
+    let ss = (elapsed%60).toString().padStart(2,'0');
+    let hStr = `Perdidas: ${missed}/${MAX_MISSES}`;
+    if(window.parent && window.parent.postMessage) {
+      window.parent.postMessage({
+        type: 'UPDATE_HUD', score: `${score} pts`, lives: hStr, level: `${Math.floor((plant.growth/plant.maxGrowth)*100)}%`, time: `${mm}:${ss}`
+      }, '*');
+    }
+  }
+}
+
+function updateLogic() {
+  // Move Bucket
+  let dx = 0;
+  if(keys['ArrowLeft'] || keys['KeyA']) dx = -1;
+  if(keys['ArrowRight'] || keys['KeyD']) dx = 1;
+  bucket.x += dx * bucket.spd;
+  bucket.x = Math.max(bucket.w/2, Math.min(W - bucket.w/2, bucket.x));
+
+  // Spawn Drops (predictable pattern)
+  dropTimer -= dt;
+  if (dropTimer <= 0) { 
+    // Pick adjacent pipe to make it catchable
+    let move = Math.random() < 0.5 ? -1 : 1;
+    lastPipeIdx += move;
+    if(lastPipeIdx < 0) lastPipeIdx = 1;
+    if(lastPipeIdx >= pipes.length) lastPipeIdx = pipes.length - 2;
+    spawnDrop(pipes[lastPipeIdx]);
+    dropTimer = dropInterval;
+  }
+
+  // Update Drops
+  for (let i = drops.length - 1; i >= 0; i--) {
+    let d = drops[i];
+    d.y += d.spd;
+    
+    // Check catch
+    if (d.y > bucket.y - bucket.h/2 && d.y < bucket.y + bucket.h/2 && Math.abs(d.x - bucket.x) < bucket.w/2 + 10) {
+      if (bucket.water < bucket.maxWater) {
+        bucket.water++;
+        dropsCaught++;
+        if (dropsCaught % 2 === 0) {
+          dropSpeedBase += 0.4;
+          dropInterval = Math.max(600, dropInterval - 100);
+          spawnFloat(d.x, d.y - 20, 'Mais rápido!', '#facc15');
+        }
+        spawnParticles(d.x, d.y, '#38bdf8');
+        score += 5; updateParentHUD();
+      } else {
+        spawnFloat(d.x, d.y, 'Vaso Cheio!', '#94a3b8');
+        missed++; updateParentHUD(true);
+      }
+      drops.splice(i, 1);
+      continue;
+    }
+    
+    // Check ground
+    if (d.y > H - 30) {
+      spawnParticles(d.x, H-30, '#0ea5e9');
+      missed++; updateParentHUD(true);
+      drops.splice(i, 1);
+      if (missed >= MAX_MISSES) { doEnd(); return; }
+    }
+  }
+
+  // Check Plant Watering
+  if (bucket.water > 0 && Math.abs(bucket.x - plant.x) < 85) {
+    let transfer = bucket.water;
+    plant.growth += transfer;
+    score += transfer * 15;
+    bucket.water = 0;
+    spawnParticles(plant.x, plant.y - 20, '#34d399');
+    spawnFloat(plant.x, plant.y - 40, `+${transfer*15} pts`, '#4ade80');
+    updateParentHUD(true);
+    if (plant.growth >= plant.maxGrowth) { doWin(); return; }
+  }
+
+  // Update Particles & Floats
+  for(let p of particles){ p.x+=p.vx; p.y+=p.vy; p.vy+=0.1; p.a-=0.03; p.r*=0.95; }
+  particles = particles.filter(p=>p.a>0);
+  for(let f of floats){ f.y-=1.5; f.a-=0.02; }
+  floats = floats.filter(f=>f.a>0);
+}
+
+function drawGame() {
+  // BG
+  let bg = ctx.createLinearGradient(0,0,0,H);
+  bg.addColorStop(0, '#1e293b'); bg.addColorStop(1, '#0f172a');
+  ctx.fillStyle = bg; ctx.fillRect(0,0,W,H);
+  
+  // Floor
+  ctx.fillStyle = '#334155'; ctx.fillRect(0, H-30, W, 30);
+  ctx.fillStyle = '#475569'; ctx.fillRect(0, H-30, W, 4);
+
+  // Plant Zone indicator
+  ctx.fillStyle = 'rgba(52,211,153,0.1)';
+  ctx.fillRect(plant.x - 75, H-30, 150, 30);
+  ctx.fillStyle = '#34d399';
+  ctx.font = '700 14px Nunito'; ctx.textAlign='center';
+  ctx.fillText('ZONA DA PLANTA', plant.x, H-10);
+
+  // Pipes
+  ctx.fillStyle = '#64748b';
+  for (let p of pipes) {
+    ctx.fillRect(p - 15, 0, 30, 40);
+    ctx.fillStyle = '#475569'; ctx.fillRect(p - 20, 30, 40, 10);
+    ctx.fillStyle = '#64748b';
+  }
+
+  // Plant
+  ctx.save(); ctx.translate(plant.x, plant.y);
+  // Pot
+  ctx.fillStyle = '#b45309';
+  ctx.beginPath(); ctx.moveTo(-35, 30); ctx.lineTo(35, 30); ctx.lineTo(25, 60); ctx.lineTo(-25, 60); ctx.closePath(); ctx.fill();
+  ctx.fillStyle = '#92400e'; ctx.fillRect(-38, 20, 76, 10);
+  // Growth stages
+  let stage = plant.growth / plant.maxGrowth;
+  ctx.strokeStyle = '#22c55e'; ctx.lineWidth = 6; ctx.lineCap = 'round';
+  if (stage > 0) {
+    let h = 20 + stage * 60;
+    ctx.beginPath(); ctx.moveTo(0, 20); ctx.lineTo(0, 20 - h); ctx.stroke();
+    // Leaves
+    if (stage > 0.3) {
+      ctx.fillStyle = '#4ade80';
+      ctx.beginPath(); ctx.ellipse(-16, 20 - h*0.4, 18, 8, Math.PI/4, 0, Math.PI*2); ctx.fill();
+      ctx.beginPath(); ctx.ellipse(16, 20 - h*0.6, 18, 8, -Math.PI/4, 0, Math.PI*2); ctx.fill();
+    }
+    if (stage > 0.7) {
+      ctx.fillStyle = '#4ade80';
+      ctx.beginPath(); ctx.ellipse(-14, 20 - h*0.8, 14, 6, Math.PI/5, 0, Math.PI*2); ctx.fill();
+    }
+    // Flower
+    if (stage >= 1) {
+      ctx.fillStyle = '#fbbf24'; ctx.beginPath(); ctx.arc(0, 20 - h, 14, 0, Math.PI*2); ctx.fill();
+      ctx.fillStyle = '#f59e0b'; ctx.beginPath(); ctx.arc(0, 20 - h, 7, 0, Math.PI*2); ctx.fill();
+    }
+  }
+  ctx.restore();
+
+  // Bucket
+  ctx.save(); ctx.translate(bucket.x, bucket.y);
+  // Water inside
+  let fillPct = bucket.water / bucket.maxWater;
+  if (fillPct > 0) {
+    ctx.fillStyle = '#38bdf8';
+    let wh = fillPct * (bucket.h - 14);
+    ctx.beginPath(); ctx.moveTo(-bucket.w/2 + 5, bucket.h/2); ctx.lineTo(bucket.w/2 - 5, bucket.h/2);
+    ctx.lineTo(bucket.w/2 - 5 + 4, bucket.h/2 - wh); ctx.lineTo(-bucket.w/2 + 5 - 4, bucket.h/2 - wh); ctx.closePath(); ctx.fill();
+  }
+  // Bucket exterior
+  ctx.fillStyle = '#94a3b8';
+  ctx.beginPath(); ctx.moveTo(-bucket.w/2, -bucket.h/2); ctx.lineTo(bucket.w/2, -bucket.h/2);
+  ctx.lineTo(bucket.w/2 - 10, bucket.h/2); ctx.lineTo(-bucket.w/2 + 10, bucket.h/2); ctx.closePath(); ctx.fill();
+  // Handle
+  ctx.strokeStyle = '#cbd5e1'; ctx.lineWidth = 3;
+  ctx.beginPath(); ctx.arc(0, -bucket.h/2, bucket.w/2, Math.PI, 0); ctx.stroke();
+  
+  // Water indicator
+  if(fillPct > 0) {
+    ctx.fillStyle = 'white'; ctx.font = 'bold 16px Nunito'; ctx.textAlign = 'center';
+    ctx.fillText(bucket.water + '/' + bucket.maxWater, 0, 8);
+  }
+  ctx.restore();
+
+  // Drops
+  for (let d of drops) {
+    ctx.fillStyle = '#38bdf8';
+    ctx.beginPath(); ctx.arc(d.x, d.y, 6, 0, Math.PI*2); ctx.fill();
+    ctx.beginPath(); ctx.moveTo(d.x - 5, d.y - 2); ctx.lineTo(d.x, d.y - 12); ctx.lineTo(d.x + 5, d.y - 2); ctx.closePath(); ctx.fill();
+  }
+
+  // Particles & Floats
+  for (let p of particles) {
+    ctx.globalAlpha = p.a; ctx.fillStyle = p.col;
+    ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI*2); ctx.fill();
+  }
+  ctx.globalAlpha = 1;
+  for (let f of floats) {
+    ctx.globalAlpha = f.a; ctx.fillStyle = f.col;
+    ctx.font = 'bold 20px Nunito'; ctx.textAlign = 'center';
+    ctx.shadowColor = f.col; ctx.shadowBlur = 8;
+    ctx.fillText(f.txt, f.x, f.y); ctx.shadowBlur = 0;
+  }
+  ctx.globalAlpha = 1;
+}
+
+function loop(ts) {
+  let dt = ts - lastTs; lastTs = ts;
+  if (dt > 100) dt = 16;
+  
+  if (state === 'playing') {
+    gameTime += dt;
+    updateLogic();
+  }
+  
+  drawGame();
+  requestAnimationFrame(loop);
+}
+
+document.getElementById('startBtn').onclick = () => { hideOverlay(); initGame(); };
+requestAnimationFrame(loop);
+</script>
+</body>
+</html>
