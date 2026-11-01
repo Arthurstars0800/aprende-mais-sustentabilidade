@@ -91,90 +91,59 @@ function applyGradient(el, c1, c2) {
 }
 
 function startCatchGame() {
-    const stage = document.getElementById('gameStage');
-    stage.style.display = 'flex';
-    document.querySelector('.game-stats-container').style.display = 'flex';
-    stage.scrollIntoView({ behavior: 'smooth' });
-    const canvas = document.getElementById('gameCanvas');
-    canvas.innerHTML = `
-        <div id="gameInstructions" class="game-instructions game-splash-coleta">
-            <div class="splash-centered-header">
-                <div class="splash-hero-icon">♻️</div>
-                <h2 class="splash-title">Coleta Seletiva</h2>
-                <p class="splash-subtitle" style="font-size:1rem;font-weight:600;color:#10b981;">Ajude a limpar o planeta antes que seja tarde demais! 🌍</p>
-            </div>
-            <div class="splash-content-split">
-                <div class="splash-text-side">
-                    <ul class="game-tutorial-list">
-                        <li><div><strong>Fique Atento:</strong> Os resíduos vão começar a pipocar pela tela!</div></li>
-                        <li><div><strong>Aja Rápido:</strong> Arraste cada material para a lixeira correta e mostre suas habilidades.</div></li>
-                        <li><div><strong>Sobrevivência:</strong> O tempo voa! Não deixe o relógio zerar e proteja suas vidas a todo custo!</div></li>
-                    </ul>
-                </div>
-                <div class="splash-visual-side">
-                    <div class="bins-chip-row">
-                        <div class="bin-chip" style="--chip-color:#ef4444"><span class="bin-chip-icon">🍶</span><span class="memory-label">Plástico</span></div>
-                        <div class="bin-chip" style="--chip-color:#3b82f6"><span class="bin-chip-icon">📦</span><span class="memory-label">Papel</span></div>
-                        <div class="bin-chip" style="--chip-color:#22c55e"><span class="bin-chip-icon">🍷</span><span class="memory-label">Vidro</span></div>
-                        <div class="bin-chip" style="--chip-color:#eab308"><span class="bin-chip-icon">🥫</span><span class="memory-label">Metal</span></div>
-                    </div>
-                </div>
-            </div>
-            <button class="btn btn-primary splash-btn" style="background:#10b981;color:white;border:none;box-shadow:0 4px 15px rgba(16,185,129,0.4);" onclick="initCatchGame()"><i class="fas fa-play"></i> Começar Jogo</button>
-        </div>`;
-    
-    // Fallback directly to green color to avoid any background-clip bugs
-    const titleEl = canvas.querySelector('.splash-title');
-    if (titleEl) {
-        titleEl.style.color = '#10b981';
-        titleEl.style.webkitTextFillColor = '#10b981';
-        titleEl.style.background = 'none';
-    }
+    showModernSplash({
+        badge: 'Resíduos & Reciclagem',
+        heroIcon: '♻️',
+        title: 'Coleta Seletiva',
+        subtitle: 'Ajude a limpar o planeta descartando cada material na lixeira correta!',
+        rules: [
+            { icon: '👀', title: 'Fique Atento', desc: 'Resíduos de diferentes materiais vão surgir na tela!' },
+            { icon: '⚡', title: 'Aja Rápido', desc: 'Arraste cada material para sua lixeira correspondente.' },
+            { icon: '⏳', title: 'Sobrevivência', desc: 'Não deixe o tempo esgotar e proteja suas vidas!' }
+        ],
+        chipsLabel: 'Lixeiras de Descarte',
+        chips: [
+            { icon: '🍶', label: 'Plástico', colorClass: 'chip-red' },
+            { icon: '📦', label: 'Papel', colorClass: 'chip-blue' },
+            { icon: '🍷', label: 'Vidro', colorClass: 'chip-green' },
+            { icon: '🥫', label: 'Metal', colorClass: 'chip-yellow' }
+        ],
+        onStart: 'initCatchGame()'
+    });
 }
 
 function startMemoryGame() {
-    const stage = document.getElementById('gameStage');
-    stage.style.display = 'flex';
-    document.querySelector('.game-stats-container').style.display = 'flex';
-    stage.scrollIntoView({ behavior: 'smooth' });
-    const canvas = document.getElementById('gameCanvas');
-    canvas.innerHTML = `
-        <div id="gameInstructions" class="game-instructions game-splash-memory">
-            <div class="splash-centered-header">
-                <div class="splash-hero-icon">🃏</div>
-                <h2 class="splash-title">Memória da Natureza</h2>
-                <p class="splash-subtitle">Vire as cartas e forme pares de materiais recicláveis!</p>
-            </div>
-            <div class="splash-content-split">
-                <div class="splash-text-side">
-                    <ul class="game-tutorial-list">
-                        <li><div><span>1</span> Clique em qualquer carta para revelá-la</div></li>
-                        <li><div><span>2</span> Encontre o par correspondente de cada material</div></li>
-                        <li><div><span>3</span> Memorize as posições para pontuar mais rápido</div></li>
-                        <li><div><span>4</span> Limpe o tabuleiro antes do tempo acabar</div></li>
-                    </ul>
-                </div>
-                <div class="splash-visual-side">
-                    <div class="splash-card-preview">
-                        <div class="preview-card flipped-preview">🗑️<span>Seco</span></div>
-                        <div class="preview-card flipped-preview">🍷<span>Vidro</span></div>
-                        <div class="preview-card back-preview"><i class="fas fa-leaf"></i></div>
-                        <div class="preview-card flipped-preview">🔋<span>Perigo</span></div>
-                        <div class="preview-card back-preview"><i class="fas fa-leaf"></i></div>
-                        <div class="preview-card flipped-preview">🥤<span>Plástico</span></div>
-                    </div>
-                </div>
-            </div>
-            <button class="btn btn-primary splash-btn" onclick="memoryLevel=1; initMemoryGame()"><i class="fas fa-play"></i> Começar Jogo</button>
-        </div>`;
-    applyGradient(canvas.querySelector('.splash-title'), '#f59e0b', '#d97706');
+    showModernSplash({
+        badge: 'Biodiversidade',
+        heroIcon: '🃏',
+        title: 'Memória da Natureza',
+        subtitle: 'Exercite sua mente memorizando pares de materiais e elementos ecológicos!',
+        rules: [
+            { icon: '👆', title: 'Revelar', desc: 'Clique em qualquer carta para descobrir o símbolo escondido.' },
+            { icon: '🧩', title: 'Formar Pares', desc: 'Encontre o par correspondente de cada material reciclável.' },
+            { icon: '⏱️', title: 'Velocidade', desc: 'Limpe todo o tabuleiro antes que o cronômetro zere!' }
+        ],
+        chipsLabel: 'Exemplos de Pares',
+        chips: [
+            { icon: '🗑️', label: 'Seco', colorClass: 'chip-blue' },
+            { icon: '🍷', label: 'Vidro', colorClass: 'chip-green' },
+            { icon: '🔋', label: 'Perigo', colorClass: 'chip-yellow' },
+            { icon: '🥤', label: 'Plástico', colorClass: 'chip-red' }
+        ],
+        onStart: 'memoryLevel=1; initMemoryGame()'
+    });
 }
 
 function closeGame() {
     isGameActive = false;
     clearInterval(gameInterval);
-    document.getElementById('gameStage').style.display = 'none';
-    document.getElementById('gameCanvas').innerHTML = '';
+    const stage = document.getElementById('gameStage');
+    if (stage) {
+        stage.style.display = 'none';
+        stage.classList.remove('splash-active', 'game-active-mode');
+    }
+    const canvas = document.getElementById('gameCanvas');
+    if (canvas) canvas.innerHTML = '';
 }
 
 function loadIframe(src) {
@@ -215,7 +184,188 @@ function openStage(showHud = false) {
     const stage = document.getElementById('gameStage');
     stage.style.display = 'flex';
     stage.scrollIntoView({ behavior: 'smooth' });
-    document.querySelector('.game-stats-container').style.display = showHud ? 'flex' : 'none';
+    if (!showHud) {
+        stage.classList.add('splash-active');
+        stage.classList.remove('game-active-mode');
+    } else {
+        stage.classList.remove('splash-active');
+        stage.classList.add('game-active-mode');
+    }
+}
+
+function showModernSplash(config) {
+    openStage(false);
+    const canvas = document.getElementById('gameCanvas');
+    
+    const rulesHtml = (config.rules || []).map(r => `
+        <div class="rule-card">
+            <div class="rule-card-icon">${r.icon || '✨'}</div>
+            <h4>${r.title}</h4>
+            <p>${r.desc}</p>
+        </div>
+    `).join('');
+
+    const chipsHtml = (config.chips || []).map(c => `
+        <div class="game-chip-pill ${c.colorClass || ''}">
+            <span>${c.icon}</span>
+            <span>${c.label}</span>
+        </div>
+    `).join('');
+
+    const elementsBox = chipsHtml ? `
+        <div class="splash-elements-box">
+            <span class="splash-elements-label">${config.chipsLabel || 'Elementos em Jogo'}</span>
+            <div class="splash-chips-row">${chipsHtml}</div>
+        </div>
+    ` : '';
+
+    canvas.innerHTML = `
+        <div class="game-instructions modern-splash ${config.customClass || ''}">
+            <button class="splash-close-btn" onclick="closeGame()" title="Fechar">&times;</button>
+            <div class="splash-header">
+                <span class="splash-badge-pill">${config.badge || 'Arcade Ecológico'}</span>
+                <h2 class="splash-title">${config.title}</h2>
+                <p class="splash-subtitle">${config.subtitle}</p>
+            </div>
+
+            <div class="splash-body">
+                ${elementsBox}
+                <div class="rules-grid">${rulesHtml}</div>
+            </div>
+
+            <div class="splash-footer">
+                <button class="splash-start-btn" onclick="openStage(true); ${config.onStart}">
+                    <i class="fas fa-play"></i> Começar Jogo
+                </button>
+            </div>
+        </div>
+    `;
+}
+
+
+// Adaptive Game HUD Configuration
+window.configureGameHUD = function(config = {}) {
+    const lvlEl = document.getElementById('levelBadge');
+    const scrEl = document.getElementById('scoreBadge');
+    const livEl = document.getElementById('livesBadge');
+    const timEl = document.getElementById('timeBadge');
+    if (lvlEl) lvlEl.style.display = config.showLevel === false ? 'none' : 'flex';
+    if (scrEl) scrEl.style.display = config.showScore === false ? 'none' : 'flex';
+    if (livEl) livEl.style.display = config.showLives === false ? 'none' : 'flex';
+    if (timEl) timEl.style.display = config.showTime === false ? 'none' : 'flex';
+};
+
+// Unified Modern Victory / Defeat Screen
+function showModernResult(config) {
+    const canvas = document.getElementById('gameCanvas');
+    if (!canvas) return;
+    
+    // Hide stats in header during result screen
+    const stage = document.getElementById('gameStage');
+    if (stage) {
+        stage.classList.add('splash-active');
+        stage.classList.remove('game-active-mode');
+    }
+
+    const statsHtml = (config.stats || []).map(s => `
+        <div class="result-stat-box ${s.highlight ? 'highlight' : ''}">
+            <span class="result-stat-label">${s.label}</span>
+            <div class="result-stat-value">
+                ${s.icon ? `<span>${s.icon}</span>` : ''}
+                <span>${s.value}</span>
+            </div>
+        </div>
+    `).join('');
+
+    canvas.innerHTML = `
+        <div class="game-instructions modern-result ${config.type || 'win'}">
+            <span class="result-badge">${config.badge || (config.type === 'win' ? 'Vitória Ecológica' : 'Fim de Jogo')}</span>
+            <div class="result-icon">${config.heroIcon || (config.type === 'win' ? '🏆' : '🥀')}</div>
+            <h2 class="result-title">${config.title}</h2>
+            <p class="result-subtitle">${config.subtitle || ''}</p>
+            
+            <div class="result-stats-grid">
+                ${statsHtml}
+            </div>
+
+            <div class="result-actions">
+                <button class="result-btn result-btn-secondary" onclick="closeGame()">
+                    <i class="fas fa-arrow-left"></i> Minigames
+                </button>
+                <button class="result-btn result-btn-primary" onclick="openStage(true); ${config.onRestart}">
+                    <i class="fas fa-rotate-right"></i> ${config.restartLabel || 'Jogar Novamente'}
+                </button>
+            </div>
+        </div>
+    `;
+}
+window.showModernResult = showModernResult;
+
+// Backward-compatible alias
+window.addLeaves = function(xp, reason) {
+    if (window.gamification) window.gamification.addXp(xp, reason ? '(' + reason + ')' : '(Minigame)');
+};
+
+function handleIframeGameResult(data) {
+    if (!data) return;
+    if (data.game === 'gari') {
+        const xp = data.xp || Math.max(15, Math.floor((data.score || 0) / 4));
+        if (window.gamification) window.gamification.addXp(xp, "(Gari Aquático)");
+        showModernResult({
+            type: data.win ? 'win' : 'lose',
+            badge: data.win ? 'Recifes Preservados' : (data.reason === 'shark' ? 'Ataque do Tubarão!' : 'Cardume Agitado'),
+            heroIcon: data.win ? '🤿' : (data.reason === 'shark' ? '🦈' : '🐟'),
+            title: data.win ? 'Oceano Despoluído!' : 'Mergulho Interrompido!',
+            subtitle: data.win 
+                ? 'Você recolheu todo o lixo marinho com maestria e salvou o recife.' 
+                : (data.reason === 'shark' ? 'O tubarão te pegou! Mantenha distância máxima dos predadores.' : 'Muitos peixes foram feridos. Nade com mais cuidado nas próximas águas.'),
+            stats: [
+                { label: 'Pontuação', value: data.score || 0, icon: '⭐' },
+                { label: 'XP Conquistado', value: `+${xp} XP`, highlight: true, icon: '🌿' },
+                { label: 'Lixo Recolhido', value: `${data.collected || 0}/${data.totalTrash || 0}`, icon: '🗑️' }
+            ],
+            onRestart: "launchGameFile('gari.html')",
+            restartLabel: 'Mergulhar Novamente'
+        });
+    } else if (data.game === 'vazamento') {
+        const xp = data.xp || Math.max(15, Math.floor((data.score || 0) / 4));
+        if (window.gamification) window.gamification.addXp(xp, "(Caça ao Vazamento)");
+        showModernResult({
+            type: data.win ? 'win' : 'lose',
+            badge: data.win ? 'Planta Florescendo' : 'Água Desperdiçada',
+            heroIcon: data.win ? '🌻' : '💦',
+            title: data.win ? 'Cultivo Sustentável!' : 'Inundação no Solo!',
+            subtitle: data.win 
+                ? 'Você coletou as gotas com rapidez e utilizou a água para nutrir a vida vegetal!' 
+                : 'Muitas gotas caíram fora do vaso e alagaram o piso. Fique atento aos gotejamentos.',
+            stats: [
+                { label: 'Pontuação', value: data.score || 0, icon: '⭐' },
+                { label: 'XP Conquistado', value: `+${xp} XP`, highlight: true, icon: '🌿' },
+                { label: 'Crescimento', value: `${data.plantGrowth || 100}%`, icon: '🌱' }
+            ],
+            onRestart: "launchGameFile('vazamento.html')",
+            restartLabel: 'Consertar Novamente'
+        });
+    } else if (data.game === 'incendio') {
+        const xp = data.xp || Math.max(20, Math.floor((data.score || 0) * 4));
+        if (window.gamification) window.gamification.addXp(xp, "(Incêndio Zero)");
+        showModernResult({
+            type: data.win ? 'win' : 'lose',
+            badge: data.win ? 'Defesa Heroica' : 'Fumaça Crítica',
+            heroIcon: data.win ? '🌳' : '🔥',
+            title: data.win ? 'Reserva Protegida!' : 'Floresta Sufocada!',
+            subtitle: data.win 
+                ? 'Você manteve os focos sob controle com maestria e evitou que a poluição tomasse o céu!' 
+                : 'A poluição atingiu 100% e as chamas sufocaram a mata. Tente agir ainda mais rápido!',
+            stats: [
+                { label: 'Árvores Salvas', value: data.score || 0, icon: '🌲' },
+                { label: 'XP Conquistado', value: `+${xp} XP`, highlight: true, icon: '🌿' },
+                { label: 'Sobrevivência', value: data.survivalTime || `${data.score || 0}s`, icon: '⏱️' }
+            ],
+            onRestart: "launchGameFile('incendio.html')",
+            restartLabel: 'Decolar Novamente'
+        });
+    }
 }
 
 // Global HUD updater — called directly when games run inline
@@ -223,7 +373,14 @@ window.__updateHUD = function(data) {
     if (!data || data.type !== 'UPDATE_HUD') return;
     if (data.score !== undefined) {
         const el = document.getElementById('gameScore');
-        if (el) el.textContent = data.score;
+        if (el) {
+            el.textContent = data.score;
+            // Score pop animation
+            el.classList.remove('score-pop');
+            void el.offsetWidth; // reflow
+            el.classList.add('score-pop');
+            setTimeout(() => el.classList.remove('score-pop'), 350);
+        }
     }
     if (data.level !== undefined) {
         const el = document.getElementById('gameLevel');
@@ -231,262 +388,174 @@ window.__updateHUD = function(data) {
     }
     if (data.time !== undefined) {
         const el = document.getElementById('gameTime');
+        const timeBadge = document.getElementById('timeBadge');
         if (el) el.textContent = data.time;
+        // Time danger visual at <= 10 seconds
+        if (timeBadge) {
+            const t = parseInt(data.time, 10);
+            if (!isNaN(t) && t <= 10) {
+                timeBadge.classList.add('time-danger');
+            } else {
+                timeBadge.classList.remove('time-danger');
+            }
+        }
     }
     if (data.lives !== undefined) {
         const livesEl = document.getElementById('gameLives');
-        if (livesEl) {
-            if (typeof data.lives === 'number') {
-                livesEl.innerHTML = '❤️'.repeat(data.lives) + '🩶'.repeat(Math.max(0, 3 - data.lives));
-            } else {
-                livesEl.innerHTML = data.lives;
+        const livesBadge = document.getElementById('livesBadge');
+        if (data.lives === false || data.lives === '') {
+            if (livesBadge) livesBadge.style.display = 'none';
+        } else {
+            if (livesBadge) livesBadge.style.display = 'flex';
+            if (livesEl) {
+                if (typeof data.lives === 'number') {
+                    livesEl.innerHTML = '❤️'.repeat(Math.max(0, data.lives)) + '🩶'.repeat(Math.max(0, 3 - data.lives));
+                } else {
+                    livesEl.innerHTML = data.lives;
+                }
             }
         }
     }
 };
 
-// Listen for postMessage from iframes (legacy) AND from same-page dispatches
+// Listen for postMessage from iframes AND from same-page dispatches
 window.addEventListener('message', (e) => {
-    if (e.data && e.data.type === 'UPDATE_HUD') {
+    if (!e.data) return;
+    if (e.data.type === 'UPDATE_HUD') {
         window.__updateHUD(e.data);
+    } else if (e.data.type === 'GAME_RESULT') {
+        handleIframeGameResult(e.data);
     }
 });
 
 function startPescadorGame() {
-    openStage(true);
-    const canvas = document.getElementById('gameCanvas');
-    canvas.innerHTML = `
-        <div class="game-instructions game-splash-pescador">
-            <div class="splash-centered-header">
-                <div class="splash-hero-icon">🎣</div>
-                <h2 class="splash-title">Pescador Ecológico</h2>
-                <p class="splash-subtitle">Limpe o oceano retirando o lixo do fundo do mar!</p>
-            </div>
-            <div class="splash-content-split">
-                <div class="splash-text-side">
-                    <ul class="game-tutorial-list">
-                        <li><div><span>1</span> Mova o barco com o mouse ou toque na tela</div></li>
-                        <li><div><span>2</span> Clique ou toque para lançar o anzol</div></li>
-                        <li><div><span>3</span> Capture os lixos acumulados no fundo do oceano</div></li>
-                        <li><div><span>4</span> Evite capturar os peixes para não perder vida</div></li>
-                    </ul>
-                </div>
-                <div class="splash-visual-side">
-                    <div class="splash-icon-row">
-                        <div class="splash-icon-chip" style="--chip-accent:#06b6d4">🚢<span>Barco</span></div>
-                        <div class="splash-icon-chip" style="--chip-accent:#0ea5e9">🪝<span>Anzol</span></div>
-                        <div class="splash-icon-chip" style="--chip-accent:#ef4444">🐠<span>Evite!</span></div>
-                        <div class="splash-icon-chip" style="--chip-accent:#22c55e">🗑️<span>Pesque!</span></div>
-                    </div>
-                </div>
-            </div>
-            <button class="btn splash-btn splash-btn-ocean" onclick="loadIframe('pescador.html')"><i class="fas fa-play"></i> Começar Jogo</button>
-        </div>`;
-    applyGradient(canvas.querySelector('.splash-title'), '#06b6d4', '#0284c7');
+    showModernSplash({
+        badge: 'Preservação Marinha',
+        heroIcon: '🎣',
+        title: 'Pescador Ecológico',
+        subtitle: 'Limpe os oceanos resgatando o lixo submarino sem machucar os peixes!',
+        rules: [
+            { icon: '🚢', title: 'Navegação', desc: 'Mova o barco com o mouse ou toque para mirar com precisão.' },
+            { icon: '🪝', title: 'Lançar Anzol', desc: 'Clique ou toque para lançar a linha no fundo do mar.' },
+            { icon: '🐠', title: 'Proteger Vidas', desc: 'Cuidado redobrado: pescar animais marinhos custa vidas!' }
+        ],
+        chipsLabel: 'Mecânicas da Pesca',
+        chips: [
+            { icon: '🚢', label: 'Barco', colorClass: 'chip-cyan' },
+            { icon: '🪝', label: 'Anzol', colorClass: 'chip-blue' },
+            { icon: '🗑️', label: 'Pesque Lixo', colorClass: 'chip-green' },
+            { icon: '🐠', label: 'Evite Peixes!', colorClass: 'chip-red' }
+        ],
+        onStart: "loadIframe('pescador.html')"
+    });
 }
 
 function startGariGame() {
-    openStage(true);
-    const canvas = document.getElementById('gameCanvas');
-    canvas.innerHTML = `
-        <div class="game-instructions game-splash-gari">
-            <div class="splash-centered-header">
-                <div class="splash-hero-icon">🤿</div>
-                <h2 class="splash-title">Gari Aquático</h2>
-                <p class="splash-subtitle">Mergulhe fundo e salve a vida marinha do lixo humano!</p>
-            </div>
-            <div class="splash-content-split">
-                <div class="splash-text-side">
-                    <ul class="game-tutorial-list">
-                        <li><div><span>1</span> Use WASD ou setas do teclado para nadar</div></li>
-                        <li><div><span>2</span> Recolha todos os detritos flutuando no mar</div></li>
-                        <li><div><span>3</span> Não encoste nos peixes da região marinha</div></li>
-                        <li><div><span>4</span> Desvie do tubarão faminto que patrulha o fundo!</div></li>
-                    </ul>
-                </div>
-                <div class="splash-visual-side">
-                    <div class="splash-icon-row">
-                        <div class="splash-icon-chip" style="--chip-accent:#3b82f6">🏊<span>Nadar</span></div>
-                        <div class="splash-icon-chip" style="--chip-accent:#22c55e">🗑️<span>Coletar</span></div>
-                        <div class="splash-icon-chip" style="--chip-accent:#f59e0b">🐟<span>Desviar</span></div>
-                        <div class="splash-icon-chip" style="--chip-accent:#ef4444">🦈<span>Perigo!</span></div>
-                    </div>
-                </div>
-            </div>
-            <button class="btn splash-btn splash-btn-ocean" onclick="loadIframe('gari.html')"><i class="fas fa-play"></i> Começar Jogo</button>
-        </div>`;
-    applyGradient(canvas.querySelector('.splash-title'), '#3b82f6', '#1d4ed8');
+    showModernSplash({
+        badge: 'Mergulho & Limpeza',
+        heroIcon: '🤿',
+        title: 'Gari Aquático',
+        subtitle: 'Mergulhe fundo e salve os recifes recolhendo o lixo humano!',
+        rules: [
+            { icon: '🏊', title: 'Natação', desc: 'Use WASD ou setas do teclado para manobrar na água.' },
+            { icon: '🗑️', title: 'Coletar Detritos', desc: 'Recolha plástico e metal flutuando antes que afundem.' },
+            { icon: '🦈', title: 'Perigo!', desc: 'Desvie de tubarões e animais marinhos em rota de caça!' }
+        ],
+        chipsLabel: 'Elementos do Mergulho',
+        chips: [
+            { icon: '🏊', label: 'Nadar', colorClass: 'chip-blue' },
+            { icon: '🗑️', label: 'Coletar', colorClass: 'chip-green' },
+            { icon: '🐟', label: 'Preservar', colorClass: 'chip-yellow' },
+            { icon: '🦈', label: 'Cuidado!', colorClass: 'chip-red' }
+        ],
+        onStart: "loadIframe('gari.html')"
+    });
 }
 
 function startVazamentoGame() {
-    openStage(true);
-    const canvas = document.getElementById('gameCanvas');
-    canvas.innerHTML = `
-        <div class="game-instructions game-splash-vazamento">
-            <div class="splash-centered-header">
-                <div class="splash-hero-icon">🔧</div>
-                <h2 class="splash-title">Caça ao Vazamento</h2>
-                <p class="splash-subtitle">Cada gota conta! Conserte os canos e salve a água!</p>
-            </div>
-            <div class="splash-content-split">
-                <div class="splash-text-side">
-                    <ul class="game-tutorial-list">
-                        <li><div><span>1</span> Localize os canos que estão gotejando na cena</div></li>
-                        <li><div><span>2</span> Posicione o balde sob o vazamento para coletar água</div></li>
-                        <li><div><span>3</span> Use a água acumulada para irrigar a plantação</div></li>
-                        <li><div><span>4</span> Clique e segure nos canos para consertá-los</div></li>
-                    </ul>
-                </div>
-                <div class="splash-visual-side">
-                    <div class="splash-icon-row">
-                        <div class="splash-icon-chip" style="--chip-accent:#0ea5e9">💧<span>Água</span></div>
-                        <div class="splash-icon-chip" style="--chip-accent:#64748b">🪣<span>Balde</span></div>
-                        <div class="splash-icon-chip" style="--chip-accent:#0369a1">🔧<span>Consertar</span></div>
-                        <div class="splash-icon-chip" style="--chip-accent:#22c55e">🌿<span>Irrigar</span></div>
-                    </div>
-                </div>
-            </div>
-            <button class="btn splash-btn splash-btn-water" onclick="loadIframe('vazamento.html')"><i class="fas fa-play"></i> Começar Jogo</button>
-        </div>`;
-    applyGradient(canvas.querySelector('.splash-title'), '#0ea5e9', '#0369a1');
+    showModernSplash({
+        badge: 'Recursos Hídricos',
+        heroIcon: '🔧',
+        title: 'Caça ao Vazamento',
+        subtitle: 'Cada gota conta! Repare a tubulação e evite o desperdício de água potável!',
+        rules: [
+            { icon: '💧', title: 'Localizar', desc: 'Encontre canos gotejando antes que o reservatório esvazie.' },
+            { icon: '🪣', title: 'Coletar Água', desc: 'Use baldes para reaproveitar água vazada na horta.' },
+            { icon: '🛠️', title: 'Reparar', desc: 'Clique e segure para apertar conexões e vedar os canos.' }
+        ],
+        chipsLabel: 'Ferramentas do Jogo',
+        chips: [
+            { icon: '💧', label: 'Água Potável', colorClass: 'chip-cyan' },
+            { icon: '🪣', label: 'Balde', colorClass: 'chip-blue' },
+            { icon: '🔧', label: 'Consertar', colorClass: 'chip-yellow' },
+            { icon: '🌿', label: 'Irrigar', colorClass: 'chip-green' }
+        ],
+        onStart: "loadIframe('vazamento.html')"
+    });
 }
 
 function startIrrigacaoGame() {
-    openStage(true);
-    const canvas = document.getElementById('gameCanvas');
-    canvas.innerHTML = `
-        <div class="game-instructions game-splash-irrigacao">
-            <div class="splash-centered-header">
-                <div class="splash-hero-icon">🌱</div>
-                <h2 class="splash-title">Irrigação Inteligente</h2>
-                <p class="splash-subtitle">Encontre o equilíbrio perfeito de água para sua plantação!</p>
-            </div>
-            <div class="splash-content-split">
-                <div class="splash-text-side">
-                    <ul class="game-tutorial-list">
-                        <li><div><span>1</span> Monitore o nível de umidade do solo em tempo real</div></li>
-                        <li><div><span>2</span> Pressione o botão de irrigar quando o solo secar</div></li>
-                        <li><div><span>3</span> Evite ressecamento: nível abaixo de 10% mata a planta!</div></li>
-                        <li><div><span>4</span> Evite encharcamento: nível acima de 90% afoga a raiz!</div></li>
-                    </ul>
-                </div>
-                <div class="splash-visual-side">
-                    <div class="splash-umidade-bar">
-                        <div class="umidade-zone zone-seco">Seco</div>
-                        <div class="umidade-zone zone-ideal">✅ Ideal</div>
-                        <div class="umidade-zone zone-encharcado">Encharcado</div>
-                    </div>
-                </div>
-            </div>
-            <button class="btn splash-btn splash-btn-green" onclick="loadIframe('irrigacao.html')"><i class="fas fa-play"></i> Começar Jogo</button>
-        </div>`;
-    applyGradient(canvas.querySelector('.splash-title'), '#84cc16', '#4d7c0f');
+    showModernSplash({
+        badge: 'Agricultura Sustentável',
+        heroIcon: '🌱',
+        title: 'Irrigação Inteligente',
+        subtitle: 'Mantenha o solo na faixa perfeita de umidade sem desperdiçar água!',
+        rules: [
+            { icon: '🚰', title: 'Abastecer o Tanque', desc: 'Se a água do tanque acabar, você não tem como regar e a planta morre!' },
+            { icon: '💧', title: 'Regar na Medida', desc: 'Regue a planta para não secar, mas cuidado para não regar demais.' },
+            { icon: '⚖️', title: 'Equilíbrio Total', desc: 'Mantenha a umidade entre 20% e 80% durante os 30 segundos!' }
+        ],
+        chipsLabel: 'Cuidados Vitais',
+        chips: [
+            { icon: '🥀', label: 'Seca (<15%)', colorClass: 'chip-yellow' },
+            { icon: '🌻', label: 'Zona Ideal', colorClass: 'chip-green' },
+            { icon: '💦', label: 'Afogada (>90%)', colorClass: 'chip-red' }
+        ],
+        onStart: "initIrrigacaoGame()"
+    });
 }
 
 function startIncendioGame() {
-    openStage(true);
-    const canvas = document.getElementById('gameCanvas');
-    canvas.innerHTML = `
-        <div class="game-instructions game-splash-incendio">
-            <div class="splash-centered-header">
-                <div class="splash-hero-icon">🔥</div>
-                <h2 class="splash-title">Incêndio Zero</h2>
-                <p class="splash-subtitle">Proteja a floresta! Cada segundo conta para salvar as árvores!</p>
-            </div>
-            <div class="splash-content-split">
-                <div class="splash-text-side">
-                    <ul class="game-tutorial-list">
-                        <li><div><span>1</span> Pressione e segure um foco de incêndio por 3 segundos</div></li>
-                        <li><div><span>2</span> Impeça que o fogo se propague para árvores vizinhas</div></li>
-                        <li><div><span>3</span> Monitore o nível de fumaça — não deixe chegar ao topo!</div></li>
-                        <li><div><span>4</span> Aguarde a brisa do vento que ajuda a limpar o céu</div></li>
-                    </ul>
-                </div>
-                <div class="splash-visual-side">
-                    <div class="splash-icon-row">
-                        <div class="splash-icon-chip" style="--chip-accent:#ef4444">🔥<span>Apagar</span></div>
-                        <div class="splash-icon-chip" style="--chip-accent:#78350f">🌳<span>Proteger</span></div>
-                        <div class="splash-icon-chip" style="--chip-accent:#6b7280">💨<span>Brisa</span></div>
-                        <div class="splash-icon-chip" style="--chip-accent:#a3a3a3">🌫️<span>Fumaça</span></div>
-                    </div>
-                </div>
-            </div>
-            <button class="btn splash-btn splash-btn-fire" onclick="loadIframe('incendio.html')"><i class="fas fa-play"></i> Começar Jogo</button>
-        </div>`;
-    applyGradient(canvas.querySelector('.splash-title'), '#f97316', '#b91c1c');
+    showModernSplash({
+        badge: 'Proteção Florestal',
+        heroIcon: '🔥',
+        title: 'Incêndio Zero',
+        subtitle: 'Modo Sobrevivência: apague o fogo e impeça a poluição de atingir 100%!',
+        rules: [
+            { icon: '🧯', title: 'Combater Focos', desc: 'Clique sobre as chamas com o helicóptero para lançar água em área.' },
+            { icon: '🌫️', title: 'Controlar Poluição', desc: 'Cada árvore apagada reduz a fumaça. Mantenha o ar respirável!' },
+            { icon: '🌲', title: 'Sem Limite de Tempo', desc: 'O jogo continua enquanto você resistir. Ele só acaba se a poluição chegar a 100%!' }
+        ],
+        chipsLabel: 'Missão de Voo',
+        chips: [
+            { icon: '🚁', label: 'Helicóptero', colorClass: 'chip-cyan' },
+            { icon: '💧', label: 'Descarga em Área', colorClass: 'chip-blue' },
+            { icon: '🌫️', label: 'Evite 100%', colorClass: 'chip-red' }
+        ],
+        onStart: "loadIframe('incendio.html')"
+    });
 }
 
 function startSupermercadoGame() {
-    openStage(true);
-    const canvas = document.getElementById('gameCanvas');
-    canvas.innerHTML = `
-        <div class="game-instructions game-splash-supermercado">
-            <div class="splash-centered-header">
-                <div class="splash-hero-icon">🛒</div>
-                <h2 class="splash-title">Supermercado Consciente</h2>
-                <p class="splash-subtitle">Consuma de forma inteligente e sustentável!</p>
-            </div>
-            <div class="splash-content-split">
-                <div class="splash-text-side">
-                    <ul class="game-tutorial-list">
-                        <li><div><span>1</span> Um item aparece na tela com preço e descrição</div></li>
-                        <li><div><span>2</span> Decida em até 5 segundos: comprar ou descartar</div></li>
-                        <li><div><span>3</span> Classifique como Essencial, Desejo ou Desnecessário</div></li>
-                        <li><div><span>4</span> Não esvazie seu orçamento inicial de 500 moedas!</div></li>
-                    </ul>
-                </div>
-                <div class="splash-visual-side">
-                    <div class="splash-icon-row">
-                        <div class="splash-icon-chip" style="--chip-accent:#22c55e">✅<span>Essencial</span></div>
-                        <div class="splash-icon-chip" style="--chip-accent:#f59e0b">💛<span>Desejo</span></div>
-                        <div class="splash-icon-chip" style="--chip-accent:#ef4444">❌<span>Desneces.</span></div>
-                        <div class="splash-icon-chip" style="--chip-accent:#a855f7">🪙<span>500 moedas</span></div>
-                    </div>
-                </div>
-            </div>
-            <button class="btn splash-btn splash-btn-purple" onclick="loadIframe('supermercado.html')"><i class="fas fa-play"></i> Começar Jogo</button>
-        </div>`;
-    applyGradient(canvas.querySelector('.splash-title'), '#a855f7', '#7e22ce');
-}
-
-function startPegadaGame() {
-    openStage(true);
-    const canvas = document.getElementById('gameCanvas');
-    canvas.innerHTML = `
-        <div class="game-instructions game-splash-pegada">
-            <div class="splash-centered-header">
-                <div class="splash-hero-icon">👣</div>
-                <h2 class="splash-title">Pegada Ecológica</h2>
-                <p class="splash-subtitle">Suas escolhas diárias moldam o futuro do planeta!</p>
-            </div>
-            <div class="splash-content-split">
-                <div class="splash-text-side">
-                    <ul class="game-tutorial-list">
-                        <li><div><span>1</span> Você vive um dia simulado cheio de escolhas cotidianas</div></li>
-                        <li><div><span>2</span> Começa com 1000 Folhas de XP no banco</div></li>
-                        <li><div><span>3</span> Decisões prejudiciais aumentam sua pegada de CO₂</div></li>
-                        <li><div><span>4</span> Quanto maior a pegada ao final, mais XP é deduzido!</div></li>
-                    </ul>
-                </div>
-                <div class="splash-visual-side">
-                    <div class="splash-co2-preview">
-                        <div class="co2-bar-track">
-                            <div class="co2-bar-fill" id="co2PreviewFill"></div>
-                            <span class="co2-label">Pegada de CO₂</span>
-                        </div>
-                        <div class="co2-icons">
-                            <span title="Transporte">🚗</span>
-                            <span title="Alimentação">🍔</span>
-                            <span title="Energia">💡</span>
-                            <span title="Compras">🛍️</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <button class="btn splash-btn splash-btn-pink" onclick="loadIframe('pegada.html')"><i class="fas fa-play"></i> Começar Jogo</button>
-        </div>`;
-    applyGradient(canvas.querySelector('.splash-title'), '#ec4899', '#be185d');
-    setTimeout(() => { const f = document.getElementById('co2PreviewFill'); if(f) f.style.width='38%'; }, 200);
+    showModernSplash({
+        badge: 'Consumo Consciente',
+        heroIcon: '🛒',
+        title: 'Supermercado Consciente',
+        subtitle: 'Planeje suas compras com equilíbrio financeiro e impacto ambiental reduzido!',
+        rules: [
+            { icon: '🏷️', title: 'Avaliar Itens', desc: 'Observe a utilidade, pegada ecológica e o valor do produto.' },
+            { icon: '⚖️', title: 'Classificar', desc: 'Decida rápido: é item Essencial, Desejo ou Supérfluo?' },
+            { icon: '🪙', title: 'Poupança', desc: 'Gerencie seu saldo de 500 moedas sem zerar o orçamento.' }
+        ],
+        chipsLabel: 'Categorias de Compra',
+        chips: [
+            { icon: '✅', label: 'Essencial', colorClass: 'chip-green' },
+            { icon: '💛', label: 'Desejo', colorClass: 'chip-yellow' },
+            { icon: '❌', label: 'Desnecessário', colorClass: 'chip-red' },
+            { icon: '🪙', label: 'Orçamento', colorClass: 'chip-purple' }
+        ],
+        onStart: "loadIframe('supermercado.html')"
+    });
 }
 
 function updateLivesUI() {
@@ -506,6 +575,9 @@ function updateLivesUI() {
 
 // --- Jogo da Coleta ---
 function initCatchGame() {
+    if (window.configureGameHUD) window.configureGameHUD({ showLevel: true, showScore: true, showLives: true, showTime: true });
+    const statsEl = document.querySelector('.game-stats-container');
+    if (statsEl) statsEl.style.display = 'flex';
     score = 0;
     currentLevel = 1;
     lives = 3;
@@ -528,7 +600,14 @@ function initCatchGame() {
         const bin = document.createElement('div');
         bin.className = `game-bin bin-${type}`;
         bin.id = `bin-${type}`;
-        bin.innerHTML = `<i class="fas ${BINS[type].icon}"></i><span>${BINS[type].name}</span>`;
+        bin.innerHTML = `
+            <div class="bin-lid"></div>
+            <div class="bin-slot"></div>
+            <div class="bin-body-grooves"></div>
+            <div class="bin-icon-wrap"><i class="fas ${BINS[type].icon}"></i></div>
+            <div class="bin-label">${BINS[type].name}</div>
+            <div class="bin-recycle-badge"><i class="fas fa-recycle"></i></div>
+        `;
         binsContainer.appendChild(bin);
     });
     canvas.appendChild(binsContainer);
@@ -590,6 +669,7 @@ function startRound() {
     gameInterval = setInterval(() => {
         timeLeft--;
         document.getElementById('gameTime').textContent = timeLeft;
+        if (window.__updateHUD) window.__updateHUD({ type: 'UPDATE_HUD', time: timeLeft });
         if (timeLeft <= 0) {
             clearInterval(gameInterval);
             lives--; updateLivesUI();
@@ -628,14 +708,40 @@ function spawnWaste() {
     };
 }
 
+function spawnEcoSparks(bin) {
+    const canvas = document.getElementById("gameCanvas");
+    if (!canvas) return;
+    const bRect = bin.getBoundingClientRect();
+    const cRect = canvas.getBoundingClientRect();
+    const cx = bRect.left - cRect.left + bRect.width / 2;
+    const cy = bRect.top - cRect.top + 8;
+    for (let i = 0; i < 9; i++) {
+        const spark = document.createElement("div");
+        spark.style.cssText = "position:absolute;left:" + cx + "px;top:" + cy + "px;width:7px;height:7px;border-radius:50%;background:#22c55e;box-shadow:0 0 10px #4ade80,0 0 18px #22c55e;pointer-events:none;z-index:100;transition:all 0.5s cubic-bezier(0.16,1,0.3,1);";
+        canvas.appendChild(spark);
+        const angle = (Math.PI * 2 / 9) * i;
+        const dist = 28 + Math.random() * 32;
+        requestAnimationFrame(() => {
+            spark.style.transform = "translate(" + (Math.cos(angle)*dist) + "px, " + (Math.sin(angle)*dist - 24) + "px) scale(0)";
+            spark.style.opacity = "0";
+        });
+        setTimeout(() => spark.remove(), 550);
+    }
+}
 function collectWaste(waste, bin) {
     playPopSound('correct');
+    bin.classList.remove('bin-feed-success');
+    void bin.offsetWidth; // force reflow
+    bin.classList.add('bin-feed-success');
+    spawnEcoSparks(bin);
+    setTimeout(() => bin.classList.remove('bin-feed-success'), 400);
+
     const canvas = document.getElementById('gameCanvas');
     const bRect = bin.getBoundingClientRect();
     const cRect = canvas.getBoundingClientRect();
     waste.style.transition = 'all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
     waste.style.left = (bRect.left - cRect.left + bRect.width / 2) + 'px';
-    waste.style.top = (bRect.top - cRect.top) + 'px';
+    waste.style.top = (bRect.top - cRect.top + 20) + 'px';
     waste.style.transform = 'scale(0) rotate(720deg)';
     waste.style.opacity = '0';
     waste.style.pointerEvents = 'none';
@@ -658,20 +764,31 @@ function collectWaste(waste, bin) {
 function endGame() {
     isGameActive = false;
     clearInterval(gameInterval);
-    const canvas = document.getElementById('gameCanvas');
-    const xp = Math.floor(score / 2);
-    if (window.gamification) window.gamification.addXp(xp, "(Minigame)");
-    canvas.innerHTML = `
-        <div class="game-instructions">
-            <h2>Fim de Jogo!</h2>
-            <p>Pontuação: <strong>${score}</strong> | XP: <strong>${xp}</strong></p>
-            <button class="btn btn-primary" onclick="initCatchGame()">Jogar Novamente</button>
-        </div>
-    `;
+    const xp = Math.max(10, Math.floor(score / 2));
+    if (window.gamification) window.gamification.addXp(xp, "(Coleta Seletiva)");
+    showModernResult({
+        type: score >= 80 ? 'win' : 'lose',
+        badge: score >= 80 ? 'Coleta Eficiente' : 'Tempo Esgotado',
+        heroIcon: score >= 80 ? '♻️' : '🗑️',
+        title: score >= 80 ? 'Parabéns, Reciclador!' : 'Quase lá!',
+        subtitle: score >= 80 
+            ? 'Você separou os resíduos com rapidez e evitou a contaminação do solo.' 
+            : 'Fique atento às cores das lixeiras e tente agir mais rápido na próxima rodada.',
+        stats: [
+            { label: 'Pontuação', value: score, icon: '⭐' },
+            { label: 'XP Conquistado', value: `+${xp} XP`, highlight: true, icon: '🌿' },
+            { label: 'Nível Final', value: currentLevel, icon: '🏅' }
+        ],
+        onRestart: 'initCatchGame()',
+        restartLabel: 'Jogar Novamente'
+    });
 }
 
 // --- Jogo da Memória ---
 function initMemoryGame() {
+    if (window.configureGameHUD) window.configureGameHUD({ showLevel: true, showScore: true, showLives: false, showTime: true });
+    const statsEl = document.querySelector('.game-stats-container');
+    if (statsEl) statsEl.style.display = 'flex';
     isGameActive = true;
     memoryScore = (memoryLevel > 1) ? memoryScore : 0;
     matchedPairs = 0; flippedCards = [];
@@ -715,6 +832,7 @@ function initMemoryGame() {
     gameInterval = setInterval(() => {
         timeLeft--;
         document.getElementById('gameTime').textContent = timeLeft;
+        if (window.__updateHUD) window.__updateHUD({ type: 'UPDATE_HUD', time: timeLeft });
         if (timeLeft <= 0) endMemoryGame(false);
     }, 1000);
 }
@@ -754,14 +872,22 @@ function checkMatch() {
 function endMemoryGame(win) {
     isGameActive = false;
     clearInterval(gameInterval);
-    const xp = Math.floor((memoryScore + (win ? 100 : 0)) / 10);
-    if (window.gamification) window.gamification.addXp(xp, "(Memória)");
-    
-    document.getElementById('gameCanvas').innerHTML = `
-        <div class="game-instructions">
-            <h2>${win ? 'Mestre da Memória!' : 'Tempo Esgotado!'}</h2>
-            <p>Score: <strong>${memoryScore}</strong> | XP: <strong>${xp}</strong></p>
-            <button class="btn btn-primary" onclick="memoryLevel=1; initMemoryGame()">Tentar de Novo</button>
-        </div>
-    `;
+    const xp = Math.max(15, Math.floor((memoryScore + (win ? 150 : 0)) / 8));
+    if (window.gamification) window.gamification.addXp(xp, "(Memória da Natureza)");
+    showModernResult({
+        type: win ? 'win' : 'lose',
+        badge: win ? 'Mestre da Memória' : 'Tempo Esgotado',
+        heroIcon: win ? '🧠' : '⏳',
+        title: win ? 'Memória de Elefante!' : 'O Tempo Acabou!',
+        subtitle: win 
+            ? 'Você encontrou todos os pares ecológicos e dominou os conceitos sustentáveis.' 
+            : 'Memorize a localização de cada carta para formar os pares com mais agilidade.',
+        stats: [
+            { label: 'Pontuação', value: memoryScore, icon: '⭐' },
+            { label: 'XP Conquistado', value: `+${xp} XP`, highlight: true, icon: '🌿' },
+            { label: 'Nível', value: `${memoryLevel}/4`, icon: '🧩' }
+        ],
+        onRestart: 'memoryLevel=1; initMemoryGame()',
+        restartLabel: 'Jogar Novamente'
+    });
 }

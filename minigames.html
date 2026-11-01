@@ -1,6 +1,7 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-br">
 <head>
+    <meta name="google" content="notranslate">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Minigames: Aprende Mais</title>
@@ -8,45 +9,52 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="modern_splash.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
     <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 <body class="theme-minigames">
     <div class="menu-overlay"></div>
 
     <!-- Header / Navbar -->
-    <nav class="navbar">
-        <div class="container">
-            <div class="logo">
-                <img src="logo.png" alt="Logo" class="nav-logo">
-                <span>APRENDE MAIS</span>
-            </div>
-
+        <nav class="navbar" id="mainNavbar">
+        <div class="reading-progress-container"><div class="reading-progress-bar" id="readingProgressBar"></div></div>
+        <div class="nav-inner">
+            <a href="index.html" class="nav-logo-wrap">
+                <img src="logo.png" alt="Logo" class="nav-logo-img">
+                <span class="nav-logo-text">APRENDE MAIS</span>
+            </a>
             <ul class="nav-links" id="navLinks">
                 <li><a href="index.html">Home</a></li>
                 <li><a href="reciclagem.html">Reciclagem</a></li>
                 <li><a href="artesanato.html">Oficina</a></li>
-                <li><a href="quizes.html">Quizes</a></li>
+                <li><a href="quizes.html">Quizzes</a></li>
                 <li><a href="minigames.html" class="active">Minigames</a></li>
                 <li><a href="sobre.html">Sobre</a></li>
             </ul>
-
-            <div class="eco-hud" id="ecoHud" title="Carregando perfil...">
-                <span class="eco-level-icon"><i class="fab fa-google"></i></span>
-                <div class="eco-bar-container">
-                    <div class="eco-bar-fill" id="ecoBarFill" style="width: 0%"></div>
+            <div class="nav-actions">
+                <div class="eco-hud" id="ecoHud" title="Ver perfil">
+                    <span class="eco-level-icon"></span>
+                    <div class="eco-bar-container">
+                        <div class="eco-bar-fill" id="ecoBarFill" style="width:0%"></div>
+                    </div>
+                    <span class="eco-xp-text" id="ecoXpText">...</span>
                 </div>
-                <span class="eco-xp-text" id="ecoXpText">...</span>
+                <div id="authContainer" class="auth-container">
+                    <div id="googleLoginBtn"></div>
+                    <img id="userProfileImg" class="user-profile-img" style="display:none;width:36px;height:36px;border-radius:50%;border:2px solid var(--primary);cursor:pointer;" alt="User">
+                </div>
+                <button class="nav-icon-btn" id="darkModeToggle" aria-label="Toggle Dark Mode">
+                    <i class="fas fa-moon"></i>
+                </button>
+                <button class="nav-icon-btn" id="audioToggle" aria-label="Toggle Sound">
+                    <i class="fas fa-volume-mute"></i>
+                </button>
             </div>
-
-            <div id="authContainer" class="auth-container" style="display: flex; align-items: center; gap: 10px; margin-left: 10px;">
-                <div id="googleLoginBtn"></div>
-                <img id="userProfileImg" class="user-profile-img" style="display: none; width: 36px; height: 36px; border-radius: 50%; border: 2px solid var(--primary); cursor: pointer;" alt="User">
-            </div>
-
-            <button class="dark-mode-toggle" id="darkModeToggle">
-                <i class="fas fa-moon"></i>
+            <button class="nav-hamburger" id="mobileMenuToggle" aria-label="Menu">
+                <span></span><span></span><span></span>
             </button>
         </div>
     </nav>
@@ -71,7 +79,7 @@
         </a>
         <a href="quizes.html" class="bottom-nav-item">
             <i class="fas fa-gamepad"></i>
-            <span>Quizes</span>
+            <span>Quizzes</span>
         </a>
         <a href="sobre.html" class="bottom-nav-item">
             <i class="fas fa-info-circle"></i>
@@ -79,168 +87,254 @@
         </a>
     </nav>
 
-    <header class="hero minigames-hero">
-        <div class="container" data-aos="fade-down">
-            <h1>Eco <span>Minigames</span></h1>
-            <p>Aprenda sustentabilidade na prática com nossos jogos interativos!</p>
+            <header class="hero minigames-hero">
+        <div class="hero-bg-shapes">
+            <i class="fas fa-gamepad hero-floating-icon icon-1"></i>
+            <i class="fas fa-rocket hero-floating-icon icon-2"></i>
+            <i class="fas fa-trophy hero-floating-icon icon-3"></i>
+            <i class="fas fa-puzzle-piece hero-floating-icon icon-4"></i>
+        </div>
+        <div class="container hero-split-box" data-aos="zoom-in">
+            <div class="hero-left-col">
+                <span class="hero-game-badge"><i class="fas fa-gamepad"></i> Arcade Ecológico</span>
+                <h1>Eco <span class="gradient-text">Minigames</span></h1>
+                <p>Aprenda sustentabilidade na prática superando desafios e ganhando XP!</p>
+            </div>
+            <div class="hero-right-col">
+                <div class="hero-game-tags">
+                    <span class="tag-item"><i class="fas fa-gamepad"></i> 9 Jogos Interativos</span>
+                    <span class="tag-item"><i class="fas fa-star"></i> Ganhe XP & Níveis</span>
+                    <span class="tag-item"><i class="fas fa-leaf"></i> 100% Educativo</span>
+                </div>
+            </div>
         </div>
     </header>
 
     <main class="container">
-        <section class="minigames-grid">
+                <section class="minigames-grid">
+
             <!-- Jogo 1: Coleta Seletiva Rápida -->
             <div class="game-card theme-collect" data-aos="fade-up">
-                <span class="game-badge badge-residuos">Resíduos</span>
                 <div class="game-preview">
-                    <i class="fas fa-trash-arrow-up"></i>
+                    <div class="game-preview-glow"></div>
+                    <div class="game-preview-icon-wrap">
+                        <i class="fas fa-trash-arrow-up"></i>
+                    </div>
+                    <div class="game-preview-particles"><span></span><span></span><span></span></div>
+                </div>
+                <div class="game-card-meta">
+                    <span class="game-badge badge-residuos"><i class="fas fa-recycle"></i> Resíduos</span>
+                    <span class="game-xp-badge"><i class="fas fa-star"></i> +120 XP</span>
                 </div>
                 <div class="game-info">
                     <h3>Coleta Seletiva</h3>
-                    <ol class="game-tutorial-list">
-                        <li>Itens de lixo aparecem na tela</li>
-                        <li>Arraste cada item até a lixeira da cor certa</li>
-                        <li>Colete tudo antes do tempo acabar!</li>
-                    </ol>
-                    <button class="btn btn-primary btn-large-center" onclick="startCatchGame()">Jogar agora</button>
+                    <p class="game-desc">Arraste resíduos para as lixeiras certas antes do tempo acabar!</p>
+                    <div class="game-tags-row">
+                        <span class="gtag gtag-green">♻️ Reciclagem</span>
+                        <span class="gtag gtag-blue">⏱️ Tempo</span>
+                        <span class="gtag gtag-red">❤️ Vidas</span>
+                    </div>
+                    <button class="game-play-btn" onclick="startCatchGame()"><i class="fas fa-play"></i> Jogar Agora</button>
                 </div>
             </div>
 
             <!-- Jogo 2: Memória Ecológica -->
             <div class="game-card theme-memoria" data-aos="fade-up" data-aos-delay="100">
-                <span class="game-badge badge-biodiv">Biodiversidade</span>
                 <div class="game-preview">
-                    <i class="fas fa-leaf"></i>
+                    <div class="game-preview-glow"></div>
+                    <div class="game-preview-icon-wrap">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <div class="game-preview-particles"><span></span><span></span><span></span></div>
+                </div>
+                <div class="game-card-meta">
+                    <span class="game-badge badge-biodiv"><i class="fas fa-leaf"></i> Biodiversidade</span>
+                    <span class="game-xp-badge"><i class="fas fa-star"></i> +100 XP</span>
                 </div>
                 <div class="game-info">
                     <h3>Memória da Natureza</h3>
-                    <ol class="game-tutorial-list">
-                        <li>Clique em qualquer carta para virá-la</li>
-                        <li>Clique em uma segunda carta para tentar o par</li>
-                        <li>Encontre todos os pares antes do tempo acabar</li>
-                        <li>Acerte mais rápido para ganhar mais pontos!</li>
-                    </ol>
-                    <button class="btn btn-primary" onclick="startMemoryGame()">Jogar agora</button>
+                    <p class="game-desc">Encontre todos os pares de materiais ecológicos no menor tempo!</p>
+                    <div class="game-tags-row">
+                        <span class="gtag gtag-amber">🧩 Pares</span>
+                        <span class="gtag gtag-blue">⏱️ Tempo</span>
+                        <span class="gtag gtag-green">🌿 Ecologia</span>
+                    </div>
+                    <button class="game-play-btn" onclick="startMemoryGame()"><i class="fas fa-play"></i> Jogar Agora</button>
                 </div>
             </div>
 
             <!-- Jogo 3: Pescador Ecológico -->
             <div class="game-card theme-pescador" data-aos="fade-up" data-aos-delay="200">
-                <span class="game-badge badge-agua">Água</span>
                 <div class="game-preview">
-                    <i class="fas fa-fish"></i>
+                    <div class="game-preview-glow"></div>
+                    <div class="game-preview-icon-wrap">
+                        <i class="fas fa-fish"></i>
+                    </div>
+                    <div class="game-preview-particles"><span></span><span></span><span></span></div>
+                </div>
+                <div class="game-card-meta">
+                    <span class="game-badge badge-agua"><i class="fas fa-water"></i> Água</span>
+                    <span class="game-xp-badge"><i class="fas fa-star"></i> +150 XP</span>
                 </div>
                 <div class="game-info">
                     <h3>Pescador Ecológico</h3>
-                    <ol class="game-tutorial-list">
-                        <li>Mova o mouse para posicionar o barco</li>
-                        <li>Clique para lançar o anzol</li>
-                        <li>Pesque o lixo do fundo do mar</li>
-                        <li>Cuidado para não fisgar os peixes!</li>
-                    </ol>
-                    <button class="btn btn-primary" onclick="startPescadorGame()">Jogar agora</button>
+                    <p class="game-desc">Lance o anzol e limpe o fundo do mar sem fisgar os peixes!</p>
+                    <div class="game-tags-row">
+                        <span class="gtag gtag-blue">🎣 Pesca</span>
+                        <span class="gtag gtag-cyan">🌊 Mar</span>
+                        <span class="gtag gtag-red">🐠 Cuidado</span>
+                    </div>
+                    <button class="game-play-btn" onclick="startPescadorGame()"><i class="fas fa-play"></i> Jogar Agora</button>
                 </div>
             </div>
 
             <!-- Jogo 4: Gari Aquático -->
             <div class="game-card theme-gari" data-aos="fade-up" data-aos-delay="300">
-                <span class="game-badge badge-agua">Água</span>
                 <div class="game-preview">
-                    <i class="fas fa-swimmer"></i>
+                    <div class="game-preview-glow"></div>
+                    <div class="game-preview-icon-wrap">
+                        <i class="fas fa-person-swimming"></i>
+                    </div>
+                    <div class="game-preview-particles"><span></span><span></span><span></span></div>
+                </div>
+                <div class="game-card-meta">
+                    <span class="game-badge badge-agua"><i class="fas fa-water"></i> Água</span>
+                    <span class="game-xp-badge"><i class="fas fa-star"></i> +130 XP</span>
                 </div>
                 <div class="game-info">
                     <h3>Gari Aquático</h3>
-                    <ol class="game-tutorial-list">
-                        <li>Nade usando as setas ou WASD</li>
-                        <li>Colete todo o lixo do fundo do mar</li>
-                        <li>Desvie dos peixes pelo caminho</li>
-                        <li>Fuja do tubarão faminto!</li>
-                    </ol>
-                    <button class="btn btn-primary" onclick="startGariGame()">Jogar agora</button>
+                    <p class="game-desc">Mergulhe e recolha o lixo dos recifes. Fuja do tubarão!</p>
+                    <div class="game-tags-row">
+                        <span class="gtag gtag-purple">🤿 Mergulho</span>
+                        <span class="gtag gtag-red">🦈 Perigo</span>
+                        <span class="gtag gtag-green">🗑️ Coletar</span>
+                    </div>
+                    <button class="game-play-btn" onclick="startGariGame()"><i class="fas fa-play"></i> Jogar Agora</button>
                 </div>
             </div>
 
             <!-- Jogo 5: Caça ao Vazamento -->
             <div class="game-card theme-vazamento" data-aos="fade-up" data-aos-delay="400">
-                <span class="game-badge badge-agua">Água</span>
                 <div class="game-preview">
-                    <i class="fas fa-wrench"></i>
+                    <div class="game-preview-glow"></div>
+                    <div class="game-preview-icon-wrap">
+                        <i class="fas fa-wrench"></i>
+                    </div>
+                    <div class="game-preview-particles"><span></span><span></span><span></span></div>
+                </div>
+                <div class="game-card-meta">
+                    <span class="game-badge badge-agua"><i class="fas fa-water"></i> Água</span>
+                    <span class="game-xp-badge"><i class="fas fa-star"></i> +110 XP</span>
                 </div>
                 <div class="game-info">
                     <h3>Caça ao Vazamento</h3>
-                    <ol class="game-tutorial-list">
-                        <li>Encontre canos vazando na cena</li>
-                        <li>Colete a água com um balde</li>
-                        <li>Conserte os vazamentos rápido</li>
-                    </ol>
-                    <button class="btn btn-primary" onclick="startVazamentoGame()">Jogar agora</button>
+                    <p class="game-desc">Repare canos com vazamento e salve cada gota de água potável!</p>
+                    <div class="game-tags-row">
+                        <span class="gtag gtag-blue">💧 Água</span>
+                        <span class="gtag gtag-cyan">🪣 Balde</span>
+                        <span class="gtag gtag-amber">🔧 Consertar</span>
+                    </div>
+                    <button class="game-play-btn" onclick="startVazamentoGame()"><i class="fas fa-play"></i> Jogar Agora</button>
                 </div>
             </div>
 
             <!-- Jogo 6: Irrigação Inteligente -->
             <div class="game-card theme-irrigacao" data-aos="fade-up" data-aos-delay="500">
-                <span class="game-badge badge-agua">Água</span>
                 <div class="game-preview">
-                    <i class="fas fa-seedling"></i>
+                    <div class="game-preview-glow"></div>
+                    <div class="game-preview-icon-wrap">
+                        <i class="fas fa-seedling"></i>
+                    </div>
+                    <div class="game-preview-particles"><span></span><span></span><span></span></div>
+                </div>
+                <div class="game-card-meta">
+                    <span class="game-badge badge-agua"><i class="fas fa-water"></i> Água</span>
+                    <span class="game-xp-badge"><i class="fas fa-star"></i> +90 XP</span>
                 </div>
                 <div class="game-info">
                     <h3>Irrigação Inteligente</h3>
-                    <ol class="game-tutorial-list">
-                        <li>Monitore o nível de umidade do solo</li>
-                        <li>Irrigue quando o solo secar</li>
-                        <li>Não deixe a planta encharcar</li>
-                    </ol>
-                    <button class="btn btn-primary" onclick="startIrrigacaoGame()">Jogar agora</button>
+                    <p class="game-desc">Mantenha a umidade ideal do solo sem secar nem encharcar!</p>
+                    <div class="game-tags-row">
+                        <span class="gtag gtag-green">🌱 Solo</span>
+                        <span class="gtag gtag-blue">💧 Umidade</span>
+                        <span class="gtag gtag-amber">☀️ Clima</span>
+                    </div>
+                    <button class="game-play-btn" onclick="startIrrigacaoGame()"><i class="fas fa-play"></i> Jogar Agora</button>
                 </div>
             </div>
 
             <!-- Jogo 7: Incêndio Zero -->
             <div class="game-card theme-incendio" data-aos="fade-up" data-aos-delay="600">
-                <span class="game-badge badge-florestas">Florestas</span>
                 <div class="game-preview">
-                    <i class="fas fa-fire"></i>
+                    <div class="game-preview-glow"></div>
+                    <div class="game-preview-icon-wrap">
+                        <i class="fas fa-fire-flame-curved"></i>
+                    </div>
+                    <div class="game-preview-particles"><span></span><span></span><span></span></div>
+                </div>
+                <div class="game-card-meta">
+                    <span class="game-badge badge-florestas"><i class="fas fa-tree"></i> Florestas</span>
+                    <span class="game-xp-badge"><i class="fas fa-star"></i> +160 XP</span>
                 </div>
                 <div class="game-info">
                     <h3>Incêndio Zero</h3>
-                    <ol class="game-tutorial-list">
-                        <li>Apague focos de incêndio rapidamente</li>
-                        <li>Proteja as árvores vizinhas</li>
-                        <li>Monitore a fumaça no céu</li>
-                    </ol>
-                    <button class="btn btn-primary" onclick="startIncendioGame()">Jogar agora</button>
+                    <p class="game-desc">Apague focos de incêndio e salve as florestas do desastre!</p>
+                    <div class="game-tags-row">
+                        <span class="gtag gtag-red">🔥 Fogo</span>
+                        <span class="gtag gtag-green">🌳 Árvores</span>
+                        <span class="gtag gtag-amber">💨 Fumaça</span>
+                    </div>
+                    <button class="game-play-btn" onclick="startIncendioGame()"><i class="fas fa-play"></i> Jogar Agora</button>
                 </div>
             </div>
 
             <!-- Jogo 8: Supermercado Consciente -->
             <div class="game-card theme-supermercado" data-aos="fade-up" data-aos-delay="700">
-                <span class="game-badge badge-consumo">Consumo</span>
                 <div class="game-preview">
-                    <i class="fas fa-shopping-cart"></i>
+                    <div class="game-preview-glow"></div>
+                    <div class="game-preview-icon-wrap">
+                        <i class="fas fa-cart-shopping"></i>
+                    </div>
+                    <div class="game-preview-particles"><span></span><span></span><span></span></div>
+                </div>
+                <div class="game-card-meta">
+                    <span class="game-badge badge-consumo"><i class="fas fa-bag-shopping"></i> Consumo</span>
+                    <span class="game-xp-badge"><i class="fas fa-star"></i> +105 XP</span>
                 </div>
                 <div class="game-info">
                     <h3>Supermercado Consciente</h3>
-                    <ol class="game-tutorial-list">
-                        <li>Avalie produtos do supermercado</li>
-                        <li>Decida se é Essencial ou Desejo</li>
-                        <li>Gerencie seu orçamento!</li>
-                    </ol>
-                    <button class="btn btn-primary" onclick="startSupermercadoGame()">Jogar agora</button>
+                    <p class="game-desc">Classifique produtos e gerencie seu orçamento sustentável!</p>
+                    <div class="game-tags-row">
+                        <span class="gtag gtag-green">✅ Essencial</span>
+                        <span class="gtag gtag-amber">💛 Desejo</span>
+                        <span class="gtag gtag-purple">🪙 Orçamento</span>
+                    </div>
+                    <button class="game-play-btn" onclick="startSupermercadoGame()"><i class="fas fa-play"></i> Jogar Agora</button>
                 </div>
             </div>
 
             <!-- Jogo 9: Pegada Ecológica -->
             <div class="game-card theme-pegada" data-aos="fade-up" data-aos-delay="800">
-                <span class="game-badge badge-clima">Clima</span>
                 <div class="game-preview">
-                    <i class="fas fa-shoe-prints"></i>
+                    <div class="game-preview-glow"></div>
+                    <div class="game-preview-icon-wrap">
+                        <i class="fas fa-shoe-prints"></i>
+                    </div>
+                    <div class="game-preview-particles"><span></span><span></span><span></span></div>
+                </div>
+                <div class="game-card-meta">
+                    <span class="game-badge badge-clima"><i class="fas fa-cloud-sun"></i> Clima</span>
+                    <span class="game-xp-badge"><i class="fas fa-star"></i> +140 XP</span>
                 </div>
                 <div class="game-info">
                     <h3>Pegada Ecológica</h3>
-                    <ol class="game-tutorial-list">
-                        <li>Viva um dia cheio de escolhas</li>
-                        <li>Gerencie suas emissões de CO₂</li>
-                        <li>Ao fim do dia, veja seu impacto</li>
-                    </ol>
-                    <button class="btn btn-primary" onclick="startPegadaGame()">Jogar agora</button>
+                    <p class="game-desc">Viva um dia simulado e descubra o impacto das suas escolhas!</p>
+                    <div class="game-tags-row">
+                        <span class="gtag gtag-pink">👣 CO₂</span>
+                        <span class="gtag gtag-green">🌍 Planeta</span>
+                        <span class="gtag gtag-amber">⚡ Energia</span>
+                    </div>
+                    <button class="game-play-btn" onclick="startPegadaGame()"><i class="fas fa-play"></i> Jogar Agora</button>
                 </div>
             </div>
         </section>
@@ -249,25 +343,41 @@
         <section id="gameStage" class="game-stage" style="display: none;">
             <div class="game-window glass">
                 <div class="game-header">
+                    <div class="game-hud-brand">
+                        <span class="hud-brand-dot"></span>
+                        <span class="hud-brand-title">Arcade Ecológico</span>
+                    </div>
                     <div class="game-stats-container">
-                        <div class="game-stat-badge level">
-                            <i class="fas fa-star icon-star-spin"></i>
-                            <span>Nível <strong id="gameLevel">1</strong></span>
+                        <div class="game-stat-badge level" id="levelBadge" title="Nível atual">
+                            <div class="badge-icon-wrap"><i class="fas fa-star icon-star-spin"></i></div>
+                            <div class="badge-data">
+                                <span class="badge-sub">Nível</span>
+                                <span class="badge-val" id="gameLevel">1</span>
+                            </div>
                         </div>
-                        <div class="game-stat-badge score">
-                            <i class="fas fa-award"></i>
-                            <span>Score: <strong id="gameScore">0</strong></span>
+                        <div class="game-stat-badge score" id="scoreBadge" title="Pontuação">
+                            <div class="badge-icon-wrap"><i class="fas fa-award"></i></div>
+                            <div class="badge-data">
+                                <span class="badge-sub">Pontos</span>
+                                <span class="badge-val" id="gameScore">0</span>
+                            </div>
                         </div>
-                        <div class="game-stat-badge lives" id="livesBadge">
-                            <i class="fas fa-heart"></i>
-                            <span>Vidas: <span id="gameLives" class="game-lives">🍃🍃🍃</span></span>
+                        <div class="game-stat-badge lives" id="livesBadge" title="Vidas">
+                            <div class="badge-icon-wrap"><i class="fas fa-heart"></i></div>
+                            <div class="badge-data">
+                                <span class="badge-sub">Vidas</span>
+                                <span class="badge-val game-lives" id="gameLives">❤️❤️❤️</span>
+                            </div>
                         </div>
-                        <div class="game-stat-badge time" id="timeBadge">
-                            <i class="fas fa-stopwatch"></i>
-                            <span>Tempo: <strong id="gameTime">30</strong>s</span>
+                        <div class="game-stat-badge time" id="timeBadge" title="Cronômetro">
+                            <div class="badge-icon-wrap"><i class="fas fa-stopwatch"></i></div>
+                            <div class="badge-data">
+                                <span class="badge-sub">Tempo</span>
+                                <span class="badge-val"><span id="gameTime">30</span><small>s</small></span>
+                            </div>
                         </div>
                     </div>
-                    <button class="game-close" onclick="closeGame()">&times;</button>
+                    <button class="game-close" onclick="closeGame()" title="Sair do jogo" aria-label="Fechar">&times;</button>
                 </div>
                 <div id="gameCanvas" class="game-canvas">
                     <!-- Elementos do jogo serão injetados aqui -->
@@ -286,10 +396,30 @@
         </section>
     </main>
 
+        <footer class="main-footer">
+        <div class="container footer-grid">
+            <div class="footer-logo">
+                <img src="logo.png" alt="Logo">
+                <span>APRENDE MAIS</span>
+            </div>
+            <div class="footer-copy">
+                <p>&copy; 2025 Aprende Mais: Sustentabilidade. Desenvolvido para um futuro melhor.</p>
+                <div class="social-links">
+                    <a href="https://www.instagram.com/projeto_gaia26?stkn=MWhocW5jcmNhYWM0dA%3D%3D" target="_blank" rel="noopener noreferrer" class="instagram-btn">
+                        <i class="fab fa-instagram"></i>
+                        <span>@projeto_gaia26</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script src="gamification.js"></script>
     <script src="minigames.js"></script>
     <script src="games_extra.js"></script>
     <script src="script.js"></script>
+    <script src="theme_deltarune.js"></script>
 </body>
 </html>
+

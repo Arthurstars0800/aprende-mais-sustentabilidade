@@ -1,0 +1,512 @@
+/* ============================================================
+   TEMA: RESFRIAMENTO GLOBAL ❄️🧊
+   Conceito: Gelo puro, cristalino, glacial e congelante
+   Efeito Associado: Flocos de neve suaves
+   ============================================================ */
+
+/* ── MODO ESCURO — GELO ABISSAL / GLACIAL NOTURNO ──────────── */
+body.theme-ice.dark-mode {
+    --ice-bg-deep:      #030a16;
+    --ice-bg-surface:   rgba(6, 22, 46, 0.82);
+    --ice-bg-card:      rgba(8, 28, 58, 0.75);
+    --ice-border:       rgba(56, 189, 248, 0.4);
+    --ice-border-hover: rgba(125, 211, 252, 0.85);
+    --ice-glow:         0 0 0 1px rgba(56,189,248,0.5), 0 0 18px rgba(56,189,248,0.5), 0 0 35px rgba(56,189,248,0.2);
+    --ice-glow-hover:   0 0 0 1.5px rgba(125,211,252,0.9), 0 0 25px rgba(56,189,248,0.8), 0 0 50px rgba(0,240,255,0.4);
+    --ice-cyan:         #38bdf8;
+    --ice-cyan-bright:  #00f0ff;
+    --ice-white:        #f0f9ff;
+    --ice-text:         #f0f9ff;
+    --ice-text-dim:     #93c5fd;
+
+    --primary:          #0284c7;
+    --primary-light:    #38bdf8;
+    --bg-light:         #030a16;
+    --text-dark:        #f0f9ff;
+    --text-muted:       #93c5fd;
+
+    background-color: var(--ice-bg-deep) !important;
+    background-image: 
+        /* Textura de rachaduras de gelo */
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cg stroke='rgba(56,189,248,0.10)' stroke-width='1' fill='none'%3E%3Cline x1='150' y1='0' x2='80' y2='120'/%3E%3Cline x1='150' y1='0' x2='220' y2='110'/%3E%3Cline x1='80' y1='120' x2='20' y2='180'/%3E%3Cline x1='80' y1='120' x2='130' y2='220'/%3E%3Cline x1='220' y1='110' x2='280' y2='200'/%3E%3Cline x1='220' y1='110' x2='170' y2='210'/%3E%3Cline x1='0' y1='60' x2='80' y2='120'/%3E%3Cline x1='300' y1='50' x2='220' y2='110'/%3E%3Cline x1='130' y1='220' x2='100' y2='300'/%3E%3Cline x1='170' y1='210' x2='200' y2='300'/%3E%3C/g%3E%3C/svg%3E"),
+        /* Brilho da aurora boreal / névoa glacial superior */
+        radial-gradient(ellipse 90% 40% at 50% 0%, rgba(56, 189, 248, 0.25) 0%, transparent 65%),
+        /* Luz azul congelante lateral */
+        radial-gradient(circle at 10% 40%, rgba(14, 165, 233, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 90% 70%, rgba(2, 132, 199, 0.18) 0%, transparent 50%),
+        /* Profundidade abissal na base */
+        radial-gradient(ellipse 70% 30% at 50% 100%, rgba(8, 145, 178, 0.2) 0%, transparent 70%) !important;
+    color: var(--ice-text) !important;
+}
+
+/* ── MODO CLARO — CRISTAL DE GELO / NEVE BRANCA PURA ──────── */
+body.theme-ice:not(.dark-mode) {
+    --ice-bg-deep:      #f0f8ff;
+    --ice-bg-surface:   rgba(255, 255, 255, 0.88);
+    --ice-bg-card:      rgba(240, 249, 255, 0.82);
+    --ice-border:       rgba(14, 165, 233, 0.35);
+    --ice-border-hover: rgba(2, 132, 199, 0.75);
+    --ice-glow:         0 4px 20px rgba(14, 165, 233, 0.15);
+    --ice-glow-hover:   0 6px 25px rgba(2, 132, 199, 0.3);
+    --ice-cyan:         #0284c7;
+    --ice-cyan-bright:  #0ea5e9;
+    --ice-white:        #ffffff;
+    --ice-text:         #0c4a6e;
+    --ice-text-dim:     #0369a1;
+
+    --primary:          #0284c7;
+    --primary-light:    #38bdf8;
+    --bg-light:         #f0f8ff;
+    --text-dark:        #0c4a6e;
+    --text-muted:       #0369a1;
+
+    background-color: var(--ice-bg-deep) !important;
+    background-image: 
+        radial-gradient(circle at 50% 0%, rgba(186, 230, 253, 0.45) 0%, transparent 65%),
+        radial-gradient(circle at 15% 90%, rgba(224, 242, 254, 0.6) 0%, transparent 50%),
+        radial-gradient(circle at 85% 30%, rgba(186, 230, 253, 0.35) 0%, transparent 50%) !important;
+    color: var(--ice-text) !important;
+}
+
+/* ── NAVBAR CRISTALINA COM EFEITO FROSTED GLASS ───────────── */
+body.theme-ice .navbar,
+body.theme-ice .main-nav {
+    background: var(--ice-bg-surface) !important;
+    backdrop-filter: blur(20px) !important;
+    border-bottom: 2px solid rgba(56, 189, 248, 0.7) !important;
+    box-shadow: 0 4px 30px rgba(2, 132, 199, 0.4), 0 0 60px rgba(56, 189, 248, 0.15) inset !important;
+}
+
+body.theme-ice .nav-logo-text,
+body.theme-ice .nav-logo span {
+    color: var(--ice-cyan) !important;
+    text-shadow: 0 0 12px rgba(56, 189, 248, 0.5) !important;
+    font-weight: 800 !important;
+    letter-spacing: 1px !important;
+}
+
+body.theme-ice .nav-logo-img,
+body.theme-ice .nav-logo img {
+    filter: drop-shadow(0 0 10px rgba(56, 189, 248, 0.6)) !important;
+}
+
+body.theme-ice .nav-links a,
+body.theme-ice .nav-link {
+    color: var(--ice-text) !important;
+    transition: all 0.2s ease !important;
+    border-radius: 8px !important;
+}
+
+body.theme-ice .nav-links a:hover,
+body.theme-ice .nav-links a.active,
+body.theme-ice .nav-link:hover,
+body.theme-ice .nav-link.active {
+    color: var(--ice-cyan-bright) !important;
+    background: rgba(56, 189, 248, 0.12) !important;
+    box-shadow: 0 0 14px rgba(56, 189, 248, 0.3) !important;
+}
+
+/* HUD Glacial */
+body.theme-ice .eco-hud {
+    background: var(--ice-bg-surface) !important;
+    border: 1.5px solid var(--ice-border) !important;
+    box-shadow: 0 0 15px rgba(56, 189, 248, 0.25) !important;
+    border-radius: 20px !important;
+}
+
+body.theme-ice .eco-bar-container {
+    background: rgba(3, 10, 22, 0.8) !important;
+    border: 1px solid var(--ice-border) !important;
+}
+
+body.theme-ice .eco-bar-fill {
+    background: linear-gradient(90deg, #0284c7, #00f0ff, #ffffff) !important;
+    box-shadow: 0 0 10px #00f0ff !important;
+}
+
+body.theme-ice .eco-xp-text {
+    color: var(--ice-cyan) !important;
+}
+
+/* ── CARDS EM VIDRO CONGELADO (FROSTED GLASS) ─────────────── */
+body.theme-ice .intro-card,
+body.theme-ice .cta-card,
+body.theme-ice .card,
+body.theme-ice .game-card,
+body.theme-ice .quiz-card,
+body.theme-ice .content-card,
+body.theme-ice .info-card,
+body.theme-ice .tutorial-card,
+body.theme-ice .craft-card,
+body.theme-ice .material-card {
+    background: var(--ice-bg-card) !important;
+    backdrop-filter: blur(14px) !important;
+    border: 1.5px solid rgba(56, 189, 248, 0.55) !important;
+    border-radius: 16px !important;
+    box-shadow:
+        0 0 0 1px rgba(56, 189, 248, 0.2),
+        0 8px 32px rgba(2, 132, 199, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
+    color: var(--ice-text) !important;
+    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease !important;
+}
+
+body.theme-ice .game-card:hover,
+body.theme-ice .quiz-card:hover,
+body.theme-ice .card:hover,
+body.theme-ice .craft-card:hover {
+    transform: translateY(-5px) !important;
+    border-color: rgba(125, 211, 252, 0.9) !important;
+    box-shadow:
+        0 0 0 1.5px rgba(125, 211, 252, 0.8),
+        0 12px 40px rgba(56, 189, 248, 0.55),
+        0 0 60px rgba(0, 240, 255, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.15) !important;
+}
+
+body.theme-ice h1,
+body.theme-ice h2,
+body.theme-ice h3,
+body.theme-ice h4 {
+    color: var(--ice-text) !important;
+}
+
+body.theme-ice .gradient-text,
+body.theme-ice span.highlight {
+    background: linear-gradient(135deg, #00f0ff, #38bdf8, #ffffff) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+}
+
+body.theme-ice p,
+body.theme-ice li,
+body.theme-ice span {
+    color: var(--ice-text-dim) !important;
+}
+
+/* ── BOTÕES GLACIAIS CRISTALINOS ─────────────────────────── */
+body.theme-ice .btn,
+body.theme-ice .hero-buttons a,
+body.theme-ice button:not(.game-close):not(.nav-icon-btn):not(.nav-hamburger) {
+    background: linear-gradient(135deg, #0284c7, #0ea5e9) !important;
+    color: #ffffff !important;
+    border: 1.5px solid rgba(255, 255, 255, 0.4) !important;
+    border-radius: 12px !important;
+    box-shadow: 0 4px 18px rgba(14, 165, 233, 0.35) !important;
+    font-weight: 700 !important;
+    transition: all 0.2s ease !important;
+}
+
+body.theme-ice .btn:hover,
+body.theme-ice .hero-buttons a:hover {
+    background: linear-gradient(135deg, #0ea5e9, #38bdf8) !important;
+    box-shadow: 0 6px 25px rgba(14, 165, 233, 0.6), 0 0 15px rgba(255, 255, 255, 0.6) !important;
+    transform: translateY(-2px) !important;
+}
+
+body.theme-ice .btn-secondary,
+body.theme-ice .btn-outline {
+    background: rgba(6, 22, 46, 0.6) !important;
+    border-color: var(--ice-cyan) !important;
+    color: var(--ice-cyan) !important;
+}
+
+body.theme-ice .btn-secondary:hover,
+body.theme-ice .btn-outline:hover {
+    background: rgba(56, 189, 248, 0.2) !important;
+    color: #ffffff !important;
+}
+
+/* ── BADGES & TAGS DE GELO ────────────────────────────────── */
+body.theme-ice .badge,
+body.theme-ice .tag-item,
+body.theme-ice .hero-game-badge {
+    background: rgba(56, 189, 248, 0.15) !important;
+    border: 1px solid var(--ice-cyan) !important;
+    color: var(--ice-cyan) !important;
+    border-radius: 20px !important;
+    box-shadow: 0 0 10px rgba(56, 189, 248, 0.25) !important;
+}
+
+/* ── BANNER HERO ─────────────────────────────────────────── */
+body.theme-ice .hero,
+body.theme-ice .page-header,
+body.theme-ice .hero-mini {
+    position: relative !important;
+    background: transparent !important;
+    border: none !important;
+}
+
+body.theme-ice .hero-logo-container {
+    background: rgba(255, 255, 255, 0.08) !important;
+    backdrop-filter: blur(12px) !important;
+    border: 2px solid var(--ice-border) !important;
+    box-shadow: 0 0 30px rgba(56, 189, 248, 0.3) !important;
+}
+
+body.theme-ice .hero-logo {
+    filter: drop-shadow(0 0 15px rgba(56, 189, 248, 0.6)) !important;
+}
+
+/* ── RODAPÉ CONGELADO ────────────────────────────────────── */
+body.theme-ice footer,
+body.theme-ice .footer-bottom {
+    background: var(--ice-bg-surface) !important;
+    border-top: 2px solid var(--ice-border) !important;
+    box-shadow: 0 -10px 30px rgba(2, 132, 199, 0.15) !important;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   ADAPTAÇÃO SUTIL DAS TELAS ESPECÍFICAS
+   ══════════════════════════════════════════════════════════════ */
+
+/* ── 1. MODAL DE PERFIL DO GUARDIÃO / ECO-SHOP ─────────────── */
+body.theme-ice .eco-modal {
+    background: var(--ice-bg-surface) !important;
+    backdrop-filter: blur(20px) !important;
+    border: 1.5px solid rgba(56, 189, 248, 0.3) !important;
+    box-shadow: 0 20px 60px rgba(2, 6, 23, 0.8), 0 0 25px rgba(56, 189, 248, 0.12) !important;
+}
+
+body.theme-ice .eco-modal-header {
+    background: linear-gradient(135deg, #0369a1, #0284c7, #38bdf8) !important;
+    border-bottom: 1.5px solid rgba(56, 189, 248, 0.3) !important;
+}
+
+body.theme-ice .eco-modal-header-bg {
+    opacity: 0.08 !important;
+    filter: hue-rotate(80deg) !important;
+}
+
+body.theme-ice .eco-close-modal {
+    background: rgba(255, 255, 255, 0.22) !important;
+    border: 1px solid rgba(255, 255, 255, 0.4) !important;
+    color: #ffffff !important;
+    transition: all 0.2s ease !important;
+}
+
+body.theme-ice .eco-close-modal:hover {
+    background: rgba(255, 255, 255, 0.4) !important;
+    transform: rotate(90deg) scale(1.05) !important;
+}
+
+body.theme-ice .eco-profile-summary {
+    background: rgba(6, 22, 46, 0.6) !important;
+    border: 1.5px solid rgba(56, 189, 248, 0.25) !important;
+    border-radius: 14px !important;
+}
+
+body.theme-ice .eco-level-bar {
+    background: rgba(3, 10, 22, 0.7) !important;
+    border: 1px solid rgba(56, 189, 248, 0.25) !important;
+}
+
+body.theme-ice .eco-level-fill {
+    background: linear-gradient(90deg, #0284c7, #38bdf8, #ffffff) !important;
+    box-shadow: 0 0 10px rgba(56, 189, 248, 0.5) !important;
+}
+
+body.theme-ice .eco-tab-btn {
+    background: rgba(14, 165, 233, 0.12) !important;
+    border: 1px solid rgba(56, 189, 248, 0.25) !important;
+    color: var(--ice-text) !important;
+}
+
+body.theme-ice .eco-tab-btn:hover {
+    background: rgba(56, 189, 248, 0.22) !important;
+    border-color: rgba(56, 189, 248, 0.5) !important;
+}
+
+body.theme-ice .eco-tab-btn.active {
+    background: linear-gradient(135deg, #0284c7, #0ea5e9) !important;
+    color: #ffffff !important;
+    border-color: rgba(255, 255, 255, 0.4) !important;
+    box-shadow: 0 0 16px rgba(14, 165, 233, 0.4) !important;
+}
+
+body.theme-ice .eco-shop-item {
+    background: rgba(6, 22, 46, 0.55) !important;
+    border: 1.5px solid rgba(56, 189, 248, 0.2) !important;
+    border-radius: 14px !important;
+}
+
+body.theme-ice .eco-shop-item:hover {
+    border-color: rgba(125, 211, 252, 0.6) !important;
+    box-shadow: 0 4px 18px rgba(56, 189, 248, 0.25) !important;
+}
+
+body.theme-ice .eco-shop-item.equipped {
+    border-color: #38bdf8 !important;
+    box-shadow: 0 0 0 1.5px #38bdf8, 0 0 20px rgba(56, 189, 248, 0.35), inset 0 0 12px rgba(56, 189, 248, 0.12) !important;
+}
+
+body.theme-ice .eco-shop-item.equipped::after {
+    background: #0284c7 !important;
+    color: #ffffff !important;
+    box-shadow: 0 0 8px rgba(56, 189, 248, 0.6) !important;
+}
+
+/* ── 2. CARD DE QUIZZES (QUIZ CTA CARD) ────────────────────── */
+body.theme-ice .quiz-cta-card,
+body.theme-ice.dark-mode .quiz-cta-card {
+    background: linear-gradient(135deg, rgba(6, 24, 52, 0.9) 0%, rgba(12, 42, 82, 0.82) 50%, rgba(5, 20, 44, 0.92) 100%) !important;
+    border: 1.5px solid rgba(56, 189, 248, 0.4) !important;
+    border-radius: 20px !important;
+    box-shadow: 0 8px 32px rgba(2, 132, 199, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.12) !important;
+}
+
+body.theme-ice:not(.dark-mode) .quiz-cta-card {
+    background: linear-gradient(135deg, rgba(224, 242, 254, 0.92) 0%, rgba(186, 230, 253, 0.85) 50%, rgba(240, 249, 255, 0.95) 100%) !important;
+    border: 1.5px solid rgba(14, 165, 233, 0.35) !important;
+}
+
+body.theme-ice .quiz-cta-card .quiz-badge {
+    background: rgba(56, 189, 248, 0.18) !important;
+    color: #7dd3fc !important;
+    border: 1px solid rgba(56, 189, 248, 0.45) !important;
+    box-shadow: 0 0 10px rgba(56, 189, 248, 0.25) !important;
+}
+
+body.theme-ice .quiz-cta-card .cta-icon {
+    opacity: 0.25 !important;
+}
+
+body.theme-ice .quiz-cta-card .cta-icon i {
+    color: #38bdf8 !important;
+    filter: drop-shadow(0 0 20px rgba(56, 189, 248, 0.4)) !important;
+}
+
+body.theme-ice .quiz-cta-card .btn {
+    background: linear-gradient(135deg, #0284c7, #0ea5e9) !important;
+    border: 1.5px solid rgba(255, 255, 255, 0.35) !important;
+    box-shadow: 0 4px 18px rgba(14, 165, 233, 0.35) !important;
+}
+
+body.theme-ice .quiz-cta-card .btn:hover {
+    background: linear-gradient(135deg, #0ea5e9, #38bdf8) !important;
+    box-shadow: 0 6px 24px rgba(14, 165, 233, 0.55) !important;
+}
+
+/* ── 3. OFICINA DE ARTESANATO (DICAS DE SEGURANÇA E DIVERSÃO) ─ */
+body.theme-ice .safety-tip,
+body.theme-ice.dark-mode .safety-tip {
+    background: rgba(6, 24, 50, 0.72) !important;
+    backdrop-filter: blur(14px) !important;
+    border: 1.5px solid rgba(56, 189, 248, 0.28) !important;
+    border-left: 4px solid #38bdf8 !important;
+    border-radius: 12px !important;
+    box-shadow: 0 6px 22px rgba(2, 10, 24, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+}
+
+body.theme-ice:not(.dark-mode) .safety-tip {
+    background: rgba(240, 249, 255, 0.88) !important;
+    border: 1.5px solid rgba(14, 165, 233, 0.3) !important;
+    border-left: 4px solid #0284c7 !important;
+}
+
+body.theme-ice .safety-tip i {
+    color: #38bdf8 !important;
+    filter: drop-shadow(0 0 8px rgba(56, 189, 248, 0.4)) !important;
+}
+
+body.theme-ice .safety-tip h4 {
+    color: #f0f9ff !important;
+    font-weight: 700 !important;
+}
+
+body.theme-ice:not(.dark-mode) .safety-tip h4 {
+    color: #0c4a6e !important;
+}
+
+body.theme-ice .safety-tip p {
+    color: #bae6fd !important;
+}
+
+body.theme-ice:not(.dark-mode) .safety-tip p {
+    color: #0369a1 !important;
+}
+
+/* ── 4. GUIA DE RECICLAGEM (RESULT CARD BIG) ──────────────── */
+body.theme-ice .result-card-big,
+body.theme-ice.dark-mode .result-card-big {
+    background: rgba(6, 24, 52, 0.78) !important;
+    backdrop-filter: blur(16px) !important;
+    border: 1.5px solid rgba(56, 189, 248, 0.3) !important;
+    border-radius: 18px !important;
+    box-shadow: 0 10px 32px rgba(2, 6, 23, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
+    color: #f0f9ff !important;
+}
+
+body.theme-ice:not(.dark-mode) .result-card-big {
+    background: rgba(240, 249, 255, 0.92) !important;
+    border: 1.5px solid rgba(14, 165, 233, 0.35) !important;
+    color: #0c4a6e !important;
+}
+
+body.theme-ice .result-visual-side {
+    border-right: 1px solid rgba(56, 189, 248, 0.18) !important;
+}
+
+body.theme-ice .result-visual-side i {
+    color: #38bdf8 !important;
+    filter: drop-shadow(0 0 14px rgba(56, 189, 248, 0.5)) !important;
+}
+
+body.theme-ice .result-visual-side h3 {
+    color: var(--ice-text) !important;
+}
+
+body.theme-ice .result-visual-side .status-label {
+    background: rgba(56, 189, 248, 0.16) !important;
+    border: 1px solid rgba(56, 189, 248, 0.4) !important;
+    color: #7dd3fc !important;
+}
+
+body.theme-ice .result-content-side .result-info-text {
+    color: var(--ice-text) !important;
+}
+
+body.theme-ice .guide-box-big {
+    background: rgba(4, 18, 38, 0.65) !important;
+    border: 1px solid rgba(56, 189, 248, 0.25) !important;
+    border-left: 3px solid #38bdf8 !important;
+    border-radius: 12px !important;
+}
+
+body.theme-ice:not(.dark-mode) .guide-box-big {
+    background: rgba(224, 242, 254, 0.7) !important;
+    border: 1px solid rgba(14, 165, 233, 0.3) !important;
+    border-left: 3px solid #0284c7 !important;
+}
+
+body.theme-ice .guide-box-big h5 {
+    color: #7dd3fc !important;
+}
+
+body.theme-ice:not(.dark-mode) .guide-box-big h5 {
+    color: #0284c7 !important;
+}
+
+body.theme-ice .guide-box-big li {
+    color: var(--ice-text) !important;
+}
+
+body.theme-ice .guide-box-tip {
+    background: rgba(14, 165, 233, 0.1) !important;
+    border: 1px solid rgba(56, 189, 248, 0.25) !important;
+    border-left: 3px solid #0ea5e9 !important;
+    border-radius: 12px !important;
+}
+
+body.theme-ice .guide-box-tip h5,
+body.theme-ice .guide-box-tip h5 i {
+    color: #38bdf8 !important;
+}
+
+body.theme-ice .guide-box-tip .result-guide-text {
+    color: var(--ice-text) !important;
+}
+
+
+/* ── EFEITO FLOCOS DE NEVE (JS SNOWFLAKES ENGINE) ─────────── */
+/* Keyframes definidos globalmente em effects_snowflakes.css */

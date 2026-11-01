@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
+    <meta name="google" content="notranslate">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Caça ao Vazamento</title>
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;800;900&display=swap" rel="stylesheet">
+    
   <style>
     *{margin:0;padding:0;box-sizing:border-box}
     body{
@@ -12,7 +14,7 @@
       min-height:100vh;font-family:'Nunito',sans-serif;overflow:hidden;
     }
     #wrapper{position:relative;user-select:none}
-    canvas{border-radius:18px;box-shadow:0 0 80px rgba(56,189,248,.3);display:block}
+    canvas{border-radius:18px;box-shadow:0 0 80px rgba(56,189,248,.3);display:block;max-width:100%;height:auto;aspect-ratio:820/560;}
     #overlay{
       position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
       background:rgba(15,23,42,.8);backdrop-filter:blur(8px);border-radius:18px;z-index:20;
@@ -81,7 +83,7 @@ let particles = [], floats = [];
 let bucket = { x: W/2, y: H-55, w: 60, h: 50, spd: 7.5, water: 0, maxWater: 5 };
 let drops = [];
 let pipes = [120, 260, 400, 540];
-let plant = { x: W - 90, y: H - 60, w: 80, h: 100, growth: 0, maxGrowth: 25 };
+let plant = { x: W - 90, y: H - 30, w: 80, h: 100, growth: 0, maxGrowth: 25 };
 let dropTimer = 0, dropInterval = 1500, dropSpeedBase = 3.5, dropsCaught = 0, lastPipeIdx = 1;
 
 const keys = {};
@@ -136,6 +138,17 @@ function hideOverlay(){ overlay.classList.add('hidden'); }
 
 function doEnd() {
   state = 'gameOver';
+  if (window.parent && window.parent !== window) {
+    window.parent.postMessage({
+      type: 'GAME_RESULT',
+      game: 'vazamento',
+      win: false,
+      score: score,
+      xp: Math.max(10, Math.floor(score / 5)),
+      plantGrowth: Math.floor((plant.growth / plant.maxGrowth) * 100)
+    }, '*');
+    return;
+  }
   showOverlay(`<div class="obox">
     <div class="emoji">💦</div>
     <h2>Game Over!</h2>
@@ -148,6 +161,17 @@ function doEnd() {
 
 function doWin() {
   state = 'win';
+  if (window.parent && window.parent !== window) {
+    window.parent.postMessage({
+      type: 'GAME_RESULT',
+      game: 'vazamento',
+      win: true,
+      score: score,
+      xp: Math.max(30, Math.floor(score / 3) + 40),
+      plantGrowth: 100
+    }, '*');
+    return;
+  }
   showOverlay(`<div class="obox">
     <div class="emoji">🌻</div>
     <h2>Planta Cresceu!</h2>
@@ -175,7 +199,7 @@ function updateParentHUD(force=false) {
   }
 }
 
-function updateLogic() {
+function updateLogic(dt = 16) {
   // Move Bucket
   let dx = 0;
   if(keys['ArrowLeft'] || keys['KeyA']) dx = -1;
@@ -259,46 +283,82 @@ function drawGame() {
   ctx.fillStyle = '#475569'; ctx.fillRect(0, H-30, W, 4);
 
   // Plant Zone indicator
-  ctx.fillStyle = 'rgba(52,211,153,0.1)';
-  ctx.fillRect(plant.x - 75, H-30, 150, 30);
+  ctx.fillStyle = 'rgba(52,211,153,0.18)';
+  ctx.fillRect(plant.x - 75, H-28, 150, 26);
   ctx.fillStyle = '#34d399';
-  ctx.font = '700 14px Nunito'; ctx.textAlign='center';
-  ctx.fillText('ZONA DA PLANTA', plant.x, H-10);
+  ctx.font = '800 13px Nunito'; ctx.textAlign='center';
+  ctx.fillText('🌿 ZONA DA PLANTA', plant.x, H-10);
 
-  // Pipes
-  ctx.fillStyle = '#64748b';
+  // Pipes (Metallic industrial copper with brass coupling rings)
   for (let p of pipes) {
+    let pg = ctx.createLinearGradient(p - 15, 0, p + 15, 0);
+    pg.addColorStop(0, "#78350f"); pg.addColorStop(0.3, "#d97706"); pg.addColorStop(0.7, "#f59e0b"); pg.addColorStop(1, "#78350f");
+    ctx.fillStyle = pg;
     ctx.fillRect(p - 15, 0, 30, 40);
-    ctx.fillStyle = '#475569'; ctx.fillRect(p - 20, 30, 40, 10);
-    ctx.fillStyle = '#64748b';
+    ctx.fillStyle = "#b45309";
+    ctx.fillRect(p - 20, 30, 40, 10);
+    ctx.fillStyle = "#fbbf24";
+    ctx.fillRect(p - 18, 32, 36, 3);
   }
 
   // Plant
   ctx.save(); ctx.translate(plant.x, plant.y);
-  // Pot
+  // Pot (apoiado perfeitamente no chão H - 30)
   ctx.fillStyle = '#b45309';
-  ctx.beginPath(); ctx.moveTo(-35, 30); ctx.lineTo(35, 30); ctx.lineTo(25, 60); ctx.lineTo(-25, 60); ctx.closePath(); ctx.fill();
-  ctx.fillStyle = '#92400e'; ctx.fillRect(-38, 20, 76, 10);
+  ctx.beginPath();
+  ctx.moveTo(-32, -40);
+  ctx.lineTo(32, -40);
+  ctx.lineTo(24, 0);
+  ctx.lineTo(-24, 0);
+  ctx.closePath();
+  ctx.fill();
+
+  // Borda do vaso
+  ctx.fillStyle = '#92400e';
+  ctx.fillRect(-35, -48, 70, 9);
+  
+  // Terra fértil no topo do vaso
+  ctx.fillStyle = '#451a03';
+  ctx.beginPath();
+  ctx.ellipse(0, -44, 28, 5, 0, 0, Math.PI * 2);
+  ctx.fill();
+
   // Growth stages
   let stage = plant.growth / plant.maxGrowth;
   ctx.strokeStyle = '#22c55e'; ctx.lineWidth = 6; ctx.lineCap = 'round';
-  if (stage > 0) {
-    let h = 20 + stage * 60;
-    ctx.beginPath(); ctx.moveTo(0, 20); ctx.lineTo(0, 20 - h); ctx.stroke();
+  
+  if (stage <= 0) {
+    // Brotinho inicial mesmo sem água
+    ctx.beginPath(); ctx.moveTo(0, -44); ctx.lineTo(0, -56); ctx.stroke();
+    ctx.fillStyle = '#4ade80';
+    ctx.beginPath(); ctx.ellipse(-6, -56, 7, 4, -Math.PI/6, 0, Math.PI*2); ctx.fill();
+    ctx.beginPath(); ctx.ellipse(6, -56, 7, 4, Math.PI/6, 0, Math.PI*2); ctx.fill();
+  } else {
+    let h = 24 + stage * 75;
+    ctx.beginPath(); ctx.moveTo(0, -44); ctx.lineTo(0, -44 - h); ctx.stroke();
     // Leaves
-    if (stage > 0.3) {
+    if (stage > 0.15) {
       ctx.fillStyle = '#4ade80';
-      ctx.beginPath(); ctx.ellipse(-16, 20 - h*0.4, 18, 8, Math.PI/4, 0, Math.PI*2); ctx.fill();
-      ctx.beginPath(); ctx.ellipse(16, 20 - h*0.6, 18, 8, -Math.PI/4, 0, Math.PI*2); ctx.fill();
+      ctx.beginPath(); ctx.ellipse(-16, -44 - h*0.35, 16, 7, -Math.PI/5, 0, Math.PI*2); ctx.fill();
+      ctx.beginPath(); ctx.ellipse(16, -44 - h*0.45, 16, 7, Math.PI/5, 0, Math.PI*2); ctx.fill();
     }
-    if (stage > 0.7) {
-      ctx.fillStyle = '#4ade80';
-      ctx.beginPath(); ctx.ellipse(-14, 20 - h*0.8, 14, 6, Math.PI/5, 0, Math.PI*2); ctx.fill();
+    if (stage > 0.5) {
+      ctx.fillStyle = '#22c55e';
+      ctx.beginPath(); ctx.ellipse(-18, -44 - h*0.7, 18, 8, -Math.PI/4, 0, Math.PI*2); ctx.fill();
+      ctx.beginPath(); ctx.ellipse(18, -44 - h*0.75, 18, 8, Math.PI/4, 0, Math.PI*2); ctx.fill();
     }
     // Flower
     if (stage >= 1) {
-      ctx.fillStyle = '#fbbf24'; ctx.beginPath(); ctx.arc(0, 20 - h, 14, 0, Math.PI*2); ctx.fill();
-      ctx.fillStyle = '#f59e0b'; ctx.beginPath(); ctx.arc(0, 20 - h, 7, 0, Math.PI*2); ctx.fill();
+      // Pétalas de girassol
+      ctx.fillStyle = '#f59e0b';
+      for (let i = 0; i < 8; i++) {
+        let ang = (i * Math.PI) / 4;
+        ctx.beginPath();
+        ctx.ellipse(Math.cos(ang) * 16, -44 - h + Math.sin(ang) * 16, 9, 5, ang, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      ctx.fillStyle = '#fbbf24'; ctx.beginPath(); ctx.arc(0, -44 - h, 14, 0, Math.PI*2); ctx.fill();
+      ctx.fillStyle = '#78350f'; ctx.beginPath(); ctx.arc(0, -44 - h, 7, 0, Math.PI*2); ctx.fill();
     }
   }
   ctx.restore();
@@ -328,11 +388,16 @@ function drawGame() {
   }
   ctx.restore();
 
-  // Drops
+  // Drops with specular reflection
   for (let d of drops) {
-    ctx.fillStyle = '#38bdf8';
-    ctx.beginPath(); ctx.arc(d.x, d.y, 6, 0, Math.PI*2); ctx.fill();
-    ctx.beginPath(); ctx.moveTo(d.x - 5, d.y - 2); ctx.lineTo(d.x, d.y - 12); ctx.lineTo(d.x + 5, d.y - 2); ctx.closePath(); ctx.fill();
+    let dg = ctx.createRadialGradient(d.x - 2, d.y - 2, 1, d.x, d.y, 7);
+    dg.addColorStop(0, "#e0f2fe"); dg.addColorStop(0.4, "#38bdf8"); dg.addColorStop(1, "#0284c7");
+    ctx.fillStyle = dg;
+    ctx.beginPath(); ctx.arc(d.x, d.y, 6.5, 0, Math.PI*2); ctx.fill();
+    ctx.beginPath(); ctx.moveTo(d.x - 5.5, d.y - 2); ctx.lineTo(d.x, d.y - 14); ctx.lineTo(d.x + 5.5, d.y - 2); ctx.closePath(); ctx.fill();
+    // Shiny specular highlight
+    ctx.fillStyle = "rgba(255, 255, 255, 0.85)";
+    ctx.beginPath(); ctx.arc(d.x - 2, d.y - 3, 1.8, 0, Math.PI*2); ctx.fill();
   }
 
   // Particles & Floats
@@ -356,7 +421,7 @@ function loop(ts) {
   
   if (state === 'playing') {
     gameTime += dt;
-    updateLogic();
+    updateLogic(dt);
   }
   
   drawGame();
@@ -366,5 +431,19 @@ function loop(ts) {
 document.getElementById('startBtn').onclick = () => { hideOverlay(); initGame(); };
 requestAnimationFrame(loop);
 </script>
+
+    <script>
+    // Sync Deltarune theme from parent frame
+    window.addEventListener('message', function(e) {
+        if (!e.data) return;
+        if (e.data.type === 'DR_THEME_ON') {
+            document.body.classList.add('theme-deltarune');
+            if (e.data.dark) document.body.classList.add('dark-mode');
+            else document.body.classList.remove('dark-mode');
+        } else if (e.data.type === 'DR_THEME_OFF') {
+            document.body.classList.remove('theme-deltarune');
+        }
+    });
+    </script>
 </body>
 </html>

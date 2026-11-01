@@ -1,0 +1,237 @@
+/* ==========================================================================
+   EFEITO: AURORA BOREAL (Luzes do Norte Árticas — Arcos Curvados & Orgânicos)
+   Draperias e arcos aurorais com curvas Bézier fluidas, inclinação magnética
+   e ciclo dinâmico de respiração/pulsação de intensidade.
+   ========================================================================== */
+
+.eco-aurora-sky {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    z-index: 9996;
+    overflow: hidden;
+    background: transparent;
+    /* Máscara elíptica suave nos cantos em vez de corte reto horizontal */
+    mask-image: radial-gradient(ellipse 95% 80% at 50% 50%, rgba(0, 0, 0, 1) 30%, rgba(0, 0, 0, 0.6) 70%, transparent 100%);
+    -webkit-mask-image: radial-gradient(ellipse 95% 80% at 50% 50%, rgba(0, 0, 0, 1) 30%, rgba(0, 0, 0, 0.6) 70%, transparent 100%);
+    transition: opacity 0.8s ease;
+}
+
+/* Camada com inclinação angular natural (imita a inclinação do campo magnético polar) */
+.eco-aurora-curtain-layer {
+    position: absolute;
+    top: 6vh;
+    left: -20%;
+    width: 140%;
+    height: 88vh;
+    pointer-events: none;
+    mix-blend-mode: screen;
+    filter: blur(42px);
+    transform-origin: 50% 50%;
+    will-change: transform, opacity, filter;
+    /* Pulsação orgânica: ganha força, ondeia com torção e depois fica tênue */
+    animation: auroraBreathingPulse 18s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+/* Faixas luminosas em arco */
+.eco-aurora-ribbon {
+    position: absolute;
+    width: 140%;
+    height: 100%;
+    top: 0;
+    left: -20%;
+    mix-blend-mode: screen;
+    transform-origin: 45% 55%;
+    will-change: transform, opacity;
+}
+
+/* Ribbon 1: Arco Esmeralda Principal — ondulação orgânica com rotação e torção */
+.eco-aurora-ribbon-1 {
+    animation: auroraOrganicArc1 24s ease-in-out infinite alternate,
+               auroraRibbon1Glow 14s ease-in-out infinite alternate;
+}
+
+/* Ribbon 2: Véu Ciano Cruzado — contra-curva em S */
+.eco-aurora-ribbon-2 {
+    animation: auroraOrganicArc2 28s ease-in-out infinite alternate,
+               auroraRibbon2Glow 19s ease-in-out infinite alternate;
+}
+
+/* Ribbon 3: Coroa Violeta & Magenta Superior */
+.eco-aurora-ribbon-3 {
+    animation: auroraOrganicArc3 21s ease-in-out infinite alternate,
+               auroraRibbon3Glow 16s ease-in-out infinite alternate;
+}
+
+/* Raios difusos inclinados com o ângulo geomagnético */
+.eco-aurora-rays {
+    position: absolute;
+    top: -5%;
+    left: -15%;
+    width: 130%;
+    height: 110%;
+    transform: skewX(-14deg) rotate(-4deg);
+    background: repeating-linear-gradient(
+        90deg,
+        transparent 0%,
+        rgba(52, 211, 153, 0.04) 3.5%,
+        transparent 7%,
+        rgba(56, 189, 248, 0.05) 12%,
+        transparent 16%,
+        rgba(192, 132, 252, 0.04) 22%,
+        transparent 27%
+    );
+    animation: auroraRaySlowDrift 32s ease-in-out infinite alternate;
+    mix-blend-mode: screen;
+    pointer-events: none;
+    filter: blur(24px);
+    opacity: 0.4;
+}
+
+/* Estrelas cintilantes orgânicas */
+.eco-aurora-star {
+    position: absolute;
+    background: #ffffff;
+    border-radius: 50%;
+    pointer-events: none;
+    box-shadow: 0 0 5px rgba(255, 255, 255, 0.8), 0 0 10px rgba(186, 230, 253, 0.5);
+    animation: auroraStarTwinkle 5s ease-in-out infinite;
+}
+
+/* ==========================================================================
+   CICLO DE INTENSIDADE & ONDULAÇÃO (Forte vs Fraca — NUNCA some)
+   ========================================================================== */
+@keyframes auroraBreathingPulse {
+    0% {
+        /* Estado suave/fraco — SEMPRE claramente visível, apenas mais calmo */
+        opacity: 0.42;
+        filter: blur(42px) brightness(0.92);
+        transform: rotate(-6deg) scale(0.97) translateY(-8px);
+    }
+    22% {
+        /* Transição intermediária ascendente */
+        opacity: 0.58;
+        filter: blur(39px) brightness(1.05);
+        transform: rotate(-4.5deg) scale(1.0) translateY(0);
+    }
+    40% {
+        /* Leve recuo suave (mantendo presença contínua garantida) */
+        opacity: 0.40;
+        filter: blur(44px) brightness(0.90);
+        transform: rotate(-6deg) scale(0.96) translateY(4px);
+    }
+    60% {
+        /* Ganho de intensidade e energia luminosa */
+        opacity: 0.74;
+        filter: blur(36px) brightness(1.22);
+        transform: rotate(-3.5deg) scale(1.03) translateY(-4px);
+    }
+    75% {
+        /* PICO DE FORÇA: Muito radiante, cores acesas e arco expandido */
+        opacity: 0.98;
+        filter: blur(32px) brightness(1.38) contrast(1.15);
+        transform: rotate(-2deg) scale(1.06) translateY(8px);
+    }
+    88% {
+        /* Desvanecimento suave voltando ao estado calmo */
+        opacity: 0.60;
+        filter: blur(38px) brightness(1.08);
+        transform: rotate(-4deg) scale(1.01) translateY(0);
+    }
+    100% {
+        /* Retorna ao estado suave base (nunca some!) */
+        opacity: 0.42;
+        filter: blur(42px) brightness(0.92);
+        transform: rotate(-6deg) scale(0.97) translateY(-8px);
+    }
+}
+
+/* Animações ondulatórias em curva (Arco 1) */
+@keyframes auroraOrganicArc1 {
+    0% {
+        transform: rotate(-5deg) translateY(-25px) skewX(-4deg) scaleY(0.92);
+    }
+    50% {
+        transform: rotate(-1deg) translateY(20px) skewX(5deg) scaleY(1.12);
+    }
+    100% {
+        transform: rotate(-4deg) translateY(-10px) skewX(-2deg) scaleY(1);
+    }
+}
+
+/* Animações ondulatórias em contra-curva (Arco 2) */
+@keyframes auroraOrganicArc2 {
+    0% {
+        transform: rotate(3deg) translateY(20px) skewX(4deg) scaleY(1.08);
+    }
+    50% {
+        transform: rotate(-3deg) translateY(-25px) skewX(-6deg) scaleY(0.9);
+    }
+    100% {
+        transform: rotate(2deg) translateY(15px) skewX(2deg) scaleY(1.04);
+    }
+}
+
+/* Animações ondulatórias de coroa (Arco 3) */
+@keyframes auroraOrganicArc3 {
+    0% {
+        transform: rotate(-3deg) translateY(-15px) skewX(-3deg) scaleY(0.95);
+    }
+    50% {
+        transform: rotate(2deg) translateY(25px) skewX(4deg) scaleY(1.14);
+    }
+    100% {
+        transform: rotate(-1deg) translateY(-5px) skewX(-5deg) scaleY(0.98);
+    }
+}
+
+/* Pulsações secundárias por cor — pisos altos para nunca desaparecerem */
+@keyframes auroraRibbon1Glow {
+    0%, 100% { opacity: 0.65; }
+    50% { opacity: 0.98; }
+}
+
+@keyframes auroraRibbon2Glow {
+    0%, 100% { opacity: 0.55; }
+    50% { opacity: 0.90; }
+}
+
+@keyframes auroraRibbon3Glow {
+    0%, 100% { opacity: 0.50; }
+    50% { opacity: 0.85; }
+}
+
+@keyframes auroraRaySlowDrift {
+    0% {
+        transform: skewX(-14deg) rotate(-4deg) translateX(-4%);
+    }
+    50% {
+        transform: skewX(-11deg) rotate(-2deg) translateX(4%);
+    }
+    100% {
+        transform: skewX(-15deg) rotate(-5deg) translateX(-2%);
+    }
+}
+
+@keyframes auroraStarTwinkle {
+    0%, 100% {
+        opacity: 0.12;
+        transform: scale(0.7);
+    }
+    50% {
+        opacity: 0.85;
+        transform: scale(1.2);
+    }
+}
+
+/* Modo Compacto */
+body.compact-perf .eco-aurora-curtain-layer {
+    filter: blur(30px);
+    animation-duration: 24s;
+}
+body.compact-perf .eco-aurora-rays {
+    display: none;
+}

@@ -1,3 +1,4 @@
+@import url('theme_ice.css');
 @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
 
 /* --- EXPERIMENTO DE TEMAS VISUAIS --- */
@@ -55,7 +56,7 @@ body.theme-guide .nav-logo {
     filter: hue-rotate(85deg) brightness(1.2);
 }
 
-/* Tema: Games (Quizes) - Energético, divertido, roxo/neon */
+/* Tema: Games (Quizzes) - Energético, divertido, roxo/neon */
 body.theme-game {
     --primary: #7c3aed;
     /* Violeta Vibrante */
@@ -95,7 +96,7 @@ body.theme-nature .nav-logo {
     filter: hue-rotate(20deg) brightness(1.1);
 }
 
-/* Tema: Minigames - Vermelho Carmesim Energético (Diferente do Roxo dos Quizes) */
+/* Tema: Minigames - Vermelho Carmesim Energético (Diferente do Roxo dos Quizzes) */
 body.theme-minigames {
     --primary: #e11d48; /* Crimson */
     --primary-light: #fff1f2;
@@ -197,6 +198,388 @@ body.theme-future.theme-minigames {
     --neon-shadow: rgba(255, 0, 68, 0.2);
 }
 
+/* Tema: Oásis Eólico — Réplica Fiel do Mapa Brawl Stars Season 53 (Grama de Trevos, Pista de 3 Faixas Laranja/Amarela) */
+body.theme-windstock {
+    --primary: #f97316;
+    --primary-light: #facc15;
+    --secondary: #059669;
+    --deep: #ea580c;
+    --bg-light: #059669;
+    background-color: #059669;
+    /* Padrão Exato do Chão do Mapa: Gramado de Trevos 4 Pétalas Solarpunk */
+    background-image: 
+        radial-gradient(circle at 50% 0%, rgba(253, 224, 71, 0.25) 0%, transparent 60%),
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cg fill='%23047857' fill-opacity='0.45'%3E%3Cpath d='M40 22 C32 10 16 10 16 26 C16 34 26 40 40 40 C54 40 64 34 64 26 C64 10 48 10 40 22 Z'/%3E%3Cpath d='M40 58 C32 70 16 70 16 54 C16 46 26 40 40 40 C54 40 64 46 64 54 C64 70 48 70 40 58 Z'/%3E%3Cpath d='M22 40 C10 32 10 16 26 16 C34 16 40 26 40 40 C40 54 34 64 26 64 C10 64 10 48 22 40 Z'/%3E%3Cpath d='M58 40 C70 32 70 16 54 16 C46 16 40 26 40 40 C40 54 46 64 54 64 C70 64 70 48 58 40 Z'/%3E%3C/g%3E%3C/svg%3E");
+    background-size: 100% 100%, 75px 75px;
+    background-attachment: fixed;
+}
+/* Corrige a visibilidade do texto no fundo verde do tema Windstock */
+body.theme-windstock .hero-content h1,
+body.theme-windstock .intro-box-section h2,
+body.theme-windstock .section-header h2,
+body.theme-windstock .quiz-header h1 {
+    color: #ffffff;
+    text-shadow: 0 4px 0 #047857, 0 8px 15px rgba(0,0,0,0.4);
+}
+
+body.theme-windstock .hero-content h1 span,
+body.theme-windstock .section-header h2 span,
+body.theme-windstock .quiz-header h1 span {
+    color: #facc15;
+    text-shadow: 0 4px 0 #ca8a04, 0 8px 15px rgba(0,0,0,0.4);
+}
+
+body.theme-windstock .hero-content p,
+body.theme-windstock .intro-box-section p,
+body.theme-windstock .section-header p,
+body.theme-windstock .quiz-header p {
+    color: #ffffff;
+    font-weight: 600;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.6);
+}
+
+/* Textos gerais sobre fundo verde do tema Oásis Eólico */
+body.theme-windstock .about-text h2,
+body.theme-windstock .about-text h3,
+body.theme-windstock .intro-box-section h2,
+body.theme-windstock .section-header h2 {
+    color: #ffffff !important;
+    text-shadow: 0 3px 0 #047857, 0 6px 12px rgba(0,0,0,0.4);
+}
+
+body.theme-windstock .about-text p,
+body.theme-windstock .about-text strong,
+body.theme-windstock .about-text em,
+body.theme-windstock .section-header p,
+body.theme-windstock .about-section p {
+    color: #ffffff !important;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+}
+
+body.theme-windstock .about-card h3,
+body.theme-windstock .about-card p {
+    color: #ffffff !important;
+}
+
+/* Card do Desenvolvedor na aba Sobre */
+body.theme-windstock .about-card {
+    background: linear-gradient(180deg, #064e3b 0%, #042f2e 100%) !important;
+    border-top: 5px solid #ea580c !important;
+    box-shadow: 0 0 0 3px #ea580c, 0 8px 0 3px #047857, 0 16px 30px rgba(0,0,0,0.4) !important;
+}
+
+body.theme-windstock .about-card h3 {
+    color: #facc15 !important;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+}
+
+body.theme-windstock .about-card p {
+    color: #ffffff !important;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+}
+
+body.theme-windstock .about-card img {
+    border: 4px solid #ea580c;
+    box-shadow: 0 0 0 3px #facc15, 0 8px 20px rgba(0,0,0,0.4);
+}
+
+/* Rodapé (Footer) do Tema Oásis Eólico */
+body.theme-windstock .main-footer {
+    background: linear-gradient(180deg, #042f2e 0%, #022c22 100%);
+    border-top: 5px solid #ea580c;
+    box-shadow: 0 -4px 0 #f97316, 0 -8px 0 #facc15;
+}
+
+body.theme-windstock .main-footer .footer-logo span {
+    color: #ffffff;
+}
+
+body.theme-windstock .main-footer .footer-copy p {
+    color: #a7f3d0;
+}
+
+body.theme-windstock .main-footer .social-links a {
+    color: #ffffff;
+    opacity: 1;
+}
+
+body.theme-windstock .main-footer .social-links a:hover {
+    color: #facc15;
+}
+
+body.theme-windstock .main-footer .instagram-btn {
+    background: linear-gradient(180deg, #f97316 0%, #ea580c 100%);
+    border: 2px solid #ffffff;
+    border-radius: 20px;
+    box-shadow: 0 0 0 2px #ea580c, 0 4px 0 2px #c25e00;
+    color: #ffffff;
+    font-weight: 700;
+    padding: 8px 18px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    transition: all 0.2s;
+}
+
+body.theme-windstock .main-footer .instagram-btn:hover {
+    background: linear-gradient(180deg, #facc15 0%, #f97316 100%);
+    color: #451a03;
+    transform: translateY(-3px);
+    box-shadow: 0 0 0 2px #ea580c, 0 7px 0 2px #c25e00;
+}
+
+/* Header com o Degradê e Pista 3 Faixas Laranja/Amarela */
+body.theme-windstock .page-header,
+body.theme-windstock .hero-mini,
+body.theme-windstock .minigames-hero,
+body.theme-windstock .reciclagem-hero {
+    position: relative;
+    background: linear-gradient(180deg, #ea580c 0%, #f97316 60%, #facc15 100%) !important;
+    border-bottom: 6px solid #ffffff;
+    box-shadow: 
+        0 0 0 4px #ea580c,
+        0 0 0 10px #f97316,
+        0 0 0 16px #facc15,
+        0 12px 30px rgba(0, 0, 0, 0.4);
+    overflow: hidden;
+}
+
+/* Navbar com Bordas Arredondadas da Pista */
+body.theme-windstock .navbar {
+    border-bottom: 5px solid #ea580c;
+    box-shadow: 0 4px 0 #f97316, 0 8px 0 #facc15, 0 12px 25px rgba(0, 0, 0, 0.25);
+    background: #ffffff;
+}
+
+body.theme-windstock .nav-logo {
+    filter: hue-rotate(-50deg) saturate(1.8) brightness(1.1);
+}
+
+/* Botões Estilo Blocos Laranja e Branco com Borda Espessa */
+body.theme-windstock .btn-primary,
+body.theme-windstock .search-btn {
+    background: linear-gradient(180deg, #f97316 0%, #ea580c 100%);
+    border: 3px solid #ffffff;
+    border-radius: 24px;
+    box-shadow: 0 0 0 3px #ea580c, 0 6px 0 3px #c25e00, 0 10px 18px rgba(0, 0, 0, 0.3);
+    font-weight: 900;
+    color: #ffffff;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+    transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+body.theme-windstock .btn-primary:hover,
+body.theme-windstock .search-btn:hover {
+    background: linear-gradient(180deg, #facc15 0%, #f97316 100%);
+    color: #451a03;
+    text-shadow: none;
+    transform: translateY(-3px) scale(1.03);
+    box-shadow: 0 8px 0 #c25e00, 0 14px 24px rgba(0, 0, 0, 0.4);
+}
+
+/* Caixa de Busca no Guia de Reciclagem */
+body.theme-windstock .search-wrapper {
+    border: 4px solid #ea580c;
+    border-radius: 28px;
+    background: #ffffff;
+    box-shadow: 0 0 0 4px #ffffff, 0 10px 0 4px #047857, 0 16px 30px rgba(0, 0, 0, 0.3);
+    padding: 28px 25px;
+}
+
+body.theme-windstock .search-hints span {
+    background: #fff7ed;
+    border: 2px solid #f97316;
+    color: #ea580c;
+    border-radius: 16px;
+    font-weight: 700;
+    transition: all 0.2s ease;
+}
+
+body.theme-windstock .search-hints span:hover {
+    background: #f97316;
+    color: #ffffff;
+    transform: translateY(-2px);
+}
+
+/* Cards de Resíduos com Moldura de Blocos Laranja do Jogo */
+body.theme-windstock .quiz-card,
+body.theme-windstock .game-card,
+body.theme-windstock .craft-card,
+body.theme-windstock .waste-card {
+    border: 4px solid #ea580c;
+    border-radius: 28px;
+    background: #ffffff;
+    box-shadow: 0 0 0 4px #ffffff, 0 10px 0 4px #047857, 0 16px 30px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+body.theme-windstock .quiz-card:hover,
+body.theme-windstock .game-card:hover,
+body.theme-windstock .waste-card:hover {
+    border-color: #f97316;
+    transform: translateY(-8px);
+    box-shadow: 0 0 0 4px #facc15, 0 14px 0 4px #047857, 0 22px 40px rgba(0, 0, 0, 0.4);
+}
+
+/* HUD da Gamificação no Navbar */
+body.theme-windstock .eco-hud {
+    background: linear-gradient(180deg, #f97316 0%, #ea580c 100%);
+    border: 2px solid #ffffff;
+    border-radius: 20px;
+    box-shadow: 0 0 0 2px #ea580c, 0 4px 0 2px #c25e00, 0 6px 12px rgba(0, 0, 0, 0.25);
+    color: #ffffff;
+}
+
+/* Modal de Perfil & Loja de Gamificação */
+body.theme-windstock .eco-modal {
+    border: 5px solid #ea580c;
+    border-radius: 32px;
+    background: #ffffff;
+    box-shadow: 0 0 0 5px #ffffff, 0 16px 0 5px #047857, 0 25px 50px rgba(0, 0, 0, 0.4);
+}
+
+body.theme-windstock .eco-profile-summary {
+    background: linear-gradient(180deg, #ea580c 0%, #f97316 60%, #facc15 100%);
+    border: 3px solid #ffffff;
+    border-radius: 24px;
+    box-shadow: 0 6px 0 #c25e00;
+    color: #ffffff;
+}
+
+body.theme-windstock .eco-xp-text {
+    color: #ffffff !important;
+}
+
+body.theme-windstock .eco-profile-summary h3,
+body.theme-windstock .eco-profile-summary p,
+body.theme-windstock .eco-profile-summary .eco-profile-level,
+body.theme-windstock .eco-profile-summary .profile-xp-labels,
+body.theme-windstock .eco-profile-summary .profile-xp-needed-text,
+body.theme-windstock .eco-profile-summary .profile-xp-needed-text strong {
+    color: #ffffff !important;
+}
+
+
+body.theme-windstock .eco-profile-avatar-big {
+    background: #ffffff;
+    border: 3px solid #ea580c;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+body.theme-windstock .eco-shop-tabs {
+    background: #fff7ed;
+    border: 2px solid #ea580c;
+    border-radius: 18px;
+    padding: 6px;
+}
+
+body.theme-windstock .eco-tab-btn {
+    border-radius: 14px;
+    font-weight: 800;
+    color: #ea580c;
+}
+
+body.theme-windstock .eco-tab-btn.active {
+    background: linear-gradient(180deg, #f97316 0%, #ea580c 100%);
+    color: #ffffff;
+    box-shadow: 0 4px 0 #c25e00;
+}
+
+body.theme-windstock .eco-shop-item {
+    border: 3px solid #ea580c;
+    border-radius: 22px;
+    background: #fff7ed;
+    box-shadow: 0 0 0 2px #ffffff, 0 6px 0 2px #047857, 0 8px 18px rgba(0, 0, 0, 0.15);
+    transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+body.theme-windstock .eco-shop-item:hover {
+    border-color: #f97316;
+    transform: translateY(-5px);
+    box-shadow: 0 0 0 2px #facc15, 0 10px 0 2px #047857, 0 14px 25px rgba(0, 0, 0, 0.25);
+}
+
+body.theme-windstock .eco-shop-item.equipped {
+    border-color: #f97316;
+    background: linear-gradient(180deg, #fff7ed 0%, #ffedd5 100%);
+    box-shadow: 0 6px 0 #ea580c;
+}
+
+/* Dark Mode Windstock — Noite Solarpunk no Mapa */
+body.dark-mode.theme-windstock {
+    --bg-light: #064e3b;
+    --white: #0f291e;
+    --text-dark: #fde047;
+    background-color: #042f2e;
+    background-image: 
+        radial-gradient(circle at 50% 0%, rgba(234, 88, 12, 0.3) 0%, transparent 65%),
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cg fill='%23065f46' fill-opacity='0.5'%3E%3Cpath d='M40 22 C32 10 16 10 16 26 C16 34 26 40 40 40 C54 40 64 34 64 26 C64 10 48 10 40 22 Z'/%3E%3Cpath d='M40 58 C32 70 16 70 16 54 C16 46 26 40 40 40 C54 40 64 46 64 54 C64 70 48 70 40 58 Z'/%3E%3Cpath d='M22 40 C10 32 10 16 26 16 C34 16 40 26 40 40 C40 54 34 64 26 64 C10 64 10 48 22 40 Z'/%3E%3Cpath d='M58 40 C70 32 70 16 54 16 C46 16 40 26 40 40 C40 54 46 64 54 64 C70 64 70 48 58 40 Z'/%3E%3C/g%3E%3C/svg%3E");
+    background-size: 100% 100%, 75px 75px;
+}
+
+body.dark-mode.theme-windstock .eco-modal {
+    background: #064e3b;
+    border-color: #ea580c;
+    box-shadow: 0 0 0 5px #047857, 0 16px 0 5px #022c22, 0 25px 50px rgba(0, 0, 0, 0.6);
+}
+
+body.dark-mode.theme-windstock .eco-shop-tabs {
+    background: #042f2e;
+    border-color: #f97316;
+}
+
+body.dark-mode.theme-windstock .eco-shop-item {
+    background: #042f2e;
+    border-color: #f97316;
+    box-shadow: 0 0 0 2px #065f46, 0 6px 0 2px #022c22, 0 8px 18px rgba(0, 0, 0, 0.4);
+}
+
+body.dark-mode.theme-windstock .eco-shop-item.equipped {
+    border-color: #f97316;
+    background: linear-gradient(180deg, #ea580c 0%, #9a3412 100%);
+    box-shadow: 0 0 0 2px #065f46, 0 6px 0 2px #022c22, 0 8px 18px rgba(0, 0, 0, 0.4);
+}
+
+body.dark-mode.theme-windstock .quiz-card,
+body.dark-mode.theme-windstock .game-card,
+body.dark-mode.theme-windstock .waste-card,
+body.dark-mode.theme-windstock .craft-card {
+    background: #042f2e;
+    border-color: #f97316;
+    box-shadow: 0 0 0 3px #065f46, 0 8px 0 3px #022c22, 0 14px 28px rgba(0, 0, 0, 0.5);
+    color: #f0fdf4;
+}
+
+body.dark-mode.theme-windstock .search-container {
+    background: #022c22;
+    border-color: #047857;
+    box-shadow: inset 0 2px 5px rgba(0,0,0,0.5);
+}
+body.dark-mode.theme-windstock .search-container input {
+    color: #ffffff;
+}
+body.dark-mode.theme-windstock .search-container input::placeholder {
+    color: #6ee7b7;
+}
+body.dark-mode.theme-windstock .search-hints span {
+    background: #042f2e;
+    border-color: #f97316;
+    color: #fcd34d;
+}
+body.dark-mode.theme-windstock .search-hints span:hover {
+    background: #ea580c;
+    color: #ffffff;
+}
+
+
+body.dark-mode.theme-windstock .page-header,
+body.dark-mode.theme-windstock .reciclagem-hero {
+    background: linear-gradient(180deg, #9a3412 0%, #ea580c 60%, #b45309 100%) !important;
+}
+
+
+
 /* Custom Crimson Neon Cards for Minigames - Toned Down Version */
 body.theme-future.theme-minigames .game-card {
     background: rgba(13, 17, 23, 0.8) !important; /* Neutral Dark Slate */
@@ -279,18 +662,24 @@ body.theme-future .game-card {
     color: #c9d1d9 !important;
 }
 
-/* --- Future Hero Style (Matrix/Grid) --- */
+/* --- Future Hero Style (Matrix/Grid para Todos os Heroes) --- */
+body.theme-future .hero,
 body.theme-future .minigames-hero,
+body.theme-future .reciclagem-hero,
+body.theme-future .quizes-hero,
 body.theme-future .hero-mini {
     background: #05010a !important;
     position: relative;
     overflow: hidden;
     border-bottom: 2px solid var(--primary) !important;
-    box-shadow: 0 10px 30px var(--neon-shadow);
+    box-shadow: 0 10px 30px var(--neon-shadow) !important;
 }
 
+body.theme-future .hero::before,
 body.theme-future .hero-mini::before,
-body.theme-future .minigames-hero::before {
+body.theme-future .minigames-hero::before,
+body.theme-future .reciclagem-hero::before,
+body.theme-future .quizes-hero::before {
     content: '';
     position: absolute;
     inset: 0;
@@ -303,20 +692,57 @@ body.theme-future .minigames-hero::before {
     z-index: 1;
 }
 
+body.theme-future .hero .container,
 body.theme-future .minigames-hero .container,
+body.theme-future .reciclagem-hero .container,
+body.theme-future .quizes-hero .container,
 body.theme-future .hero-mini .container {
     position: relative;
     z-index: 10;
 }
 
+/* Tópicos/Tags dos Heroes no tema futurista */
+body.theme-future .hero-split-box .tag-item {
+    background: rgba(10, 17, 30, 0.8) !important;
+    border: 1.5px solid rgba(0, 243, 255, 0.35) !important;
+    color: #e2e8f0 !important;
+    box-shadow: 0 0 15px rgba(0, 243, 255, 0.15) !important;
+}
+
+body.theme-future .hero-split-box .tag-item:hover {
+    border-color: var(--primary) !important;
+    box-shadow: 0 0 25px var(--neon-shadow) !important;
+    background: rgba(0, 243, 255, 0.15) !important;
+}
+
+body.theme-future .guide-hero-badge {
+    background: rgba(57, 255, 20, 0.15) !important;
+    border-color: #39ff14 !important;
+    color: #39ff14 !important;
+    box-shadow: 0 0 16px rgba(57, 255, 20, 0.4) !important;
+}
+
 body.theme-future .badge {
-    background: #2d3748 !important;
-    color: white !important;
-    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    background: rgba(16, 185, 129, 0.15) !important;
+    color: #4ade80 !important;
+    border: 1.5px solid #10b981 !important;
     text-transform: uppercase;
     font-size: 0.75rem;
-    padding: 5px 20px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    padding: 6px 22px;
     border-radius: 50px;
+    box-shadow: 0 0 16px rgba(16, 185, 129, 0.5), 0 0 32px rgba(16, 185, 129, 0.25) !important;
+    text-shadow: 0 0 8px rgba(74, 222, 128, 0.6);
+    display: inline-block;
+}
+
+body.theme-future.dark-mode .badge {
+    background: rgba(16, 185, 129, 0.2) !important;
+    color: #86efac !important;
+    border-color: #22c55e !important;
+    box-shadow: 0 0 22px rgba(34, 197, 94, 0.6), 0 0 45px rgba(34, 197, 94, 0.3) !important;
+    text-shadow: 0 0 10px rgba(134, 239, 172, 0.7);
 }
 
 body.theme-future.dark-mode .card,
@@ -377,9 +803,41 @@ body.theme-future .nav-logo {
 }
 
 body.theme-future .result-visual-side {
-    background: linear-gradient(135deg, var(--primary), var(--primary-light)) !important;
-    color: white !important;
-    border-right: none !important;
+    background: rgba(10, 15, 26, 0.85) !important;
+    border-right: 1px solid rgba(0, 243, 255, 0.25) !important;
+    color: #e2e8f0 !important;
+}
+
+body.theme-future .result-visual-side i {
+    color: #00f3ff !important;
+    filter: drop-shadow(0 0 16px rgba(0, 243, 255, 0.5)) !important;
+}
+
+body.theme-future .result-visual-side h3 {
+    color: #f8fafc !important;
+    text-shadow: 0 0 10px rgba(0, 243, 255, 0.4) !important;
+}
+
+body.theme-future .result-card-big {
+    background: rgba(10, 15, 26, 0.9) !important;
+    border: 1.5px solid rgba(0, 243, 255, 0.35) !important;
+    box-shadow: 0 0 30px rgba(0, 243, 255, 0.15), 0 15px 35px rgba(0, 0, 0, 0.6) !important;
+    backdrop-filter: blur(12px) !important;
+}
+
+body.theme-future .guide-box-big {
+    background: rgba(0, 243, 255, 0.05) !important;
+    border: 1px solid rgba(0, 243, 255, 0.25) !important;
+    border-radius: 18px !important;
+}
+
+body.theme-future .guide-box-big h5,
+body.theme-future .guide-box-big h5 i {
+    color: #00f3ff !important;
+}
+
+body.theme-future .result-guide-text {
+    color: #cbd5e1 !important;
 }
 
 body.theme-future .guide-box-big {
@@ -400,60 +858,6 @@ body.theme-future .card-visual i {
     text-shadow: 0 0 15px var(--primary);
 }
 
-/* --- Gamificação Futurista Suave (Menos Brilho) --- */
-body.theme-future .eco-modal {
-    background: #0a0515 !important;
-    border: 1px solid var(--primary);
-    box-shadow: 0 0 30px rgba(0, 0, 0, 0.8);
-}
-
-body.theme-future .eco-modal-header {
-    background: linear-gradient(90deg, #100520, #0a0515) !important;
-    border-bottom: 2px solid var(--primary);
-}
-
-body.theme-future .eco-profile-summary {
-    border-bottom-color: rgba(255, 255, 255, 0.1);
-}
-
-body.theme-future .eco-profile-avatar-big {
-    background: rgba(16, 5, 32, 0.8);
-    border: 1px solid var(--neon-shadow);
-}
-
-body.theme-future .eco-profile-info p {
-    color: #a0a0c0;
-}
-
-body.theme-future .eco-tab-btn {
-    background: #1a1a2e;
-    color: #8080a0;
-}
-
-body.theme-future .eco-tab-btn.active {
-    background: var(--primary);
-    color: #05010a;
-    box-shadow: 0 0 15px var(--neon-shadow);
-}
-
-body.theme-future .eco-shop-item {
-    background: #110a1f !important;
-    border-color: rgba(255, 255, 255, 0.05) !important;
-}
-
-body.theme-future .eco-shop-item:hover {
-    border-color: var(--primary) !important;
-    background: rgba(var(--primary-rgb, 0, 243, 255), 0.05) !important;
-}
-
-body.theme-future .eco-shop-item.equipped {
-    background: rgba(var(--primary-rgb, 0, 243, 255), 0.1) !important;
-    border-color: var(--primary) !important;
-}
-
-body.theme-future .eco-shop-item .item-status {
-    color: #8080a0;
-}
 
 /* HUD mais discreto */
 body.theme-future .eco-hud {
@@ -494,47 +898,201 @@ body.theme-future .progress-fill {
     background: var(--primary);
     box-shadow: 0 0 10px var(--primary);
 }
-
-body.theme-future .option-btn {
-    background: rgba(26, 26, 46, 0.5);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    color: #e0e0fb;
+/* --- Gamificação Futurista — G.A.I.A. Core Terminal --- */
+body.theme-future .eco-modal-overlay {
+    background: rgba(5, 1, 10, 0.85) !important;
+    backdrop-filter: blur(20px) !important;
 }
 
-body.theme-future .option-btn:hover {
-    background: rgba(var(--primary-rgb, 0, 243, 255), 0.1);
-    border-color: var(--primary);
-    box-shadow: 0 0 15px var(--neon-shadow);
+body.theme-future .eco-modal {
+    background: #08020f !important;
+    border: 1px solid rgba(0, 243, 255, 0.3);
+    box-shadow: 0 0 40px rgba(0, 243, 255, 0.08), 0 0 0 1px rgba(0, 243, 255, 0.1), inset 0 1px 0 rgba(0, 243, 255, 0.05) !important;
 }
 
-/* Estados de Resposta (Sinal de Dados) */
-body.theme-future .option-btn.correct {
-    background: rgba(57, 255, 20, 0.1) !important;
-    border-color: #39ff14 !important;
-    color: #39ff14 !important;
-    box-shadow: 0 0 20px rgba(57, 255, 20, 0.3) !important;
+body.theme-future .eco-modal-header {
+    background: linear-gradient(135deg, #0a0318, #10052a, #0a0318) !important;
+    border-bottom: 1px solid rgba(0, 243, 255, 0.3);
+    padding: 22px 28px;
 }
 
-body.theme-future .option-btn.wrong {
-    background: rgba(255, 0, 60, 0.1) !important;
-    border-color: #ff003c !important;
-    color: #ff003c !important;
-    box-shadow: 0 0 20px rgba(255, 0, 60, 0.3) !important;
+body.theme-future .eco-modal-header::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, #00f3ff, transparent);
+    box-shadow: 0 0 10px rgba(0, 243, 255, 0.5);
 }
 
-body.theme-future .intro-slide-content {
-    background: rgba(26, 26, 46, 0.4);
-    border-color: var(--primary);
-    color: #a0a0c0;
+body.theme-future .eco-modal-header-bg {
+    background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(0, 243, 255, 0.02) 2px,
+        rgba(0, 243, 255, 0.02) 4px
+    ) !important;
+    opacity: 1 !important;
 }
 
-body.theme-future .intro-slide-title {
-    color: var(--primary);
+body.theme-future .eco-modal-header h2 {
+    color: #00f3ff;
+    text-shadow: 0 0 10px rgba(0, 243, 255, 0.4);
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.1rem;
+    letter-spacing: 0.08em;
 }
 
-body.theme-future .result-gaia-box {
-    background: rgba(16, 5, 32, 0.9) !important;
-    border: 1px solid var(--primary);
+body.theme-future .eco-close-modal {
+    background: rgba(0, 243, 255, 0.1) !important;
+    border: 1px solid rgba(0, 243, 255, 0.2);
+    color: #00f3ff;
+}
+
+body.theme-future .eco-close-modal:hover {
+    background: rgba(0, 243, 255, 0.2) !important;
+    box-shadow: 0 0 15px rgba(0, 243, 255, 0.3);
+}
+
+body.theme-future .eco-modal-content {
+    background: #08020f;
+}
+
+body.theme-future .eco-modal-content::-webkit-scrollbar-thumb {
+    background: rgba(0, 243, 255, 0.2);
+}
+
+body.theme-future .eco-profile-summary {
+    background: linear-gradient(135deg, rgba(0, 243, 255, 0.04), rgba(168, 85, 247, 0.03)) !important;
+    border: 1px solid rgba(0, 243, 255, 0.12) !important;
+    border-radius: 16px;
+    position: relative;
+}
+
+body.theme-future .eco-profile-summary::before {
+    content: '';
+    position: absolute;
+    top: -1px;
+    left: 20%;
+    width: 60%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(0, 243, 255, 0.5), transparent);
+}
+
+body.theme-future .eco-profile-avatar-big {
+    background: rgba(0, 243, 255, 0.05) !important;
+    border: 1px solid rgba(0, 243, 255, 0.25) !important;
+    box-shadow: 0 0 20px rgba(0, 243, 255, 0.08), inset 0 0 15px rgba(0, 243, 255, 0.03) !important;
+}
+
+body.theme-future .eco-profile-info h3 {
+    color: #00f3ff !important;
+    text-shadow: 0 0 8px rgba(0, 243, 255, 0.3);
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.1rem;
+    letter-spacing: 0.05em;
+}
+
+body.theme-future .eco-profile-info p,
+body.theme-future .eco-profile-level {
+    color: #8080a0 !important;
+}
+
+body.theme-future .profile-xp-labels {
+    color: #6060a0 !important;
+}
+
+body.theme-future .profile-xp-bar-container {
+    background: rgba(0, 243, 255, 0.06) !important;
+    border: 1px solid rgba(0, 243, 255, 0.1);
+}
+
+body.theme-future .profile-xp-bar-fill {
+    background: linear-gradient(90deg, #00f3ff, #a855f7) !important;
+    box-shadow: 0 0 10px rgba(0, 243, 255, 0.4);
+}
+
+body.theme-future .profile-xp-bar-fill::after {
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent) !important;
+}
+
+body.theme-future .profile-xp-needed-text {
+    color: #8080a0 !important;
+}
+
+body.theme-future .profile-xp-needed-text strong {
+    color: #00f3ff !important;
+    text-shadow: 0 0 6px rgba(0, 243, 255, 0.3);
+}
+
+body.theme-future .eco-shop-tabs {
+    background: rgba(0, 243, 255, 0.03) !important;
+    border: 1px solid rgba(0, 243, 255, 0.08);
+}
+
+body.theme-future .eco-tab-btn {
+    color: #6060a0 !important;
+    background: transparent !important;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.06em;
+}
+
+body.theme-future .eco-tab-btn:hover {
+    color: #00f3ff !important;
+    background: rgba(0, 243, 255, 0.05) !important;
+}
+
+body.theme-future .eco-tab-btn.active {
+    background: rgba(0, 243, 255, 0.1) !important;
+    color: #00f3ff !important;
+    border: 1px solid rgba(0, 243, 255, 0.25);
+    box-shadow: 0 0 12px rgba(0, 243, 255, 0.15) !important;
+}
+
+body.theme-future .eco-shop-item {
+    background: rgba(8, 2, 15, 0.8) !important;
+    border: 1px solid rgba(0, 243, 255, 0.08) !important;
+    backdrop-filter: blur(5px);
+}
+
+body.theme-future .eco-shop-item:hover {
+    border-color: rgba(0, 243, 255, 0.35) !important;
+    background: rgba(0, 243, 255, 0.04) !important;
+    box-shadow: 0 0 20px rgba(0, 243, 255, 0.08) !important;
+    transform: translateY(-4px);
+}
+
+body.theme-future .eco-shop-item.locked {
+    opacity: 0.35;
+    filter: grayscale(0.8) brightness(0.5);
+}
+
+body.theme-future .eco-shop-item.equipped {
+    background: rgba(0, 243, 255, 0.06) !important;
+    border-color: rgba(0, 243, 255, 0.35) !important;
+    box-shadow: 0 0 15px rgba(0, 243, 255, 0.1), inset 0 0 20px rgba(0, 243, 255, 0.03) !important;
+}
+
+body.theme-future .eco-shop-item.equipped::after {
+    background: linear-gradient(135deg, #00f3ff, #a855f7) !important;
+    box-shadow: 0 0 10px rgba(0, 243, 255, 0.5) !important;
+}
+
+body.theme-future .eco-shop-item .item-name {
+    color: #c0c0e0;
+}
+
+body.theme-future .eco-shop-item .item-status {
+    color: #6060a0 !important;
+}
+
+body.theme-future .eco-shop-item.equipped .item-status {
+    color: #00f3ff !important;
+    text-shadow: 0 0 6px rgba(0, 243, 255, 0.3);
 }
 
 /* --- Efeito: Chuva de Dados G.A.I.A. --- */
@@ -543,11 +1101,12 @@ body.theme-future .result-gaia-box {
     top: -50px;
     font-family: 'Courier New', Courier, monospace;
     font-weight: bold;
-    color: var(--primary);
-    text-shadow: 0 0 8px var(--primary);
-    pointer-events: none;
-    z-index: 5;
+    color: #00f3ff;
+    text-shadow: 0 0 8px #00f3ff, 0 0 15px rgba(0, 243, 255, 0.6);
     animation: data-fall linear forwards;
+    pointer-events: none;
+    z-index: 9999;
+    user-select: none;
     white-space: nowrap;
 }
 
@@ -572,9 +1131,10 @@ body.theme-future .result-gaia-box {
 }
 
 .eco-data-bit.matrix-style {
-    color: var(--primary) !important;
-    text-shadow: 0 0 15px var(--primary), 0 0 25px rgba(0, 0, 0, 0.9) !important;
-    font-size: 1.1em;
+    color: #00ff66 !important;
+    text-shadow: 0 0 10px #00ff66, 0 0 20px rgba(0, 255, 102, 0.8), 0 0 30px rgba(0, 255, 102, 0.4) !important;
+    font-size: 1.15em;
+    font-weight: 900;
 }
 
 @keyframes glitch {
@@ -606,4 +1166,436 @@ body.theme-future .result-gaia-box {
 }
 
 /* Scanline removido por causar poluição visual e cansaço ocular */
-
+
+/* --- Símbolo/Logo do Hero no Tema Futurista (Verde Escuro Nítido & Fundo Limpo) --- */
+body.theme-future .hero-logo-container {
+    background: #080d16 !important;
+    border: 2px solid #00f3ff !important;
+    box-shadow: 0 0 28px rgba(0, 243, 255, 0.4), 0 0 60px rgba(0, 243, 255, 0.15) !important;
+    position: relative;
+}
+
+body.theme-future.dark-mode .hero-logo-container {
+    background: #040810 !important;
+    border: 2px solid #00f3ff !important;
+    box-shadow: 0 0 35px rgba(0, 243, 255, 0.5), 0 0 75px rgba(0, 243, 255, 0.2) !important;
+}
+
+body.theme-future .hero-logo {
+    /* Verde esmeralda escuro bem limpo e definido, sem vazamento de luz difusa */
+    filter: invert(1) sepia(1) saturate(550%) hue-rotate(85deg) brightness(0.78) contrast(1.25) drop-shadow(0 0 6px rgba(16, 185, 129, 0.4)) !important;
+    transition: filter 0.5s ease;
+}
+
+body.theme-future.dark-mode .hero-logo {
+    filter: invert(1) sepia(1) saturate(600%) hue-rotate(85deg) brightness(0.82) contrast(1.3) drop-shadow(0 0 8px rgba(16, 185, 129, 0.5)) !important;
+}
+
+/* --- Card de Quizzes no Tema Futurista (Neon Roxo Neon / Cyber Arcade) --- */
+body.theme-future .quiz-cta-card,
+body.theme-future.dark-mode .quiz-cta-card {
+    background: radial-gradient(circle at 10% 20%, rgba(168, 85, 247, 0.22) 0%, transparent 45%),
+                radial-gradient(circle at 85% 75%, rgba(126, 34, 206, 0.28) 0%, transparent 50%),
+                rgba(12, 6, 24, 0.9) !important;
+    border: 2px solid #a855f7 !important;
+    box-shadow: 0 0 25px rgba(168, 85, 247, 0.45), 0 0 60px rgba(168, 85, 247, 0.2), inset 0 0 25px rgba(168, 85, 247, 0.1) !important;
+}
+
+body.theme-future .quiz-cta-card .quiz-badge,
+body.theme-future.dark-mode .quiz-cta-card .quiz-badge {
+    background: rgba(168, 85, 247, 0.18) !important;
+    color: #e9d5ff !important;
+    border: 1.5px solid #c084fc !important;
+    box-shadow: 0 0 16px rgba(192, 132, 252, 0.6), 0 0 32px rgba(168, 85, 247, 0.3) !important;
+    text-shadow: 0 0 10px rgba(233, 213, 255, 0.8) !important;
+}
+
+body.theme-future .quiz-cta-card .cta-icon,
+body.theme-future.dark-mode .quiz-cta-card .cta-icon {
+    text-shadow: none !important;
+    opacity: 0.25 !important;
+}
+
+body.theme-future .quiz-cta-card .cta-icon i,
+body.theme-future.dark-mode .quiz-cta-card .cta-icon i {
+    color: #a855f7 !important;
+    text-shadow: none !important;
+    filter: none !important;
+}
+
+body.theme-future .quiz-cta-card .btn,
+body.theme-future.dark-mode .quiz-cta-card .btn {
+    background: rgba(168, 85, 247, 0.2) !important;
+    border: 1.5px solid #a855f7 !important;
+    color: #ffffff !important;
+    box-shadow: 0 0 15px rgba(168, 85, 247, 0.4) !important;
+}
+
+body.theme-future .quiz-cta-card .btn:hover,
+body.theme-future.dark-mode .quiz-cta-card .btn:hover {
+    background: #a855f7 !important;
+    color: #ffffff !important;
+    box-shadow: 0 0 25px rgba(168, 85, 247, 0.8) !important;
+    transform: translateY(-2px);
+}
+
+
+/* --- Aba Reciclagem no Tema Futurista (G.A.I.A. Cyber Grid & Neon) --- */
+body.theme-future.theme-guide .reciclagem-hero,
+body.theme-future .reciclagem-hero {
+    background: radial-gradient(circle at 15% 30%, rgba(0, 243, 255, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 85% 70%, rgba(57, 255, 20, 0.15) 0%, transparent 50%),
+                #05010a !important;
+    border-bottom: 2px solid #00f3ff !important;
+    box-shadow: 0 10px 30px rgba(0, 243, 255, 0.25) !important;
+    position: relative;
+    overflow: hidden;
+}
+
+body.theme-future.theme-guide .reciclagem-hero::before,
+body.theme-future .reciclagem-hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: 
+        linear-gradient(rgba(0, 243, 255, 0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 243, 255, 0.06) 1px, transparent 1px);
+    background-size: 40px 40px;
+    background-position: center center;
+    pointer-events: none;
+    z-index: 1;
+}
+
+body.theme-future .reciclagem-hero .container {
+    position: relative;
+    z-index: 10;
+}
+
+body.theme-future .guide-hero-badge {
+    background: rgba(0, 243, 255, 0.12) !important;
+    border: 1.5px solid #00f3ff !important;
+    color: #70ffff !important;
+    box-shadow: 0 0 18px rgba(0, 243, 255, 0.5) !important;
+    text-shadow: 0 0 8px rgba(112, 255, 255, 0.7);
+}
+
+body.theme-future .reciclagem-hero h1 {
+    color: #f8fafc !important;
+    text-shadow: 0 0 20px rgba(0, 243, 255, 0.4);
+}
+
+body.theme-future .reciclagem-hero h1 .gradient-text {
+    background: linear-gradient(135deg, #70ffff 0%, #00f3ff 60%, #38bdf8 100%) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    filter: drop-shadow(0 0 15px rgba(0, 243, 255, 0.6));
+}
+
+body.theme-future .hero-floating-icon {
+    color: #00f3ff !important;
+    opacity: 0.25 !important;
+    filter: drop-shadow(0 0 15px rgba(0, 243, 255, 0.5));
+}
+
+/* --- Barra de Pesquisa no Tema Futurista (Cyberpunk Terminal) --- */
+body.theme-future .search-label {
+    color: #ffffff !important;
+    text-shadow: 0 0 10px rgba(0, 243, 255, 0.5);
+}
+
+body.theme-future .search-label i {
+    color: #00f3ff !important;
+    text-shadow: 0 0 10px rgba(0, 243, 255, 0.7);
+}
+
+body.theme-future .search-container,
+body.theme-future.dark-mode .search-container {
+    background: rgba(10, 15, 26, 0.85) !important;
+    border: 2px solid rgba(0, 243, 255, 0.4) !important;
+    box-shadow: 0 0 25px rgba(0, 243, 255, 0.25), 0 10px 30px rgba(0, 0, 0, 0.5) !important;
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+}
+
+body.theme-future .search-container:focus-within,
+body.theme-future.dark-mode .search-container:focus-within {
+    border-color: #00f3ff !important;
+    box-shadow: 0 0 35px rgba(0, 243, 255, 0.5), 0 0 70px rgba(0, 243, 255, 0.2) !important;
+    transform: translateY(-2px);
+}
+
+body.theme-future .search-icon-left {
+    color: #00f3ff !important;
+    text-shadow: 0 0 10px rgba(0, 243, 255, 0.6);
+}
+
+body.theme-future .search-container input,
+body.theme-future.dark-mode .search-container input {
+    color: #f8fafc !important;
+}
+
+body.theme-future .search-container input::placeholder {
+    color: rgba(148, 163, 184, 0.6) !important;
+}
+
+body.theme-future .search-btn,
+body.theme-future.dark-mode .search-btn {
+    background: linear-gradient(135deg, #00f3ff 0%, #0284c7 100%) !important;
+    color: #ffffff !important;
+    font-weight: 800 !important;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 0 20px rgba(0, 243, 255, 0.5) !important;
+}
+
+body.theme-future .search-btn:hover,
+body.theme-future.dark-mode .search-btn:hover {
+    background: linear-gradient(135deg, #38bdf8 0%, #0284c7 100%) !important;
+    color: #ffffff !important;
+    box-shadow: 0 0 30px rgba(0, 243, 255, 0.8) !important;
+    transform: scale(1.04);
+}
+
+body.theme-future .search-hints span,
+body.theme-future.dark-mode .search-hints span {
+    background: rgba(10, 15, 26, 0.8) !important;
+    border: 1px solid rgba(0, 243, 255, 0.3) !important;
+    color: #cbd5e1 !important;
+    box-shadow: 0 0 10px rgba(0, 243, 255, 0.1) !important;
+}
+
+body.theme-future .search-hints span:hover,
+body.theme-future.dark-mode .search-hints span:hover {
+    background: rgba(0, 243, 255, 0.2) !important;
+    border-color: #00f3ff !important;
+    color: #ffffff !important;
+    box-shadow: 0 0 18px rgba(0, 243, 255, 0.45) !important;
+    transform: translateY(-2px);
+}
+
+body.theme-future .search-hints span i {
+    color: #00f3ff !important;
+}
+
+/* --- Rodapé (Footer) no Tema Futurista --- */
+body.theme-future .main-footer {
+    background: linear-gradient(180deg, rgba(8, 13, 22, 0.95) 0%, #05010a 100%) !important;
+    border-top: 2px solid var(--primary, #00f3ff) !important;
+    box-shadow: 0 -10px 30px var(--neon-shadow, rgba(0, 243, 255, 0.25)) !important;
+    position: relative;
+    overflow: hidden;
+}
+
+body.theme-future.dark-mode .main-footer {
+    background: linear-gradient(180deg, #090d16 0%, #030107 100%) !important;
+    border-top: 2px solid #00f3ff !important;
+    box-shadow: 0 -10px 40px rgba(0, 243, 255, 0.35) !important;
+}
+
+body.theme-future .main-footer::before {
+    display: none !important;
+}
+
+body.theme-future .main-footer .container {
+    position: relative;
+    z-index: 2;
+}
+
+body.theme-future .footer-logo img {
+    filter: drop-shadow(0 0 12px #22c55e) brightness(1.3) hue-rotate(0deg) saturate(2.5) !important;
+    transition: filter 0.3s ease;
+}
+
+body.theme-future .footer-logo span {
+    color: #f8fafc !important;
+    letter-spacing: 0.1em;
+    text-shadow: 0 0 12px rgba(0, 243, 255, 0.6);
+}
+
+body.theme-future .footer-copy p {
+    color: #94a3b8 !important;
+}
+
+body.theme-future .social-links a.instagram-btn {
+    background: rgba(10, 15, 26, 0.8) !important;
+    border: 1.5px solid rgba(0, 243, 255, 0.4) !important;
+    color: #e2e8f0 !important;
+    box-shadow: 0 0 16px rgba(0, 243, 255, 0.25) !important;
+    backdrop-filter: blur(10px);
+}
+
+body.theme-future .social-links a.instagram-btn:hover {
+    background: linear-gradient(45deg, #405de6 0%, #833ab4 20%, #c13584 40%, #e1306c 60%, #fd1d1d 78%, #f77737 90%, #fcaf45 100%) !important;
+    border-color: transparent !important;
+    box-shadow: 0 0 30px rgba(225, 48, 108, 0.7), 0 0 15px rgba(0, 243, 255, 0.5) !important;
+    color: #ffffff !important;
+}
+
+/* --- Novo Modelo Cyber-Arcade para os Cards de Quiz (Tema Futurista) --- */
+body.theme-future .quiz-card,
+body.theme-future.dark-mode .quiz-card {
+    background: #090614 !important;
+    border: 2px solid #a855f7 !important;
+    border-radius: 28px !important;
+    overflow: hidden !important;
+    box-shadow: 0 0 25px rgba(168, 85, 247, 0.35), 0 15px 35px rgba(0, 0, 0, 0.6) !important;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+    position: relative !important;
+}
+
+body.theme-future .quiz-card:hover,
+body.theme-future.dark-mode .quiz-card:hover {
+    transform: translateY(-8px) scale(1.02) !important;
+    border-color: #c084fc !important;
+    box-shadow: 0 0 35px rgba(192, 132, 252, 0.55), 0 20px 45px rgba(0, 0, 0, 0.7) !important;
+}
+
+/* Área superior do ícone: elegante, profunda e temática */
+body.theme-future .quiz-visual,
+body.theme-future.dark-mode .quiz-visual {
+    height: 160px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border-bottom: 2px solid rgba(168, 85, 247, 0.3) !important;
+    position: relative !important;
+}
+
+body.theme-future .quiz-visual i,
+body.theme-future.dark-mode .quiz-visual i {
+    font-size: 3.8rem !important;
+    color: #ffffff !important;
+    filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.5)) !important;
+    transition: transform 0.3s ease !important;
+}
+
+body.theme-future .quiz-card:hover .quiz-visual i {
+    transform: scale(1.1) !important;
+}
+
+/* Cores específicas da parte superior por categoria (Tons nobres escuros) */
+body.theme-future .quiz-visual.orgânico,
+body.theme-future.dark-mode .quiz-visual.orgânico {
+    background: linear-gradient(180deg, #14532d 0%, #052e16 100%) !important;
+}
+
+body.theme-future .quiz-visual.pilhas,
+body.theme-future.dark-mode .quiz-visual.pilhas {
+    background: linear-gradient(180deg, #854d0e 0%, #451a03 100%) !important;
+}
+
+body.theme-future .quiz-visual.seco,
+body.theme-future.dark-mode .quiz-visual.seco {
+    background: linear-gradient(180deg, #0e7490 0%, #164e63 100%) !important;
+}
+
+body.theme-future .quiz-visual.vidro,
+body.theme-future.dark-mode .quiz-visual.vidro {
+    background: linear-gradient(180deg, #1d4ed8 0%, #1e1b4b 100%) !important;
+}
+
+body.theme-future .quiz-visual.metal,
+body.theme-future.dark-mode .quiz-visual.metal {
+    background: linear-gradient(180deg, #b45309 0%, #451a03 100%) !important;
+}
+
+body.theme-future .quiz-visual.plastico,
+body.theme-future.dark-mode .quiz-visual.plastico {
+    background: linear-gradient(180deg, #b91c1c 0%, #450a0a 100%) !important;
+}
+
+/* Área inferior com texto e botão */
+body.theme-future .quiz-info,
+body.theme-future.dark-mode .quiz-info {
+    padding: 30px 24px !important;
+    background: #090614 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    text-align: center !important;
+}
+
+body.theme-future .quiz-info h3,
+body.theme-future.dark-mode .quiz-info h3 {
+    color: #f8fafc !important;
+    font-size: 1.55rem !important;
+    font-weight: 800 !important;
+    margin-bottom: 12px !important;
+    letter-spacing: -0.5px !important;
+    text-shadow: 0 0 10px rgba(168, 85, 247, 0.4) !important;
+}
+
+body.theme-future .quiz-info p,
+body.theme-future.dark-mode .quiz-info p {
+    color: #cbd5e1 !important;
+    font-size: 0.95rem !important;
+    line-height: 1.6 !important;
+    margin-bottom: 25px !important;
+}
+
+/* Botão "Iniciar Quiz" no estilo neon */
+body.theme-future .quiz-info .btn-primary,
+body.theme-future.dark-mode .quiz-info .btn-primary {
+    background: transparent !important;
+    color: #e9d5ff !important;
+    border: 2px solid #a855f7 !important;
+    border-radius: 16px !important;
+    font-weight: 800 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.08em !important;
+    padding: 14px 20px !important;
+    box-shadow: 0 0 15px rgba(168, 85, 247, 0.3), inset 0 0 10px rgba(168, 85, 247, 0.15) !important;
+    transition: all 0.3s ease !important;
+}
+
+body.theme-future .quiz-info .btn-primary:hover,
+body.theme-future.dark-mode .quiz-info .btn-primary:hover {
+    background: #a855f7 !important;
+    color: #ffffff !important;
+    box-shadow: 0 0 25px rgba(168, 85, 247, 0.8) !important;
+    border-color: #c084fc !important;
+    transform: translateY(-2px) !important;
+}
+
+
+/* --- ITEM ESPECIAL NA ECO-LOJA --- */
+.eco-shop-item.special-item {
+    position: relative;
+    border: 1.5px solid #00f3ff !important;
+    background: radial-gradient(circle at 50% 0%, rgba(0, 243, 255, 0.16) 0%, rgba(8, 20, 36, 0.7) 100%) !important;
+    box-shadow: 0 0 15px rgba(0, 243, 255, 0.25) !important;
+}
+
+.eco-shop-item.special-item:hover {
+    border-color: #70ffff !important;
+    box-shadow: 0 0 22px rgba(0, 243, 255, 0.5) !important;
+}
+
+.eco-shop-item .item-special-tag {
+    position: absolute;
+    top: -8px;
+    right: -6px;
+    background: linear-gradient(135deg, #00f3ff, #0284c7);
+    color: #030a16;
+    font-size: 0.58rem;
+    font-weight: 900;
+    padding: 2px 7px;
+    border-radius: 8px;
+    letter-spacing: 0.8px;
+    box-shadow: 0 0 10px rgba(0, 243, 255, 0.6);
+    text-transform: uppercase;
+    z-index: 2;
+}
+
+/* --- STREAM CIBERNÉTICO DA CHUVA DE DADOS --- */
+.eco-data-bit.cyber-stream {
+    color: #38bdf8;
+    text-shadow: 0 0 8px #00f3ff, 0 0 18px rgba(0, 243, 255, 0.7);
+    font-family: 'VT323', 'Courier New', monospace;
+    letter-spacing: 1.5px;
+    opacity: 0.88;
+}
+
+.eco-data-bit.cyber-stream .data-head {
+    color: #ffffff;
+    text-shadow: 0 0 10px #ffffff, 0 0 20px #00f3ff;
+    font-weight: 900;
+}

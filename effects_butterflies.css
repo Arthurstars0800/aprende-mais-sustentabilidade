@@ -1,0 +1,182 @@
+/* ==========================================================================
+   EFEITO: JARDIM DE BORBOLETAS (Dança Floral 3D)
+   Batimento de asas tridimensional realista, trajetórias orgânicas de voo
+   e rastro sutil de pólen brilhante.
+   ========================================================================== */
+
+.eco-butterfly-wrapper {
+    position: absolute;
+    pointer-events: none;
+    z-index: 9998;
+    will-change: transform;
+}
+
+.eco-butterfly {
+    width: 68px;
+    height: 56px;
+    perspective: 600px;
+    transform-style: preserve-3d;
+    filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.26));
+    will-change: transform;
+}
+
+.eco-butterfly-svg {
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+}
+
+/* Batimento de asas em 3D realista */
+.eco-butterfly .wing-left {
+    transform-origin: 27px 20px;
+    will-change: transform;
+    animation: butterflyFlapLeft 0.22s cubic-bezier(0.4, 0, 0.6, 1) infinite alternate;
+}
+
+.eco-butterfly .wing-right {
+    transform-origin: 27px 20px;
+    will-change: transform;
+    animation: butterflyFlapRight 0.22s cubic-bezier(0.4, 0, 0.6, 1) infinite alternate;
+}
+
+/* Variação suave de velocidade de batimento */
+.eco-butterfly.speed-fast .wing-left,
+.eco-butterfly.speed-fast .wing-right {
+    animation-duration: 0.17s;
+}
+
+.eco-butterfly.speed-gentle .wing-left,
+.eco-butterfly.speed-gentle .wing-right {
+    animation-duration: 0.27s;
+}
+
+@keyframes butterflyFlapLeft {
+    0% {
+        transform: rotateY(0deg) rotateZ(0deg);
+    }
+    100% {
+        transform: rotateY(74deg) rotateZ(-6deg);
+    }
+}
+
+@keyframes butterflyFlapRight {
+    0% {
+        transform: rotateY(0deg) rotateZ(0deg);
+    }
+    100% {
+        transform: rotateY(-74deg) rotateZ(6deg);
+    }
+}
+
+/* ==========================================================================
+   TRAJETÓRIAS DE VOO (Ondulação Sinusoidal & Vento)
+   ========================================================================== */
+
+/* 1. Voo da Esquerda para a Direita com oscilações suaves de altitude */
+@keyframes flyLeftToRight {
+    0% {
+        transform: translate3d(-60px, 0, 0) rotate(12deg) scale(0.9);
+        opacity: 0;
+    }
+    10% {
+        opacity: 1;
+    }
+    25% {
+        transform: translate3d(25vw, -45px, 0) rotate(4deg) scale(1);
+    }
+    50% {
+        transform: translate3d(52vw, 30px, 0) rotate(16deg) scale(0.95);
+    }
+    75% {
+        transform: translate3d(78vw, -35px, 0) rotate(6deg) scale(1.05);
+    }
+    90% {
+        opacity: 1;
+    }
+    100% {
+        transform: translate3d(108vw, 15px, 0) rotate(14deg) scale(0.9);
+        opacity: 0;
+    }
+}
+
+/* 2. Voo da Direita para a Esquerda */
+@keyframes flyRightToLeft {
+    0% {
+        transform: translate3d(106vw, 0, 0) scaleX(-1) rotate(12deg) scale(0.9);
+        opacity: 0;
+    }
+    10% {
+        opacity: 1;
+    }
+    25% {
+        transform: translate3d(78vw, -40px, 0) scaleX(-1) rotate(4deg) scale(1.05);
+    }
+    50% {
+        transform: translate3d(50vw, 35px, 0) scaleX(-1) rotate(18deg) scale(0.95);
+    }
+    75% {
+        transform: translate3d(24vw, -30px, 0) scaleX(-1) rotate(6deg) scale(1);
+    }
+    90% {
+        opacity: 1;
+    }
+    100% {
+        transform: translate3d(-60px, 10px, 0) scaleX(-1) rotate(14deg) scale(0.9);
+        opacity: 0;
+    }
+}
+
+/* 3. Voo Ascendente Espiralado (sobe flutuando suavemente pelo centro) */
+@keyframes flyAscendSpiral {
+    0% {
+        transform: translate3d(0, 106vh, 0) rotate(-10deg) scale(0.85);
+        opacity: 0;
+    }
+    12% {
+        opacity: 1;
+    }
+    30% {
+        transform: translate3d(45px, 75vh, 0) rotate(8deg) scale(1);
+    }
+    55% {
+        transform: translate3d(-35px, 45vh, 0) rotate(-14deg) scale(1.05);
+    }
+    80% {
+        transform: translate3d(40px, 18vh, 0) rotate(10deg) scale(1);
+    }
+    92% {
+        opacity: 0.9;
+    }
+    100% {
+        transform: translate3d(-20px, -60px, 0) rotate(-6deg) scale(0.85);
+        opacity: 0;
+    }
+}
+
+/* Partículas sutis de pólen brilhante */
+.eco-butterfly-pollen {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background: radial-gradient(circle, #fde047 30%, rgba(253, 224, 71, 0) 80%);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9997;
+    animation: pollenFade 1.2s ease-out forwards;
+}
+
+@keyframes pollenFade {
+    0% {
+        opacity: 0.85;
+        transform: translate3d(0, 0, 0) scale(1);
+    }
+    100% {
+        opacity: 0;
+        transform: translate3d(var(--pollen-dx, 6px), 18px, 0) scale(0.3);
+    }
+}
+
+/* Modo Escuro: Brilho bioluminescente sutil nas asas */
+body.dark-mode .eco-butterfly {
+    filter: drop-shadow(0 0 10px rgba(56, 189, 248, 0.45)) drop-shadow(0 3px 6px rgba(0, 0, 0, 0.4));
+}

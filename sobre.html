@@ -2,6 +2,7 @@
 <html lang="pt-br">
 
 <head>
+    <meta name="google" content="notranslate">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quem Somos - Aprende Mais</title>
@@ -12,43 +13,49 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <link rel="manifest" href="manifest.json">
+    
     <meta name="theme-color" content="#2d5a27">
     <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 
 <body class="theme-nature">
     <div class="menu-overlay"></div>
-    <nav class="navbar">
-        <div class="container">
-            <div class="logo">
-                <img src="logo.png" alt="Logo" class="nav-logo">
-                <span>APRENDE MAIS</span>
-            </div>
-
+        <nav class="navbar" id="mainNavbar">
+        <div class="reading-progress-container"><div class="reading-progress-bar" id="readingProgressBar"></div></div>
+        <div class="nav-inner">
+            <a href="index.html" class="nav-logo-wrap">
+                <img src="logo.png" alt="Logo" class="nav-logo-img">
+                <span class="nav-logo-text">APRENDE MAIS</span>
+            </a>
             <ul class="nav-links" id="navLinks">
                 <li><a href="index.html">Home</a></li>
                 <li><a href="reciclagem.html">Reciclagem</a></li>
                 <li><a href="artesanato.html">Oficina</a></li>
-                <li><a href="quizes.html">Quizes</a></li>
+                <li><a href="quizes.html">Quizzes</a></li>
                 <li><a href="minigames.html">Minigames</a></li>
                 <li><a href="sobre.html" class="active">Sobre</a></li>
             </ul>
-
-            <div class="eco-hud" id="ecoHud" title="Carregando perfil...">
-                <span class="eco-level-icon">🌱</span>
-                <div class="eco-bar-container">
-                    <div class="eco-bar-fill" id="ecoBarFill" style="width: 0%"></div>
+            <div class="nav-actions">
+                <div class="eco-hud" id="ecoHud" title="Ver perfil">
+                    <span class="eco-level-icon"></span>
+                    <div class="eco-bar-container">
+                        <div class="eco-bar-fill" id="ecoBarFill" style="width:0%"></div>
+                    </div>
+                    <span class="eco-xp-text" id="ecoXpText">...</span>
                 </div>
-                <span class="eco-xp-text" id="ecoXpText">...</span>
+                <div id="authContainer" class="auth-container">
+                    <div id="googleLoginBtn"></div>
+                    <img id="userProfileImg" class="user-profile-img" style="display:none;width:36px;height:36px;border-radius:50%;border:2px solid var(--primary);cursor:pointer;" alt="User">
+                </div>
+                <button class="nav-icon-btn" id="darkModeToggle" aria-label="Toggle Dark Mode">
+                    <i class="fas fa-moon"></i>
+                </button>
+                <button class="nav-icon-btn" id="audioToggle" aria-label="Toggle Sound">
+                    <i class="fas fa-volume-mute"></i>
+                </button>
             </div>
-
-            <div id="authContainer" class="auth-container" style="display: flex; align-items: center; gap: 10px; margin-left: 10px;">
-                <div id="googleLoginBtn"></div>
-                <img id="userProfileImg" class="user-profile-img" style="display: none; width: 36px; height: 36px; border-radius: 50%; border: 2px solid var(--primary); cursor: pointer;" alt="User">
-            </div>
-
-            <button class="dark-mode-toggle" id="darkModeToggle" aria-label="Toggle Dark Mode">
-                <i class="fas fa-moon"></i>
+            <button class="nav-hamburger" id="mobileMenuToggle" aria-label="Menu">
+                <span></span><span></span><span></span>
             </button>
         </div>
     </nav>
@@ -69,7 +76,7 @@
         </a>
         <a href="quizes.html" class="bottom-nav-item">
             <i class="fas fa-gamepad"></i>
-            <span>Quizes</span>
+            <span>Quizzes</span>
         </a>
         <a href="minigames.html" class="bottom-nav-item">
             <i class="fas fa-rocket"></i>
@@ -113,8 +120,20 @@
     </main>
 
     <footer class="main-footer">
-        <div class="container">
-            <p>&copy; 2025 Aprende Mais: Sustentabilidade. Desenvolvido para um futuro melhor.</p>
+        <div class="container footer-grid">
+            <div class="footer-logo">
+                <img src="logo.png" alt="Logo">
+                <span>APRENDE MAIS</span>
+            </div>
+            <div class="footer-copy">
+                <p>&copy; 2025 Aprende Mais: Sustentabilidade. Desenvolvido para um futuro melhor.</p>
+                <div class="social-links">
+                    <a href="https://www.instagram.com/projeto_gaia26?stkn=MWhocW5jcmNhYWM0dA%3D%3D" target="_blank" rel="noopener noreferrer" class="instagram-btn">
+                        <i class="fab fa-instagram"></i>
+                        <span>@projeto_gaia26</span>
+                    </a>
+                </div>
+            </div>
         </div>
     </footer>
 
@@ -143,6 +162,7 @@
                     // Check theme for colors
                     const isDark = document.body.classList.contains('dark-mode');
                     const isFuture = document.body.classList.contains('theme-future');
+                    const isWindstock = document.body.classList.contains('theme-windstock');
                     
                     let bgColor = isDark ? '#2a2a2a' : 'white';
                     let titleColor = isDark ? '#4ade80' : 'var(--primary)';
@@ -158,6 +178,15 @@
                         mutedColor = '#8080a0';
                         borderColor = '2px solid #00f3ff';
                         boxShadow = '0 0 40px rgba(0, 243, 255, 0.3)';
+                    }
+
+                    if (isWindstock) {
+                        bgColor = isDark ? '#064e3b' : '#ffffff';
+                        titleColor = '#f97316';
+                        textColor = isDark ? '#ffffff' : '#1f2937';
+                        mutedColor = isDark ? '#fde047' : '#ea580c';
+                        borderColor = '5px solid #ea580c';
+                        boxShadow = '0 0 0 5px #ffffff, 0 12px 0 5px #047857, 0 25px 50px rgba(0, 0, 0, 0.5)';
                     }
 
                     // Criar overlay escuro
@@ -198,7 +227,7 @@
                             O mundo acaba e nós estamos assistindo tudo acontecendo ao nosso redor, este site é uma forma de tentar fazer o que a mídia tradicional não faz, reclamar de aquecimento global é fácil mas dar uma solução para tudo isso é para poucos, espero que este projeto e o G.A.I.A. acabem dando certo pois assim poderei cumprir meus objetivos de espalhar educação ecológica gratuita e acessível para todos com meus projetos.
                         </p>
                         <p style="color: ${mutedColor}; font-style: italic; font-size: 1rem; margin-bottom: 30px; text-align: right;">
-                            - Arthur da Silva Arcari, 2026
+                            - Arthur da Silva Arcari, 2024
                         </p>
                         <button id="closePopup" style="
                             background: var(--primary);
@@ -259,6 +288,7 @@
         `;
         document.head.appendChild(style);
     </script>
+    <script src="theme_deltarune.js"></script>
 </body>
 
 </html>

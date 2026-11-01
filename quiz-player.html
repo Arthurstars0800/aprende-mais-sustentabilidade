@@ -2,6 +2,7 @@
 <html lang="pt-br">
 
 <head>
+    <meta name="google" content="notranslate">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quiz Interativo - Aprende Mais</title>
@@ -12,6 +13,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <link rel="manifest" href="manifest.json">
+    
     <meta name="theme-color" content="#2d5a27">
 </head>
 
@@ -21,26 +23,46 @@
         <li><a href="index.html">Home</a></li>
         <li><a href="reciclagem.html">Guia de Reciclagem</a></li>
         <li><a href="artesanato.html">Oficina</a></li>
-        <li><a href="quizes.html" class="active">Quizes</a></li>
+        <li><a href="quizes.html" class="active">Quizzes</a></li>
         <li><a href="sobre.html">Quem Somos</a></li>
     </ul>
 
-    <nav class="navbar">
-        <div class="container">
-            <div class="logo">
-                <img src="logo.png" alt="Logo" class="nav-logo">
-                <span>APRENDE MAIS</span>
-            </div>
-
-            <div class="eco-hud" id="ecoHud" title="Carregando perfil...">
-                <span class="eco-level-icon">🌱</span>
-                <div class="eco-bar-container">
-                    <div class="eco-bar-fill" id="ecoBarFill" style="width: 0%"></div>
+        <nav class="navbar" id="mainNavbar">
+        <div class="reading-progress-container"><div class="reading-progress-bar" id="readingProgressBar"></div></div>
+        <div class="nav-inner">
+            <a href="index.html" class="nav-logo-wrap">
+                <img src="logo.png" alt="Logo" class="nav-logo-img">
+                <span class="nav-logo-text">APRENDE MAIS</span>
+            </a>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="reciclagem.html">Reciclagem</a></li>
+                <li><a href="artesanato.html">Oficina</a></li>
+                <li><a href="quizes.html" class="active">Quizzes</a></li>
+                <li><a href="minigames.html">Minigames</a></li>
+                <li><a href="sobre.html">Sobre</a></li>
+            </ul>
+            <div class="nav-actions">
+                <div class="eco-hud" id="ecoHud" title="Ver perfil">
+                    <span class="eco-level-icon"></span>
+                    <div class="eco-bar-container">
+                        <div class="eco-bar-fill" id="ecoBarFill" style="width:0%"></div>
+                    </div>
+                    <span class="eco-xp-text" id="ecoXpText">...</span>
                 </div>
-                <span class="eco-xp-text" id="ecoXpText">...</span>
+                <div id="authContainer" class="auth-container">
+                    <div id="googleLoginBtn"></div>
+                    <img id="userProfileImg" class="user-profile-img" style="display:none;width:36px;height:36px;border-radius:50%;border:2px solid var(--primary);cursor:pointer;" alt="User">
+                </div>
+                <button class="nav-icon-btn" id="darkModeToggle" aria-label="Toggle Dark Mode">
+                    <i class="fas fa-moon"></i>
+                </button>
+                <button class="nav-icon-btn" id="audioToggle" aria-label="Toggle Sound">
+                    <i class="fas fa-volume-mute"></i>
+                </button>
             </div>
-            <button class="dark-mode-toggle" id="darkModeToggle" aria-label="Toggle Dark Mode">
-                <i class="fas fa-moon"></i>
+            <button class="nav-hamburger" id="mobileMenuToggle" aria-label="Menu">
+                <span></span><span></span><span></span>
             </button>
         </div>
     </nav>
@@ -95,6 +117,24 @@
         </div>
     </main>
 
+    <footer class="main-footer">
+        <div class="container footer-grid">
+            <div class="footer-logo">
+                <img src="logo.png" alt="Logo">
+                <span>APRENDE MAIS</span>
+            </div>
+            <div class="footer-copy">
+                <p>&copy; 2025 Aprende Mais: Sustentabilidade. Desenvolvido para um futuro melhor.</p>
+                <div class="social-links">
+                    <a href="https://www.instagram.com/projeto_gaia26?stkn=MWhocW5jcmNhYWM0dA%3D%3D" target="_blank" rel="noopener noreferrer" class="instagram-btn">
+                        <i class="fab fa-instagram"></i>
+                        <span>@projeto_gaia26</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
         AOS.init({
@@ -105,6 +145,7 @@
     <script src="gamification.js"></script>
     <script src="script.js"></script>
     <script src="quiz-engine.js"></script>
+    <script src="theme_deltarune.js"></script>
 </body>
 
 </html>

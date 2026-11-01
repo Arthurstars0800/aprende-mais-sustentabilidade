@@ -2,9 +2,10 @@
 <html lang="pt-br">
 
 <head>
+    <meta name="google" content="notranslate">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quizes de Sustentabilidade - Aprende Mais</title>
+    <title>Quizzes de Sustentabilidade - Aprende Mais</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
@@ -12,6 +13,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <link rel="manifest" href="manifest.json">
+    
     <meta name="theme-color" content="#2d5a27">
     <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
@@ -19,37 +21,42 @@
 <body class="theme-game">
     <div class="menu-overlay"></div>
 
-    <nav class="navbar">
-        <div class="container">
-            <div class="logo">
-                <img src="logo.png" alt="Logo" class="nav-logo">
-                <span>APRENDE MAIS</span>
-            </div>
-
+        <nav class="navbar" id="mainNavbar">
+        <div class="reading-progress-container"><div class="reading-progress-bar" id="readingProgressBar"></div></div>
+        <div class="nav-inner">
+            <a href="index.html" class="nav-logo-wrap">
+                <img src="logo.png" alt="Logo" class="nav-logo-img">
+                <span class="nav-logo-text">APRENDE MAIS</span>
+            </a>
             <ul class="nav-links" id="navLinks">
                 <li><a href="index.html">Home</a></li>
                 <li><a href="reciclagem.html">Reciclagem</a></li>
                 <li><a href="artesanato.html">Oficina</a></li>
-                <li><a href="quizes.html" class="active">Quizes</a></li>
+                <li><a href="quizes.html" class="active">Quizzes</a></li>
                 <li><a href="minigames.html">Minigames</a></li>
                 <li><a href="sobre.html">Sobre</a></li>
             </ul>
-
-            <div class="eco-hud" id="ecoHud" title="Carregando perfil...">
-                <span class="eco-level-icon">🌱</span>
-                <div class="eco-bar-container">
-                    <div class="eco-bar-fill" id="ecoBarFill" style="width: 0%"></div>
+            <div class="nav-actions">
+                <div class="eco-hud" id="ecoHud" title="Ver perfil">
+                    <span class="eco-level-icon"></span>
+                    <div class="eco-bar-container">
+                        <div class="eco-bar-fill" id="ecoBarFill" style="width:0%"></div>
+                    </div>
+                    <span class="eco-xp-text" id="ecoXpText">...</span>
                 </div>
-                <span class="eco-xp-text" id="ecoXpText">...</span>
+                <div id="authContainer" class="auth-container">
+                    <div id="googleLoginBtn"></div>
+                    <img id="userProfileImg" class="user-profile-img" style="display:none;width:36px;height:36px;border-radius:50%;border:2px solid var(--primary);cursor:pointer;" alt="User">
+                </div>
+                <button class="nav-icon-btn" id="darkModeToggle" aria-label="Toggle Dark Mode">
+                    <i class="fas fa-moon"></i>
+                </button>
+                <button class="nav-icon-btn" id="audioToggle" aria-label="Toggle Sound">
+                    <i class="fas fa-volume-mute"></i>
+                </button>
             </div>
-
-            <div id="authContainer" class="auth-container" style="display: flex; align-items: center; gap: 10px; margin-left: 10px;">
-                <div id="googleLoginBtn"></div>
-                <img id="userProfileImg" class="user-profile-img" style="display: none; width: 36px; height: 36px; border-radius: 50%; border: 2px solid var(--primary); cursor: pointer;" alt="User">
-            </div>
-
-            <button class="dark-mode-toggle" id="darkModeToggle" aria-label="Toggle Dark Mode">
-                <i class="fas fa-moon"></i>
+            <button class="nav-hamburger" id="mobileMenuToggle" aria-label="Menu">
+                <span></span><span></span><span></span>
             </button>
         </div>
     </nav>
@@ -70,7 +77,7 @@
         </a>
         <a href="quizes.html" class="bottom-nav-item active">
             <i class="fas fa-gamepad"></i>
-            <span>Quizes</span>
+            <span>Quizzes</span>
         </a>
         <a href="minigames.html" class="bottom-nav-item">
             <i class="fas fa-rocket"></i>
@@ -82,18 +89,35 @@
         </a>
     </nav>
 
-    <header class="hero-mini">
-        <div class="container" data-aos="fade-down">
-            <span class="badge">Desafio</span>
-            <h1>Teste seus Conhecimentos</h1>
-            <p>Escolha um dos temas abaixo e prove que você é um mestre da sustentabilidade!</p>
+            <header class="hero quizes-hero">
+        <div class="hero-bg-shapes">
+            <i class="fas fa-question-circle hero-floating-icon icon-1"></i>
+            <i class="fas fa-brain hero-floating-icon icon-2"></i>
+            <i class="fas fa-award hero-floating-icon icon-3"></i>
+            <i class="fas fa-lightbulb hero-floating-icon icon-4"></i>
+        </div>
+        <div class="container hero-split-box" data-aos="zoom-in">
+            <div class="hero-left-col">
+                <span class="hero-game-badge quiz-hero-badge"><i class="fas fa-gamepad"></i> Central de Quizzes</span>
+                <h1>Desafie seus <span class="gradient-text">Conhecimentos</span></h1>
+
+            </div>
+            <div class="hero-right-col">
+                <div class="hero-game-tags quiz-interactive-tags">
+                    <button class="tag-item quiz-filter-btn active" data-filter="all"><i class="fas fa-border-all"></i> Todos os Quizzes</button>
+                    <button class="tag-item quiz-filter-btn" data-filter="recycle"><i class="fas fa-recycle"></i> Recicláveis &amp; Seco</button>
+                    <button class="tag-item quiz-filter-btn" data-filter="compost"><i class="fas fa-seedling"></i> Lixo Orgânico</button>
+                    <button class="tag-item quiz-filter-btn" data-filter="special"><i class="fas fa-bolt"></i> Pilhas &amp; Especiais</button>
+                    <button class="tag-item quiz-filter-btn" data-filter="energy"><i class="fas fa-wind"></i> Energia</button>
+                </div>
+            </div>
         </div>
     </header>
 
     <section class="container quiz-grid">
 
         <!-- Quiz Lixo Orgânico -->
-        <div class="quiz-card" data-aos="fade-up">
+        <div class="quiz-card" data-category="compost" data-aos="fade-up">
             <div class="quiz-visual orgânico">
                 <i class="fas fa-apple-whole"></i>
             </div>
@@ -105,7 +129,7 @@
         </div>
 
         <!-- Quiz Pilhas e Baterias -->
-        <div class="quiz-card" data-aos="fade-up" data-aos-delay="100">
+        <div class="quiz-card" data-category="special" data-aos="fade-up" data-aos-delay="100">
             <div class="quiz-visual pilhas">
                 <i class="fas fa-battery-three-quarters"></i>
             </div>
@@ -117,7 +141,7 @@
         </div>
 
         <!-- Quiz Lixo Seco -->
-        <div class="quiz-card" data-aos="fade-up" data-aos-delay="200">
+        <div class="quiz-card" data-category="recycle" data-aos="fade-up" data-aos-delay="200">
             <div class="quiz-visual seco">
                 <i class="fas fa-recycle"></i>
             </div>
@@ -129,7 +153,7 @@
         </div>
 
         <!-- Quiz Vidro -->
-        <div class="quiz-card" data-aos="fade-up" data-aos-delay="300">
+        <div class="quiz-card" data-category="recycle" data-aos="fade-up" data-aos-delay="300">
             <div class="quiz-visual vidro">
                 <i class="fas fa-wine-glass"></i>
             </div>
@@ -141,7 +165,7 @@
         </div>
 
         <!-- Quiz Metal -->
-        <div class="quiz-card" data-aos="fade-up" data-aos-delay="400">
+        <div class="quiz-card" data-category="recycle" data-aos="fade-up" data-aos-delay="400">
             <div class="quiz-visual metal">
                 <i class="fas fa-tools"></i>
             </div>
@@ -154,7 +178,7 @@
         </div>
 
         <!-- Quiz Plástico -->
-        <div class="quiz-card" data-aos="fade-up" data-aos-delay="500">
+        <div class="quiz-card" data-category="recycle" data-aos="fade-up" data-aos-delay="500">
             <div class="quiz-visual plastico">
                 <i class="fas fa-bottle-water"></i>
             </div>
@@ -165,17 +189,114 @@
             </div>
         </div>
 
+
+        <!-- Quiz Energia Renovavel -->
+        <div class="quiz-card" data-category="energy" data-aos="fade-up" data-aos-delay="600">
+            <div class="quiz-visual energia">
+                <i class="fas fa-bolt"></i>
+            </div>
+            <div class="quiz-info">
+                <h3>Energia Renovável</h3>
+                <p>Solar, eólica, hidrelétrica e biomassa. Entenda a matriz limpa e os desafios da transição energética.</p>
+                <a href="quiz-player.html?type=energia" class="btn btn-primary w-full">Iniciar Quiz</a>
+            </div>
+        </div>
+
+        <!-- Quiz Energia Eólica -->
+        <div class="quiz-card" data-category="energy" data-aos="fade-up" data-aos-delay="650">
+            <div class="quiz-visual eolica">
+                <i class="fas fa-wind"></i>
+            </div>
+            <div class="quiz-info">
+                <h3>Energia Eólica</h3>
+                <p>Turbinas, aerogeradores, parques onshore e offshore. Domine a força dos ventos na matriz elétrica.</p>
+                <a href="quiz-player.html?type=eolica" class="btn btn-primary w-full">Iniciar Quiz</a>
+            </div>
+        </div>
+
+        <!-- Quiz Energia Solar -->
+        <div class="quiz-card" data-category="energy" data-aos="fade-up" data-aos-delay="700">
+            <div class="quiz-visual solar">
+                <i class="fas fa-solar-panel"></i>
+            </div>
+            <div class="quiz-info">
+                <h3>Energia Solar</h3>
+                <p>Efeito fotovoltaico, sistemas On-Grid e Off-Grid. Descubra como transformar luz do Sol em eletricidade.</p>
+                <a href="quiz-player.html?type=solar" class="btn btn-primary w-full">Iniciar Quiz</a>
+            </div>
+        </div>
+
+        <!-- Quiz Cidades Verdes -->
+        <div class="quiz-card" data-category="energy" data-aos="fade-up" data-aos-delay="750">
+            <div class="quiz-visual cidades_verdes">
+                <i class="fas fa-tree-city"></i>
+            </div>
+            <div class="quiz-info">
+                <h3>Cidades Verdes</h3>
+                <p>Mobilidade limpa, calçadas permeáveis, resiliência climática e o que torna um centro urbano ecológico.</p>
+                <a href="quiz-player.html?type=cidades_verdes" class="btn btn-primary w-full">Iniciar Quiz</a>
+            </div>
+        </div>
+
+        <!-- Quiz Aquecimento Global -->
+        <div class="quiz-card" data-category="special" data-aos="fade-up" data-aos-delay="800">
+            <div class="quiz-visual aquecimento_global">
+                <i class="fas fa-temperature-high"></i>
+            </div>
+            <div class="quiz-info">
+                <h3>Aquecimento Global</h3>
+                <p>Efeito estufa, gases poluentes, Acordo de Paris e as consequências das mudanças climáticas no nosso planeta.</p>
+                <a href="quiz-player.html?type=aquecimento_global" class="btn btn-primary w-full">Iniciar Quiz</a>
+            </div>
+        </div>
+
+        <!-- Quiz Eletrodomésticos -->
+        <div class="quiz-card" data-category="special" data-aos="fade-up" data-aos-delay="850">
+            <div class="quiz-visual eletrodomesticos">
+                <i class="fas fa-plug-circle-xmark"></i>
+            </div>
+            <div class="quiz-info">
+                <h3>Lixo Eletrônico (e-lixo)</h3>
+                <p>Celulares, geladeiras, baterias — saiba como descartar eletrodomésticos e eletrônicos sem contaminar o meio ambiente.</p>
+                <a href="quiz-player.html?type=eletrodomesticos" class="btn btn-primary w-full">Iniciar Quiz</a>
+            </div>
+        </div>
+
+        <!-- Quiz Alimentação Sustentável -->
+        <div class="quiz-card" data-category="compost" data-aos="fade-up" data-aos-delay="900">
+            <div class="quiz-visual alimentacao">
+                <i class="fas fa-bowl-food"></i>
+            </div>
+            <div class="quiz-info">
+                <h3>Alimentação Sustentável</h3>
+                <p>1/3 da comida do mundo vai para o lixo. Descubra como sua alimentação impacta o clima e o que fazer diferente.</p>
+                <a href="quiz-player.html?type=alimentacao" class="btn btn-primary w-full">Iniciar Quiz</a>
+            </div>
+        </div>
     </section>
 
     <footer class="main-footer">
-        <div class="container">
-            <p>&copy; 2025 Aprende Mais: Sustentabilidade. Desenvolvido para um futuro melhor.</p>
+        <div class="container footer-grid">
+            <div class="footer-logo">
+                <img src="logo.png" alt="Logo">
+                <span>APRENDE MAIS</span>
+            </div>
+            <div class="footer-copy">
+                <p>&copy; 2025 Aprende Mais: Sustentabilidade. Desenvolvido para um futuro melhor.</p>
+                <div class="social-links">
+                    <a href="https://www.instagram.com/projeto_gaia26?stkn=MWhocW5jcmNhYWM0dA%3D%3D" target="_blank" rel="noopener noreferrer" class="instagram-btn">
+                        <i class="fab fa-instagram"></i>
+                        <span>@projeto_gaia26</span>
+                    </a>
+                </div>
+            </div>
         </div>
     </footer>
 
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script src="gamification.js"></script>
     <script src="script.js"></script>
+    <script src="theme_deltarune.js"></script>
 </body>
 
 </html>

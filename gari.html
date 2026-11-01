@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
+    <meta name="google" content="notranslate">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Gari Aquático — Aprende Mais</title>
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    
   <style>
     *{margin:0;padding:0;box-sizing:border-box}
     body{
@@ -12,7 +14,7 @@
       min-height:100vh;font-family:'Nunito',sans-serif;overflow:hidden;
     }
     #wrapper{position:relative;user-select:none}
-    canvas{border-radius:18px;box-shadow:0 0 80px rgba(14,165,233,.4);display:block}
+    canvas{border-radius:18px;box-shadow:0 0 80px rgba(14,165,233,.4);display:block;max-width:100%;height:auto;aspect-ratio:820/560;}
     #overlay{
       position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
       background:rgba(4,12,30,.78);backdrop-filter:blur(10px);border-radius:18px;z-index:20;
@@ -150,15 +152,22 @@ function initGame(){
     let bx, by;
     do {
       bx=80+Math.random()*(W-160);
-      by=60+Math.random()*(H-120);
+      by=80+Math.random()*(H-200); // garantir dentro da área jogável
     } while(Math.hypot(bx - W/2, by - H/2) < 200);
     let pat=patterns[i%patterns.length];
+    // Raio de órbita menor para circle não sair da tela
+    let orb = 45 + Math.random()*50;
+    // Garantir que a posição base do circle cabe na tela com a órbita
+    if(pat === 'circle'){
+      bx = Math.max(orb+35, Math.min(W-orb-35, bx));
+      by = Math.max(orb+60, Math.min(H-orb-60, by));
+    }
     fishArr.push({
       x:bx,y:by,bx,by,
       w:44+Math.random()*26,h:22+Math.random()*14,
       spd:1.2+Math.random()*1.8,dir:Math.random()<.5?1:-1,
       pat,angle:Math.random()*Math.PI*2,
-      orb:55+Math.random()*70,
+      orb,
       col:fishColors[i%fishColors.length],
       t:Math.random()*200,
       fleeing: false, fleeTime: 0
@@ -316,12 +325,25 @@ function drawSwimmer(){
   // Head with mask
   ctx.fillStyle='#f59e0b';
   ctx.beginPath();ctx.arc(16,0-2,12,0,Math.PI*2);ctx.fill();
-  // Visor
-  ctx.fillStyle='#38bdf8';ctx.globalAlpha=.8;
+  // Visor & Headlight Beam
+  ctx.fillStyle='#38bdf8';ctx.globalAlpha=.85;
   ctx.beginPath();ctx.ellipse(19,-2,8,5,-.1,0,Math.PI*2);ctx.fill();
   ctx.globalAlpha=1;
-  ctx.fillStyle='rgba(255,255,255,.5)';
+  ctx.fillStyle='rgba(255,255,255,.6)';
   ctx.beginPath();ctx.arc(17,-4,2.5,0,Math.PI*2);ctx.fill();
+
+  // Subsea Flashlight Cone Beam
+  let beam = ctx.createRadialGradient(22, -2, 3, 115, -2, 110);
+  beam.addColorStop(0, 'rgba(56, 189, 248, 0.45)');
+  beam.addColorStop(0.4, 'rgba(56, 189, 248, 0.14)');
+  beam.addColorStop(1, 'rgba(56, 189, 248, 0)');
+  ctx.fillStyle = beam;
+  ctx.beginPath();
+  ctx.moveTo(22, -4);
+  ctx.lineTo(135, -42);
+  ctx.lineTo(135, 38);
+  ctx.closePath();
+  ctx.fill();
 
   // Fins
   ctx.fillStyle='#facc15';
@@ -469,51 +491,67 @@ function updateSwimmer(){
 function updateFish(){
   let t=gameTime/1000;
   for(let f of fishArr){
-    // Intelligence: flee from player
+    // Intelligence: flee from player when close
     let distToPlayer = Math.hypot(f.x - swimmer.x, f.y - swimmer.y);
     if(distToPlayer < 140 && !invincible){
       f.fleeing = true;
-      f.fleeTime = 50;
+      f.fleeTime = 60;
     }
-    
+
     if(f.fleeing){
       f.fleeTime--;
       if(f.fleeTime <= 0) f.fleeing = false;
       let dx = f.x - swimmer.x;
       let dy = f.y - swimmer.y;
-      let len = Math.hypot(dx, dy);
-      if(len > 0){
-        f.x += (dx/len) * (f.spd * 2.2);
-        f.y += (dy/len) * (f.spd * 2.2);
-        f.dir = dx > 0 ? 1 : -1;
-      }
-      // Wrap around
-      if(f.x > W+f.w) f.x = -f.w; if(f.x < -f.w) f.x = W+f.w;
-      if(f.y > H+f.h) f.y = -f.h; if(f.y < -f.h) f.y = H+f.h;
+      let len = Math.hypot(dx, dy) || 1;
+      f.x += (dx/len) * (f.spd * 2.4);
+      f.y += (dy/len) * (f.spd * 2.4);
+      f.dir = dx > 0 ? 1 : -1;
+      // Bounce off walls instead of wrapping during flee
+      if(f.x > W - f.w) { f.x = W - f.w; f.dir = -1; }
+      if(f.x < f.w)     { f.x = f.w;     f.dir =  1; }
+      if(f.y > H - 55)  f.y = H - 55;
+      if(f.y < 50)      f.y = 50;
     } else {
       switch(f.pat){
         case 'hline':
-          f.x+=f.spd*f.dir;
-          if(f.x>W+f.w)f.x=-f.w;if(f.x<-f.w)f.x=W+f.w;
-          f.dir=f.x+f.w/2<W/2?1:-1; 
+          // Move horizontalmente, vira nas bordas
+          f.x += f.spd * f.dir;
+          if(f.x > W - f.w/2){ f.x = W - f.w/2; f.dir = -1; }
+          if(f.x < f.w/2)    { f.x = f.w/2;     f.dir =  1; }
           break;
         case 'vline':
-          f.y+=f.spd*f.dir;
-          if(f.y>H-60){f.dir=-1;} if(f.y<55){f.dir=1;}
+          // Move verticalmente, vira no teto/chão; horizontalmente se desloca devagar
+          f.y += f.spd * f.dir;
+          if(f.y > H - 60){ f.y = H - 60; f.dir = -1; }
+          if(f.y < 50)    { f.y = 50;     f.dir =  1; }
+          // Leve drift horizontal para não ficar estático
+          f.x += Math.sin(t * 0.5 + f.t) * 0.4;
+          if(f.x > W - f.w/2) f.x = W - f.w/2;
+          if(f.x < f.w/2)     f.x = f.w/2;
+          f.dir_h = f.x > W/2 ? -1 : 1;
+          f.dir = f.dir || 1; // mantém dir vertical
           break;
         case 'circle':
-          f.angle+=f.spd*.022;
-          f.x=f.bx+Math.cos(f.angle)*f.orb;
-          f.y=f.by+Math.sin(f.angle)*f.orb;
-          f.bx=Math.max(f.orb+20,Math.min(W-f.orb-20,f.bx));
-          f.by=Math.max(f.orb+55,Math.min(H-f.orb-55,f.by));
-          f.dir=Math.cos(f.angle)>0?1:-1;
+          f.angle += f.spd * 0.022;
+          // Centro da órbita gradualmente retorna para o centro da tela
+          f.bx += (W/2 - f.bx) * 0.001;
+          f.by += (H/2 - f.by) * 0.001;
+          f.bx = Math.max(f.orb + 30, Math.min(W - f.orb - 30, f.bx));
+          f.by = Math.max(f.orb + 55, Math.min(H - f.orb - 60, f.by));
+          f.x = f.bx + Math.cos(f.angle) * f.orb;
+          f.y = f.by + Math.sin(f.angle) * f.orb;
+          f.dir = Math.cos(f.angle) > 0 ? 1 : -1;
           break;
         case 'zigzag':
           f.t++;
-          f.x+=f.spd*f.dir;
-          f.y=f.by+Math.sin(f.t*.045)*55;
-          if(f.x>W+f.w)f.x=-f.w;if(f.x<-f.w)f.x=W+f.w;
+          f.x += f.spd * f.dir;
+          // Zigzag vertical em torno da posição y atual — com limites
+          let zigY = f.by + Math.sin(f.t * 0.045) * 55;
+          zigY = Math.max(55, Math.min(H - 65, zigY));
+          f.y = f.y + (zigY - f.y) * 0.08; // suaviza movimento vertical
+          if(f.x > W - f.w/2){ f.x = W - f.w/2; f.dir = -1; }
+          if(f.x < f.w/2)    { f.x = f.w/2;     f.dir =  1; }
           break;
       }
     }
@@ -618,6 +656,19 @@ function doEnd(reason){
   let msg=reason==='shark'
     ?'🦈 O tubarão te pegou!'
     :'🐟 Os peixes te machucaram demais!';
+  if (window.parent && window.parent !== window) {
+    window.parent.postMessage({
+      type: 'GAME_RESULT',
+      game: 'gari',
+      win: false,
+      score: score,
+      xp: Math.max(10, Math.floor(score / 5)),
+      collected: collected,
+      totalTrash: totalTrash,
+      reason: reason
+    }, '*');
+    return;
+  }
   showOverlay(`<div class="obox">
     <div class="emoji">${reason==='shark'?'🦈':'💀'}</div>
     <h2>Game Over!</h2>
@@ -628,6 +679,18 @@ function doEnd(reason){
 }
 
 function doWin(){
+  if (window.parent && window.parent !== window) {
+    window.parent.postMessage({
+      type: 'GAME_RESULT',
+      game: 'gari',
+      win: true,
+      score: score,
+      xp: Math.max(30, Math.floor(score / 3) + 50),
+      collected: collected,
+      totalTrash: totalTrash
+    }, '*');
+    return;
+  }
   showOverlay(`<div class="obox">
     <div class="emoji">🏆</div>
     <h2>Oceano Limpo!</h2>
@@ -682,5 +745,19 @@ document.getElementById('startBtn').onclick=()=>{
 
 requestAnimationFrame(loop);
 </script>
+
+    <script>
+    // Sync Deltarune theme from parent frame
+    window.addEventListener('message', function(e) {
+        if (!e.data) return;
+        if (e.data.type === 'DR_THEME_ON') {
+            document.body.classList.add('theme-deltarune');
+            if (e.data.dark) document.body.classList.add('dark-mode');
+            else document.body.classList.remove('dark-mode');
+        } else if (e.data.type === 'DR_THEME_OFF') {
+            document.body.classList.remove('theme-deltarune');
+        }
+    });
+    </script>
 </body>
 </html>

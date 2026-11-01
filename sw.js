@@ -1,4 +1,4 @@
-const CACHE_NAME = 'aprende-mais-v1';
+const CACHE_NAME = 'aprende-mais-v2';
 const ASSETS = [
     'index.html',
     'quizes.html',
@@ -6,12 +6,26 @@ const ASSETS = [
     'artesanato.html',
     'sobre.html',
     'quiz-player.html',
+    'minigames.html',
+    'tutorial.html',
+    'gari.html',
+    'incendio.html',
+    'vazamento.html',
     'style.css',
-    'gaia-promo.css',
+    'modern_splash.css',
     'themes.css',
+    'gaia-promo.css',
+    'effects_aurora.css',
+    'effects_butterflies.css',
+    'effects_snowflakes.css',
+    'theme_ice.css',
+    'theme_deltarune.css',
     'script.js',
     'gamification.js',
     'quiz-engine.js',
+    'minigames.js',
+    'games_extra.js',
+    'theme_deltarune.js',
     'logo.png',
     'gaia_icon.png',
     'manifest.json'

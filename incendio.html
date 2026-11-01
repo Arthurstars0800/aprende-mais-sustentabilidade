@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
+    <meta name="google" content="notranslate">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Incêndio Zero</title>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+    
     <style>
         body {
             margin: 0; padding: 0; overflow: hidden;
@@ -14,9 +16,16 @@
             display: flex; justify-content: center; align-items: center; height: 100vh;
         }
         canvas {
-            display: block; width: 820px; height: 560px;
+            display: block;
+            width: 100%;
+            max-width: 820px;
+            max-height: 100vh;
+            height: auto;
+            aspect-ratio: 820 / 560;
             background: radial-gradient(circle, #065f46 0%, #064e3b 100%);
             cursor: pointer;
+            border-radius: 16px;
+            box-shadow: 0 0 60px rgba(0, 0, 0, 0.45);
         }
         #game-ui {
             position: absolute; top: 20px; left: 20px; right: 20px;
@@ -28,7 +37,7 @@
         }
         
         .smoke-bar-container {
-            width: 300px; height: 25px; background: #334155; border-radius: 12.5px; overflow: hidden;
+            width: 300px; max-width: calc(100vw - 60px); height: 25px; background: #334155; border-radius: 12.5px; overflow: hidden;
             border: 2px solid #1e293b; position: relative; margin-top: 5px;
         }
         #smoke-fill {
@@ -56,9 +65,12 @@
 </head>
 <body>
 
-    <div id="game-ui" style="top: auto; bottom: 20px; justify-content: center;">
-        <div class="ui-box">
-            Poluição (Fumaça)
+    <div id="game-ui" style="top: auto; bottom: 18px; justify-content: center;">
+        <div class="ui-box" style="display: flex; flex-direction: column; align-items: center; gap: 4px;">
+            <div style="display: flex; justify-content: space-between; width: 100%; font-size: 1.05rem;">
+                <span>🌫️ Poluição da Floresta</span>
+                <span id="smoke-pct" style="color: #fde047;">0%</span>
+            </div>
             <div class="smoke-bar-container">
                 <div id="smoke-fill"></div>
             </div>
@@ -80,8 +92,8 @@
         let W, H;
         
         let score = 0;
-        let timeLeft = 30;
-        let smokeLevel = 0; // 0 to 100
+        let survivalTime = 0; // Tempo de sobrevivência em segundos (sem limite!)
+        let smokeLevel = 0;   // 0 a 100% (o jogo acaba quando atingir 100%)
         let gameActive = true;
         let lastTime = 0;
         let secondTimer = 0;
@@ -93,16 +105,19 @@
         let heli = { x: 410, y: 280, rot: 0 };
         
         const smokeFill = document.getElementById('smoke-fill');
+        const smokePct = document.getElementById('smoke-pct');
         const smokeOverlay = document.getElementById('smoke-overlay');
         const gameOverScreen = document.getElementById('game-over');
 
         function updateParentHUD() {
+            let mm = Math.floor(survivalTime / 60).toString().padStart(2, '0');
+            let ss = (survivalTime % 60).toString().padStart(2, '0');
             window.parent.postMessage({
                 type: 'UPDATE_HUD',
-                score: score,
-                time: `${timeLeft}s`,
-                lives: '',
-                level: ''
+                score: `${score} salvas`,
+                time: `${mm}:${ss}`,
+                lives: `🌫️ ${Math.round(smokeLevel)}%`,
+                level: `${Math.round(smokeLevel)}%`
             }, '*');
         }
         
@@ -131,44 +146,81 @@
             }
         }
 
-        canvas.addEventListener('mousedown', handleClick);
-        canvas.addEventListener('touchstart', (e) => {
-            e.preventDefault();
-            mouseX = e.touches[0].clientX; mouseY = e.touches[0].clientY;
+        function getCanvasCoords(e) {
+            let r = canvas.getBoundingClientRect();
+            let evt = e.touches && e.touches.length > 0 ? e.touches[0] : (e.changedTouches && e.changedTouches.length > 0 ? e.changedTouches[0] : e);
+            return {
+                x: (evt.clientX - r.left) * (W / r.width),
+                y: (evt.clientY - r.top) * (H / r.height)
+            };
+        }
+
+        canvas.addEventListener('mousedown', (e) => {
+            let pos = getCanvasCoords(e);
+            mouseX = pos.x; mouseY = pos.y;
             handleClick(e);
         });
+        canvas.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            let pos = getCanvasCoords(e);
+            mouseX = pos.x; mouseY = pos.y;
+            handleClick(e);
+        }, { passive: false });
         canvas.addEventListener('mousemove', (e) => {
-            mouseX = e.clientX; mouseY = e.clientY;
+            let pos = getCanvasCoords(e);
+            mouseX = pos.x; mouseY = pos.y;
         });
         canvas.addEventListener('touchmove', (e) => {
-            mouseX = e.touches[0].clientX; mouseY = e.touches[0].clientY;
-        });
+            let pos = getCanvasCoords(e);
+            mouseX = pos.x; mouseY = pos.y;
+        }, { passive: false });
+
+        let waterWaves = []; // Efeito visual de dispersão de água
 
         function handleClick(e) {
             if(!gameActive) return;
             
+            // Raio de combate aéreo generoso (~145px): atinge a árvore alvo e adjacentes
+            let extinguishRadius = Math.min(cellW, cellH) * 1.55;
+            let extinguishedCount = 0;
+
             trees.forEach(t => {
                 if (t.state === 'burning') {
                     let dist = Math.hypot(heli.x - t.x, heli.y - t.y);
-                    if (dist < Math.min(cellW, cellH) * 0.7) {
+                    if (dist < extinguishRadius) {
                         t.state = 'healthy';
                         t.fireTimer = 0;
                         score++;
-                        updateParentHUD();
+                        extinguishedCount++;
+                        // Alivia a poluição imediatamente ao apagar
+                        smokeLevel = Math.max(0, smokeLevel - 4);
                     }
                 }
             });
-            createParticles(heli.x, heli.y, '#38bdf8', 25); // Solta bastante água
+
+            if (extinguishedCount > 0) {
+                updateParentHUD();
+            }
+
+            // Onda de choque de água expandindo
+            waterWaves.push({ x: heli.x, y: heli.y, r: 15, maxR: extinguishRadius, alpha: 0.85 });
+
+            // Dispersão de partículas de água volumosa
+            createParticles(heli.x, heli.y, '#38bdf8', 35);
+            createParticles(heli.x, heli.y, '#e0f2fe', 15);
         }
 
         let particles = [];
+        let embers = []; // Faíscas de fogo subindo
         function createParticles(x, y, color, count=10) {
             for(let i=0; i<count; i++) {
+                let ang = Math.random() * Math.PI * 2;
+                let spd = Math.random() * 6 + 2;
                 particles.push({
-                    x: x + (Math.random()-0.5)*20, 
-                    y: y + (Math.random()-0.5)*20,
-                    vx: (Math.random()-0.5)*5,
-                    vy: (Math.random()-0.5)*5 + 2, // Cai um pouco pra baixo
+                    x: x + (Math.random()-0.5)*28, 
+                    y: y + (Math.random()-0.5)*28,
+                    vx: Math.cos(ang) * spd,
+                    vy: Math.sin(ang) * spd + 1.5,
                     life: 1,
                     color: color
                 });
@@ -183,72 +235,117 @@
             heli.y += (mouseY - heli.y) * 0.1;
             heli.rot += dt * 0.03;
 
-            // Tempo
+            // Cronômetro infinito de Sobrevivência (sem limite de tempo!)
             secondTimer += dt;
             if(secondTimer >= 1000) {
                 secondTimer = 0;
-                timeLeft--;
+                survivalTime++;
                 updateParentHUD();
-                if(timeLeft <= 0) endGame("Vitória!");
             }
 
             let burningCount = 0;
             
-            // Lógica do Fogo
+            // Lógica do Fogo e Emissão de Poluição
             trees.forEach(t => {
                 if (t.state === 'burning') {
                     burningCount++;
                     t.fireTimer += dt;
-                    if (t.fireTimer > 4000) {
-                        // Queimou completamente
+                    
+                    // Emite faíscas subindo da árvore
+                    if (Math.random() < 0.25) {
+                        embers.push({
+                            x: t.x + (Math.random() - 0.5) * 28,
+                            y: t.y - Math.random() * 15,
+                            vx: (Math.random() - 0.5) * 1.5,
+                            vy: -Math.random() * 2.5 - 1.2,
+                            size: Math.random() * 3 + 1.5,
+                            alpha: 1,
+                            color: Math.random() < 0.6 ? '#fde047' : '#f97316'
+                        });
+                    }
+
+                    if (t.fireTimer > 5500) {
+                        // Queimou completamente após 5.5s
                         t.state = 'burnt';
                         t.fireTimer = 0;
-                        smokeLevel += 5; // Aumenta fumaça permanente
-                    } else if (t.fireTimer > 2000 && Math.random() < 0.02) {
-                        // Propaga o fogo
+                        smokeLevel += 6.5; // Árvore destruída polui bastante
+                    } else if (t.fireTimer > 2800 && Math.random() < 0.008 && burningCount < 5) {
+                        // Propaga o fogo com limite balanceado
                         spreadFire(t.r, t.c);
                     }
                 }
             });
 
-            // Fumaça sobe enquanto há fogo
+            // Poluição sobe conforme o fogo ativo
             if (burningCount > 0) {
-                smokeLevel += burningCount * 0.05 * (dt/16);
-            } else {
-                smokeLevel -= 0.1 * (dt/16); // Vento limpa se não há fogo
+                smokeLevel += burningCount * 0.038 * (dt/16);
+            }
+            
+            // Vento natural limpa levemente a atmosfera se há poucos focos
+            if (burningCount <= 1) {
+                smokeLevel -= 0.025 * (dt/16);
             }
             
             if (smokeLevel < 0) smokeLevel = 0;
-            if (smokeLevel > 100) {
+
+            // O JOGO SÓ ACABA QUANDO A POLUIÇÃO ATINGE 100%
+            if (smokeLevel >= 100) {
                 smokeLevel = 100;
-                endGame("Floresta Sufocada!");
+                endGame("Fumaça Crítica! A Floresta Sufocou.");
+                return;
             }
             
-            // Focos aleatórios novos
-            let spawnChance = 0.005 + (30 - timeLeft) * 0.0005;
-            if (Math.random() < spawnChance) {
-                let healthy = trees.filter(t => t.state === 'healthy');
-                if(healthy.length > 0) {
-                    let t = healthy[Math.floor(Math.random() * healthy.length)];
-                    t.state = 'burning';
-                    t.fireTimer = 0;
+            // Focos aleatórios com dificuldade progressiva suave pelo tempo de sobrevivência
+            if (burningCount < 4) {
+                let spawnChance = 0.005 + Math.min(0.012, survivalTime * 0.00015);
+                if (Math.random() < spawnChance) {
+                    let healthy = trees.filter(t => t.state === 'healthy');
+                    if(healthy.length > 0) {
+                        let t = healthy[Math.floor(Math.random() * healthy.length)];
+                        t.state = 'burning';
+                        t.fireTimer = 0;
+                    }
                 }
             }
 
-            // UI
-            smokeFill.style.width = smokeLevel + '%';
-            if(smokeLevel > 75) smokeFill.style.background = '#ef4444';
-            else if(smokeLevel > 40) smokeFill.style.background = '#f59e0b';
-            else smokeFill.style.background = '#64748b';
+            // Atualiza UI DOM da barra de poluição inferior
+            if (smokeFill) {
+                smokeFill.style.width = smokeLevel + '%';
+                if(smokeLevel > 75) smokeFill.style.background = 'linear-gradient(90deg, #f59e0b, #ef4444)';
+                else if(smokeLevel > 35) smokeFill.style.background = 'linear-gradient(90deg, #22c55e, #f59e0b)';
+                else smokeFill.style.background = '#22c55e';
+            }
+            if (smokePct) {
+                smokePct.textContent = `${Math.round(smokeLevel)}%`;
+                smokePct.style.color = smokeLevel > 75 ? '#ef4444' : (smokeLevel > 35 ? '#facc15' : '#86efac');
+            }
             
-            smokeOverlay.style.background = `rgba(100, 116, 139, ${smokeLevel / 100 * 0.8})`;
+            if (smokeOverlay) {
+                smokeOverlay.style.background = `rgba(100, 116, 139, ${smokeLevel / 100 * 0.8})`;
+            }
 
-            // Partículas
+            // Partículas de água
             for(let i=particles.length-1; i>=0; i--) {
                 let p = particles[i];
                 p.x += p.vx; p.y += p.vy;
-                p.life -= 0.05;
+                p.life -= 0.04;
                 if(p.life <= 0) particles.splice(i, 1);
+            }
+
+            // Faíscas/embers subindo
+            for(let i=embers.length-1; i>=0; i--) {
+                let emb = embers[i];
+                emb.x += emb.vx; emb.y += emb.vy;
+                emb.alpha -= 0.025;
+                if(emb.alpha <= 0) embers.splice(i, 1);
+            }
+
+            // Ondas de água expandindo
+            for(let i=waterWaves.length-1; i>=0; i--) {
+                let w = waterWaves[i];
+                w.r += 6.5;
+                w.alpha -= 0.045;
+                if(w.alpha <= 0 || w.r >= w.maxR) waterWaves.splice(i, 1);
             }
         }
 
@@ -268,7 +365,11 @@
         }
 
         function drawGame() {
-            ctx.clearRect(0, 0, W, H);
+            // Forest floor base
+            let floorG = ctx.createRadialGradient(W/2, H/2, 50, W/2, H/2, W);
+            floorG.addColorStop(0, "#166534"); floorG.addColorStop(1, "#14532d");
+            ctx.fillStyle = floorG;
+            ctx.fillRect(0, 0, W, H);
             
             let t_now = Date.now();
 
@@ -285,22 +386,69 @@
                     ctx.fillStyle = '#16a34a';
                     ctx.beginPath(); ctx.arc(-radius/4, -radius/4, radius*0.6, 0, Math.PI*2); ctx.fill();
                 } else if (t.state === 'burning') {
-                    // Árvore base
-                    ctx.fillStyle = '#15803d'; 
+                    let burnProgress = Math.min(1, t.fireTimer / 5500);
+
+                    // Copa da árvore em processo de queima: vai de verde a brasa escura e carvão
+                    let treeR = Math.round(21 + burnProgress * 65);
+                    let treeG = Math.round(128 - burnProgress * 95);
+                    let treeB = Math.round(61 - burnProgress * 50);
+                    ctx.fillStyle = `rgb(${treeR}, ${treeG}, ${treeB})`;
                     ctx.beginPath(); ctx.arc(0, 0, radius, 0, Math.PI*2); ctx.fill();
+
+                    // Brilho quente incandescente na copa
+                    let glow = ctx.createRadialGradient(0, 0, radius * 0.2, 0, 0, radius * 1.35);
+                    glow.addColorStop(0, "rgba(254, 240, 138, 0.9)");
+                    glow.addColorStop(0.35, "rgba(249, 115, 22, 0.75)");
+                    glow.addColorStop(0.7, "rgba(220, 38, 38, 0.5)");
+                    glow.addColorStop(1, "rgba(220, 38, 38, 0)");
+                    ctx.fillStyle = glow;
+                    ctx.beginPath(); ctx.arc(0, 0, radius * 1.35, 0, Math.PI*2); ctx.fill();
+
+                    // Chamas orgânicas dinâmicas (5 labaredas estilizadas)
+                    let flameT = t_now * 0.018;
+                    for (let i = 0; i < 5; i++) {
+                        let fOffset = i * 1.25 + (t.c * 2);
+                        let fx = Math.sin(flameT + fOffset) * (radius * 0.55);
+                        let fy = -radius * 0.25 - Math.abs(Math.sin(flameT * 1.4 + i)) * (radius * 0.95);
+                        let fW = radius * (0.42 + Math.sin(flameT * 0.8 + i) * 0.12);
+                        let fH = radius * (0.85 + Math.cos(flameT + i) * 0.25);
+
+                        // Camada externa vermelha/laranja
+                        ctx.fillStyle = i % 2 === 0 ? "#ea580c" : "#dc2626";
+                        ctx.beginPath();
+                        ctx.moveTo(fx - fW, -radius * 0.2);
+                        ctx.quadraticCurveTo(fx, fy - fH, fx, fy - fH);
+                        ctx.quadraticCurveTo(fx, fy - fH, fx + fW, -radius * 0.2);
+                        ctx.closePath();
+                        ctx.fill();
+
+                        // Camada interna amarela/dourada
+                        ctx.fillStyle = "#facc15";
+                        ctx.beginPath();
+                        ctx.moveTo(fx - fW * 0.55, -radius * 0.2);
+                        ctx.quadraticCurveTo(fx, fy - fH * 0.75, fx, fy - fH * 0.75);
+                        ctx.quadraticCurveTo(fx, fy - fH * 0.75, fx + fW * 0.55, -radius * 0.2);
+                        ctx.closePath();
+                        ctx.fill();
+
+                        // Núcleo branco incandescente
+                        ctx.fillStyle = "#ffffff";
+                        ctx.beginPath();
+                        ctx.arc(fx * 0.6, -radius * 0.2 - fH * 0.2, fW * 0.25, 0, Math.PI * 2);
+                        ctx.fill();
+                    }
                     
-                    // Fogo pulsante
-                    let pulse = Math.sin(t_now * 0.01 + t.x) * 5;
-                    ctx.fillStyle = '#ef4444'; // Vermelho
-                    ctx.beginPath(); ctx.arc(0, 0, radius*0.8 + pulse, 0, Math.PI*2); ctx.fill();
-                    ctx.fillStyle = '#f59e0b'; // Laranja
-                    ctx.beginPath(); ctx.arc(0, 0, radius*0.5 + pulse*0.5, 0, Math.PI*2); ctx.fill();
-                    
-                    // Barra de perigo circular
-                    ctx.strokeStyle = '#ef4444';
+                    // Barra circular de perigo elegante
+                    ctx.strokeStyle = "rgba(0,0,0,0.4)";
+                    ctx.lineWidth = 5;
+                    ctx.beginPath();
+                    ctx.arc(0, 0, radius + 11, 0, Math.PI * 2);
+                    ctx.stroke();
+
+                    ctx.strokeStyle = burnProgress > 0.7 ? '#ef4444' : '#f59e0b';
                     ctx.lineWidth = 4;
                     ctx.beginPath();
-                    ctx.arc(0, 0, radius + 10, -Math.PI/2, -Math.PI/2 + (t.fireTimer/4000) * Math.PI*2);
+                    ctx.arc(0, 0, radius + 11, -Math.PI/2, -Math.PI/2 + burnProgress * Math.PI*2);
                     ctx.stroke();
 
                 } else if (t.state === 'burnt') {
@@ -314,9 +462,50 @@
                 ctx.restore();
             });
 
+            // Ondas de choque de água ao apagar (no solo)
+            waterWaves.forEach(w => {
+                ctx.save();
+                ctx.strokeStyle = `rgba(56, 189, 248, ${w.alpha})`;
+                ctx.lineWidth = 4;
+                ctx.beginPath();
+                ctx.arc(w.x, w.y, w.r, 0, Math.PI * 2);
+                ctx.stroke();
+
+                ctx.fillStyle = `rgba(224, 242, 254, ${w.alpha * 0.25})`;
+                ctx.fill();
+                ctx.restore();
+            });
+
+            // Faíscas/fagulhas de fogo subindo
+            embers.forEach(emb => {
+                ctx.save();
+                ctx.globalAlpha = emb.alpha;
+                ctx.fillStyle = emb.color;
+                ctx.shadowColor = emb.color;
+                ctx.shadowBlur = 6;
+                ctx.beginPath();
+                ctx.arc(emb.x, emb.y, emb.size, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.restore();
+            });
+
+            // Helicopter Ground Shadow (3D Altitude effect)
+            ctx.save();
+            ctx.translate(heli.x + 20, heli.y + 26);
+            ctx.fillStyle = "rgba(0, 0, 0, 0.32)";
+            ctx.beginPath(); ctx.ellipse(0, 0, 26, 12, 0, 0, Math.PI * 2); ctx.fill();
+            ctx.beginPath(); ctx.ellipse(-38, 0, 18, 3, 0, 0, Math.PI * 2); ctx.fill();
+            ctx.restore();
+
             // Draw Helicopter
             ctx.save();
             ctx.translate(heli.x, heli.y);
+
+            // Rotor Motion Blur Disc
+            ctx.fillStyle = "rgba(255, 255, 255, 0.15)";
+            ctx.beginPath(); ctx.arc(0, 0, 48, 0, Math.PI * 2); ctx.fill();
+            ctx.strokeStyle = "rgba(255, 255, 255, 0.28)"; ctx.lineWidth = 1.5;
+            ctx.stroke();
             
             // Corpo principal (Top-down)
             ctx.fillStyle = '#ef4444'; // Vermelho bombeiro
@@ -366,15 +555,27 @@
 
         function endGame(title) {
             gameActive = false;
-            gameOverScreen.style.display = 'flex';
+            let mm = Math.floor(survivalTime / 60).toString().padStart(2, '0');
+            let ss = (survivalTime % 60).toString().padStart(2, '0');
+            let timeStr = `${mm}:${ss}`;
+            let xpEarned = Math.max(25, Math.floor(score * 4 + survivalTime * 1.5));
             
-            let xpEarned = score * 3;
-            // Penalidade por fumaça
-            xpEarned -= Math.floor(smokeLevel);
-            if (xpEarned < 0) xpEarned = 0;
+            if (window.parent && window.parent !== window) {
+                window.parent.postMessage({
+                    type: "GAME_RESULT",
+                    game: "incendio",
+                    win: survivalTime >= 40 || score >= 12,
+                    score: score,
+                    survivalTime: timeStr,
+                    xp: xpEarned,
+                    smokeLevel: Math.floor(smokeLevel)
+                }, "*");
+                return;
+            }
+            gameOverScreen.style.display = "flex";
             
             document.getElementById('go-title').innerText = title;
-            document.getElementById('go-desc').innerHTML = `Você salvou ${score} árvores e ganhou ${xpEarned} folhas (XP).<br>Poluição final: ${Math.floor(smokeLevel)}%`;
+            document.getElementById('go-desc').innerHTML = `Tempo de Sobrevivência: <strong>${timeStr}</strong><br>Você salvou <strong>${score}</strong> árvores e ganhou <strong>${xpEarned} XP</strong>.<br>Poluição final: <strong>${Math.floor(smokeLevel)}%</strong>`;
             
             if(window.parent && window.parent.addLeaves) {
                 window.parent.addLeaves(xpEarned, 'Incêndio Zero');
@@ -383,8 +584,13 @@
 
         function restartGame() {
             score = 0;
-            timeLeft = 30;
+            survivalTime = 0;
             smokeLevel = 0;
+            particles = [];
+            embers = [];
+            waterWaves = [];
+            if (smokeFill) smokeFill.style.width = '0%';
+            if (smokePct) smokePct.textContent = '0%';
             gameActive = true;
             gameOverScreen.style.display = 'none';
             updateParentHUD();
@@ -395,6 +601,20 @@
 
         resize();
         requestAnimationFrame(loop);
+    </script>
+
+    <script>
+    // Sync Deltarune theme from parent frame
+    window.addEventListener('message', function(e) {
+        if (!e.data) return;
+        if (e.data.type === 'DR_THEME_ON') {
+            document.body.classList.add('theme-deltarune');
+            if (e.data.dark) document.body.classList.add('dark-mode');
+            else document.body.classList.remove('dark-mode');
+        } else if (e.data.type === 'DR_THEME_OFF') {
+            document.body.classList.remove('theme-deltarune');
+        }
+    });
     </script>
 </body>
 </html>
