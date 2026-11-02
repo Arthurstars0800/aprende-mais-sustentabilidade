@@ -28,6 +28,7 @@ body {
     --text-dark: #1f2937;
     --text-muted: #4b5563;
     --white: #ffffff;
+    --card-bg: #ffffff;
     --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
     --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -66,6 +67,7 @@ body.dark-mode {
     --text-dark: #f3f4f6;
     --text-muted: #9ca3af;
     --white: #1e1e1e;
+    --card-bg: #1e293b;
     --card-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
 }
 
@@ -10320,3 +10322,67 @@ a,
     }
 }
 
+
+/* --- GAIA Promo Card & Dark Mode: Contraste Máximo e Letras Brancas --- */
+.gaia-card,
+.gaia-card h2,
+.gaia-text h2,
+.gaia-card p,
+.gaia-text p,
+.gaia-card strong,
+.gaia-text strong,
+.gaia-card .feature-tag,
+.gaia-card .badge,
+.gaia-card .gaia-badge {
+    color: #ffffff !important;
+}
+
+.gaia-text h2 {
+    color: #ffffff !important;
+}
+
+.gaia-text h2 span,
+.gaia-card h2 span {
+    background: linear-gradient(to right, #4ade80, #a7f3d0) !important;
+    -webkit-background-clip: text !important;
+    background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    text-shadow: none !important;
+}
+
+.gaia-text p {
+    color: #ffffff !important;
+    opacity: 0.96 !important;
+}
+
+.gaia-text p strong {
+    color: #ffffff !important;
+}
+
+.gaia-card .feature-tag {
+    background: rgba(255, 255, 255, 0.15) !important;
+    color: #ffffff !important;
+    border: 1px solid rgba(255, 255, 255, 0.25) !important;
+}
+
+.gaia-card .gaia-badge {
+    background: rgba(255, 255, 255, 0.2) !important;
+    color: #ffffff !important;
+    border: 1px solid rgba(255, 255, 255, 0.35) !important;
+}
+
+/* Garantir contraste em cards de artesanato */
+body.dark-mode .craft-card {
+    background: #1e293b !important;
+    color: #ffffff !important;
+}
+body.dark-mode .craft-card h3 {
+    color: #ffffff !important;
+}
+body.theme-future .craft-card {
+    background: rgba(22, 27, 34, 0.85) !important;
+    color: #ffffff !important;
+}
+body.theme-future .craft-card h3 {
+    color: #00f3ff !important;
+}

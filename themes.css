@@ -769,13 +769,25 @@ body.theme-future p {
 
 /* Forçar cores de destaque no tema futuro */
 body.theme-future .cta-card h2,
-body.theme-future .gaia-card h2,
 body.theme-future .intro-card p,
 body.theme-future .info-card h3,
 body.theme-future .hero-content h1 span,
 body.theme-future .card-visual h2 {
     color: var(--primary) !important;
     text-shadow: 0 0 10px var(--neon-shadow);
+}
+
+/* GAIA Card sempre com textos brancos puros para legibilidade máxima */
+body.theme-future .gaia-card,
+body.theme-future .gaia-card h2,
+body.theme-future .gaia-card p,
+body.theme-future .gaia-text h2,
+body.theme-future .gaia-text p,
+body.theme-future .gaia-card strong,
+body.theme-future .gaia-text strong,
+body.theme-future .gaia-card .feature-tag {
+    color: #ffffff !important;
+    text-shadow: none !important;
 }
 
 /* Ajustar botões */

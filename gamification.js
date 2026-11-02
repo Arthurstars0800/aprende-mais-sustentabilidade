@@ -36,53 +36,86 @@ let userProfile = {
 };
 
 // --- Google Auth Configuration ---
-const GOOGLE_CLIENT_ID = "230988263001-3qm1suf4lq2mohdqig6tuq48bbtglsm7.apps.googleusercontent.com"; // Substitua pelo seu ID se necessário
+const GOOGLE_CLIENT_ID = "230988263001-3qm1suf4lq2mohdqig6tuq48bbtglsm7.apps.googleusercontent.com";
+let _googleInitRetries = 0;
 
 function initGoogleAuth() {
-    if (typeof google === 'undefined') {
-        console.warn("Google GSI script não carregado.");
+    // Renderiza imediatamente usando o estado salvo no localStorage sem delay
+    renderGoogleButton();
+
+    if (typeof google === 'undefined' || !google.accounts || !google.accounts.id) {
+        if (_googleInitRetries < 20) {
+            _googleInitRetries++;
+            setTimeout(initGoogleAuth, 300);
+        }
         return;
     }
 
-    google.accounts.id.initialize({
-        client_id: GOOGLE_CLIENT_ID,
-        callback: handleGoogleLogin,
-        auto_select: false,
-        cancel_on_tap_outside: true
-    });
+    try {
+        google.accounts.id.initialize({
+            client_id: GOOGLE_CLIENT_ID,
+            callback: handleGoogleLogin,
+            auto_select: true,
+            cancel_on_tap_outside: true
+        });
+
+        // Se ainda não estiver logado, exibe One-Tap se disponível
+        if (!userProfile.isLoggedIn) {
+            google.accounts.id.prompt((notification) => {
+                if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
+                    // One-Tap ignorado pelo usuário ou navegador
+                }
+            });
+        }
+    } catch (e) {
+        console.warn("Google Auth initialize error:", e);
+    }
 
     renderGoogleButton();
 }
 
 function renderGoogleButton() {
     const btnContainer = document.getElementById('googleLoginBtn');
-    if (!btnContainer) return;
+    const img = document.getElementById('userProfileImg');
+    if (!btnContainer && !img) return;
 
-    if (userProfile.isLoggedIn) {
-        btnContainer.style.display = 'none';
-        const img = document.getElementById('userProfileImg');
+    if (userProfile.isLoggedIn && userProfile.googleUser) {
+        if (btnContainer) {
+            btnContainer.style.display = 'none';
+        }
         if (img) {
-            img.src = userProfile.googleUser.picture;
+            if (userProfile.googleUser.picture) {
+                img.src = userProfile.googleUser.picture;
+            }
             img.style.display = 'block';
-            img.title = `Logado como ${userProfile.googleUser.name} (${userProfile.googleUser.email})`;
-            img.onclick = logoutGoogle;
+            img.title = `Guardião: ${userProfile.googleUser.name} (${userProfile.googleUser.email}) - Clique para ver o perfil`;
+            img.onclick = () => openProfile();
         }
     } else {
-        btnContainer.style.display = 'block';
-        google.accounts.id.renderButton(
-            btnContainer,
-            { 
-                theme: "filled_blue", 
-                size: "large", 
-                type: "standard", 
-                shape: "rectangular",
-                text: "signin_with",
-                logo_alignment: "left",
-                width: 200
+        if (img) {
+            img.style.display = 'none';
+        }
+        if (btnContainer) {
+            btnContainer.style.display = 'block';
+            if (typeof google !== 'undefined' && google.accounts && google.accounts.id) {
+                try {
+                    google.accounts.id.renderButton(
+                        btnContainer,
+                        { 
+                            theme: "filled_blue", 
+                            size: "large", 
+                            type: "standard", 
+                            shape: "rectangular",
+                            text: "signin_with",
+                            logo_alignment: "left",
+                            width: 200
+                        }
+                    );
+                } catch (e) {
+                    console.warn("Erro ao renderizar botão do Google:", e);
+                }
             }
-        );
-        const img = document.getElementById('userProfileImg');
-        if (img) img.style.display = 'none';
+        }
     }
 }
 
@@ -97,15 +130,20 @@ function handleGoogleLogin(response) {
         picture: payload.picture
     };
 
+    localStorage.setItem('eco_last_logged_email', payload.email);
+
     // Migra o XP local para o perfil do Google se for a primeira vez
     // Ou carrega o XP específico desse e-mail se já existir
     const accountProgressKey = `eco_progress_${userProfile.googleUser.email}`;
     const savedAccountData = localStorage.getItem(accountProgressKey);
 
     if (savedAccountData) {
-        const parsed = JSON.parse(savedAccountData);
-        // Mantém as informações do Google User atuais
-        userProfile = { ...userProfile, ...parsed, googleUser: userProfile.googleUser };
+        try {
+            const parsed = JSON.parse(savedAccountData);
+            userProfile = { ...userProfile, ...parsed, isLoggedIn: true, googleUser: userProfile.googleUser };
+        } catch (e) {
+            console.error("Erro ao ler save da conta Google:", e);
+        }
     }
 
     saveProgress();
@@ -115,11 +153,21 @@ function handleGoogleLogin(response) {
 }
 
 function logoutGoogle() {
-    if (confirm("Deseja sair da conta?")) {
+    if (confirm("Deseja sair da sua conta Google? Seu progresso local continuará salvo neste navegador.")) {
         userProfile.isLoggedIn = false;
         userProfile.googleUser = null;
+        localStorage.removeItem('eco_last_logged_email');
+        if (typeof google !== 'undefined' && google.accounts && google.accounts.id) {
+            try {
+                google.accounts.id.disableAutoSelect();
+            } catch (_) {}
+        }
         saveProgress();
-        window.location.reload();
+        renderGoogleButton();
+        updateHud();
+        showToast("Você saiu da conta.");
+        const modal = document.getElementById('ecoProfileModal');
+        if (modal) modal.remove();
     }
 }
 
@@ -288,8 +336,12 @@ function updateAudioUI() {
 function loadProgress() {
     const saved = localStorage.getItem('eco_progress');
     if (saved) {
-        const savedData = JSON.parse(saved);
-        userProfile = { ...userProfile, ...savedData };
+        try {
+            const savedData = JSON.parse(saved);
+            userProfile = { ...userProfile, ...savedData };
+        } catch (e) {
+            console.error("Erro ao ler eco_progress:", e);
+        }
         // Garante que itens padrão sempre estejam desbloqueados,
         // mesmo em saves antigos que não os tinham
         const defaultUnlocked = ['avatar_seed', 'theme-default', 'theme-ice', 'effect_snowflakes', 'effect_glaciers', 'effect_aurora', 'effect_butterflies'];
@@ -304,10 +356,32 @@ function loadProgress() {
         }
         userProfile.unlockedItems = (userProfile.unlockedItems || []).filter(item => item !== 'theme-deltarune');
     }
+
+    // Se houver uma conta Google conectada, sincroniza com o save específico do e-mail para não perder a sessão ao trocar de abas
+    const emailToSync = (userProfile.googleUser && userProfile.googleUser.email) || localStorage.getItem('eco_last_logged_email');
+    if (emailToSync) {
+        const accountProgressKey = `eco_progress_${emailToSync}`;
+        const savedAccountData = localStorage.getItem(accountProgressKey);
+        if (savedAccountData) {
+            try {
+                const parsed = JSON.parse(savedAccountData);
+                userProfile = { 
+                    ...userProfile, 
+                    ...parsed, 
+                    isLoggedIn: true, 
+                    googleUser: userProfile.googleUser || parsed.googleUser 
+                };
+            } catch (e) {
+                console.warn("Erro ao sincronizar dados da conta:", e);
+            }
+        }
+    }
+
     if (!userProfile.completedQuizzes) userProfile.completedQuizzes = [];
     checkDailyVisit();
     updateHud();
     applyTheme();
+    renderGoogleButton(); // Exibe a foto do usuário ou botão instantaneamente sem delay
     // Delay curto para garantir que a navbar carregou
     setTimeout(setupAudioToggle, 500);
 }
@@ -425,6 +499,7 @@ function updateHud() {
     if (fill) fill.style.width = `${percentage}%`;
     if (text) text.textContent = `${userProfile.xp} XP`;
     hud.title = `${currentLevelData.name} (Próximo nível em ${nextLevelData ? (nextLevelData.minXp - userProfile.xp) : 0} XP)`;
+    renderGoogleButton();
 }
 
 // --- Shop & Customization ---
@@ -624,6 +699,14 @@ function renderSettings() {
                     <input type="checkbox" id="settingPageTransitions" ${userProfile.pageTransitions !== false ? 'checked' : ''}>
                     <span class="eco-switch-slider"></span>
                 </label>
+            </div>
+
+            <div class="eco-setting-card" style="border-top: 1px solid rgba(255,255,255,0.08); padding-top: 15px;">
+                <div class="eco-setting-info">
+                    <span class="eco-setting-title">👤 Conta Google & Sincronização</span>
+                    <span class="eco-setting-desc">${userProfile.isLoggedIn && userProfile.googleUser ? `Conectado como <strong>${userProfile.googleUser.name}</strong> (${userProfile.googleUser.email}). Seu XP e desbloqueios estão sincronizados.` : 'Nenhuma conta Google conectada. Conecte pelo botão no topo da página para salvar seus pontos em múltiplos aparelhos.'}</span>
+                </div>
+                ${userProfile.isLoggedIn ? `<button type="button" class="eco-logout-btn" onclick="logoutGoogle()" style="background:#ef4444; color:white; border:none; padding:8px 16px; border-radius:10px; font-weight:700; cursor:pointer; font-size:0.85rem; transition:transform 0.2s, background 0.2s;">Sair da Conta</button>` : ''}
             </div>
         </div>
     `;
@@ -1983,15 +2066,19 @@ function launchConfettiBurst() {
 
 // --- Initialization ---
 
-window.gamification = { addXp, markQuizComplete, updateTotalQuizzes, userProfile, loadProgress, openProfile, launchConfetti };
+window.gamification = { addXp, markQuizComplete, updateTotalQuizzes, get userProfile() { return userProfile; }, loadProgress, openProfile, launchConfetti };
+
+window.addEventListener('beforeunload', () => {
+    saveProgress();
+});
 
 document.addEventListener('DOMContentLoaded', () => {
     loadProgress();
     applyEffects();
     initPageTransitions();
     
-    // Inicializa o Google Auth com um pequeno delay para carregar o SDK
-    setTimeout(initGoogleAuth, 1000);
+    // Inicializa o Google Auth imediatamente com retry automático resiliente
+    initGoogleAuth();
 
     const hud = document.getElementById('ecoHud');
     if (hud) {
